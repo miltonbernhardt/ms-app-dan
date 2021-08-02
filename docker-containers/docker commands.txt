@@ -1,0 +1,64 @@
+docker run -p 8761:8761 -t dan/service-discovery:1.0.0
+
+docker info
+docker build -t {dir}
+docker inspect
+	→ muestra información de configuración de una imagen
+docker images
+
+** CONTAINERS **
+	docker ps
+		→ lista los containers ejecutando
+	docker ps –a 
+		→ lista todos los contenedores
+	docker stop <nombre-container>
+	docker start <nombre-container>
+	docker restart <nombre-container>
+	docker kill <nombre-container>
+	docker rm <nombre-container>
+		→ elimina el container
+	docker logs <NOMBRE_CONTAINER>
+		→ revisar los logs de un contenedor
+			-f para mantener actualizado el log (follow)
+			-n para ver las ultimos N lineas
+
+** REDES **
+	docker network create skynet
+		→ crear una nueva red
+	docker network connect skynet "container"
+		→ agregar contenedores a las redes
+		→ ahora internamente hay una entrada dns que vincula el nombre de los contenedores con su IP
+		→ se visualizan a través del nombre.
+
+** DOCKER COMPOSE **
+docker-compose up -d
+	-d - que ejecuta el contenedor en segundo plano
+
+docker-compose -f dan-infra.yml up -d
+
+
+
+
+DOCKERFILE
+	* FROM openjdk:11.0.7-slim - Podemos crear una instancia
+	* LABEL maintainer="mdomingu@gmail.com" - permite agregar metadatos a traves de pares clave/calor que luego se pueden usar para indentificar ima y contenedores de Docker
+	* USER sys01 - define el usuario de la VM, por defecto usar root (los contenedores de producción casi siempre deben ejecutarse en el contexto de un usuario sin privilegios)
+	* ARG JAR_FILE=target/*.jar - es una variable de tiempo de building (solo está disponible en el dockerfile). En este caso sirve para almacenar el nombre del archive jar que se genero en el directorio target, que corresponde a la aplicación compilada para ejecutar
+	* COPY ${JAR_FILE} ms-productos.jar - Definimos que la siguiente capa lo que debe hacer es agregarel archivo definido en la variable ${JAR_FILE} a la nueva imagen. Realmente se copian los archivos en la imagen, por lo que ya no se necesita acceder al sistema de archivos local para acceder a ellos una vez que se crea la imagen
+	* ENTRYPOINT [“comando”, “Parametro1”, “Parametro2”, …]. Básicamente este commando define que es lo primero que debe hacer docker cuando inicia el contenedor virtual
+	* CMD [“ejecutable”, “parametro1”, “parametro2”, …]. Pasa valores por defecto a un contenedor. Entre estos valores se pueden pasar ejecutables. Se ejecuta una vez que arranca el contenedor.
+	* RUN comando (o RUN [“ejecutable”, “parametro1”, …])- se ejecuta cuando se está construyendo una imagen personalizada para realizar una acción, creando una capa nueva. Cuando se ejecuta con esta sintaxis se pasa como parámetro a la Shell del sistema
+	* VOLUME /tmp/log - Son carpetas en nuestro sistema de archivos y son capaces de sobrevivir al ciclo de vida normal del contenedor. Los volúmenes permiten compartirse entre contenedores, o el propio host
+		- en el ejemplo anterior le indicamos a Docker que cree un vinculo entre el archivo “/tmp/logs” del container y  el directorio local donde ejecuta.
+		- Cuando se ejecuta el container se puede redefinir la ubicación 
+			docker run –d -p 9010:9010 d -v ~/my-logs:/tmp/logs --name app-productos dan/ms-productos
+	* EXPOSE 8080 - Permite especificar que puerto del contenedor se va a exponer
+	* ENV: permite definir variables de entorno disponibles para el contenedor pero también en el proceso de creación de la imagen
+
+
+https://hub.docker.com/_/openjdk 
+
+
+
+https://medium.com/@lewwybogus/how-to-stop-wsl2-from-hogging-all-your-ram-with-docker-d7846b9c5b37
+	Restart-Service LxssManager

@@ -1,0 +1,5 @@
+# Project exclude paths
+/ms-cuentacorriente/.mvn/
+/ms-pedido/.mvn/
+/ms-producto/.mvn/
+/ms-usuario/.mvn/
