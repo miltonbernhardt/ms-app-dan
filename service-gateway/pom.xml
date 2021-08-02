@@ -11,7 +11,7 @@
     <groupId>com.brikton.labapps</groupId>
     <artifactId>service-gateway</artifactId>
     <version>1.0.0</version>
-    <name>dan-service-gateway</name>
+    <name>service-gateway</name>
     <description>Servicio que actúa como proxy de los otros microservices implementados, permite localizar esos servicios y distribuir su carga que va a dirigida a ellos</description>
 
     <properties>
