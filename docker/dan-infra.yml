@@ -26,55 +26,40 @@ services:
     networks:
       - infra
 
-  mongo:
-    container_name: mongo
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: dan2021
-      MONGO_INITDB_ROOT_PASSWORD: dan2021
-    networks:
-      - infra
-      - app
-
-  mongo-express:
-    container_name: mongo-express
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: dan2021
-      ME_CONFIG_MONGODB_ADMINPASSWORD: dan2021
-    networks:
-      - infra
-
-#  artemis: #ToDo: probar
-#    container_name: artemis
-#    image: artemis
+#  mongo:
+#    container_name: mongo
+#    image: mongo
 #    restart: always
 #    ports:
-#      - "61616:61616"
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: dan2021
+#      MONGO_INITDB_ROOT_PASSWORD: dan2021
 #    networks:
+#      - infra
 #      - app
+
+#  mongo-express:
+#    container_name: mongo-express
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: dan2021
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: dan2021
+#    networks:
 #      - infra
 
-#  service-gateway:
-#    container_name: service-gateway
-#    image: dan/service-gateway:1.0.0
-#    ports:
-#      - "80:80" #TODO ver que puerta usar1
-#    environment:
-#      - "ZUUL_ROUTES_CUENTACORRIENTE_URL=http://ms-cuentacorriente:9013/api/cuentacorriente/"
-#      - "ZUUL_ROUTES_DETALLEPEDIDO_URL=http://ms-pedido:9012/api/detallepedido/"
-#      - "ZUUL_ROUTES_PEDIDO_URL=http://ms-pedido:9012/api/pedido/"
-#      - "ZUUL_ROUTES_PRODUCTO_URL=http://ms-producto:9011/api/producto/"
-#      - "ZUUL_ROUTES_EMPLEADO_URL=http://ms-usuario:9014/api/empleado/"
-#      - "ZUUL_ROUTES_CLIENTE_URL=http://ms-usuario:9014/api/cliente/"
-#      - "ZUUL_ROUTES_OBRA_URL=http://ms-usuario:9014/api/obra/"
-#    networks:
-#      - app
-#      - infra
+  artemis:
+    container_name: artemis
+    image: artemis:1.0.0
+    restart: always
+    ports:
+      - "61616:61616"
+    networks:
+      - app
+      - infra
 
   service-discovery:
     container_name: service-discovery
@@ -83,6 +68,18 @@ services:
       - "8761:8761"
     networks:
       - app
+
+  service-gateway:
+    container_name: service-gateway
+    image: dan/service-gateway:1.0.0
+    ports:
+      - "8181:8181"
+    environment:
+      - "SERVER_PORT=8181"
+      - "DISCOVERY-SERVICE-URL=service-discovery:8761"
+    networks:
+      - app
+      - infra
 
   ms-cuentacorriente:
     container_name: ms-cuentacorriente

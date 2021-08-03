@@ -13,8 +13,14 @@ import java.util.List;
 @RequestMapping(value = "/api/producto")
 public class ProductoRest {
 
+    private final ProductoService productoService;
+
     @Autowired
-    ProductoService productoService;
+    public ProductoRest(
+            ProductoService productoService
+    ) {
+        this.productoService = productoService;
+    }
 
     @PostMapping
     public ResponseEntity<?> crearProducto(@RequestBody Material materialNuevo) {

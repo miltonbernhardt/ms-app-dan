@@ -1,5 +1,8 @@
 package com.brikton.labapps.gateway;
 
+import com.brikton.labapps.gateway.filter.ErrorFilter;
+import com.brikton.labapps.gateway.filter.PostFilter;
+import com.brikton.labapps.gateway.filter.RouteFilter;
 import com.brikton.labapps.gateway.filters.PreFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,5 +22,20 @@ public class DanGatewayApplication {
     @Bean
     public PreFilter preFilter() {
         return new PreFilter();
+    }
+
+    @Bean
+    public PostFilter postFilter() {
+        return new PostFilter();
+    }
+
+    @Bean
+    public ErrorFilter errorFilter() {
+        return new ErrorFilter();
+    }
+
+    @Bean
+    public RouteFilter routeFilter() {
+        return new RouteFilter();
     }
 }
