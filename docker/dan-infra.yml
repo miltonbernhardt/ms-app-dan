@@ -3,7 +3,7 @@ services:
   postgresdb:
     container_name: postgresdb
     image: postgres:latest
-    restart: always
+    restart: on-failure
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
       - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -20,7 +20,7 @@ services:
   adminer:
     container_name: adminer
     image: adminer
-    restart: always
+    restart: on-failure
     ports:
       - "8080:8080"
     networks:
@@ -29,7 +29,7 @@ services:
 #  mongo:
 #    container_name: mongo
 #    image: mongo
-#    restart: always
+#    restart: on-failure
 #    ports:
 #      - "27017:27017"
 #    environment:
@@ -42,7 +42,7 @@ services:
 #  mongo-express:
 #    container_name: mongo-express
 #    image: mongo-express
-#    restart: always
+#    restart: on-failure
 #    ports:
 #      - "8081:8081"
 #    environment:
@@ -54,7 +54,7 @@ services:
   artemis:
     container_name: artemis
     image: artemis:1.0.0
-    restart: always
+    restart: on-failure
     ports:
       - "61616:61616"
     networks:
@@ -141,6 +141,33 @@ services:
     networks:
       - app
 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.6.1
+    restart: on-failure
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      - app
+#      monitoring:
+#        aliases:
+#          - prometheus
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.0
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./grafana/config.monitoring
+    networks:
+      - app
+      - infra
 #   ToDo:
 #   s
 #      http://user:password@localhost:8761/eureka) todo para seguridad
@@ -153,6 +180,7 @@ services:
 #       agregar Node
 
 networks:
+#  monitoring:
   infra:
     driver: bridge
   app:

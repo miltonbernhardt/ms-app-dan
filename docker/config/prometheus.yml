@@ -1,0 +1,14 @@
+scrape_configs:
+  - job_name: 'prometheus'
+  scrape_interval: 15s
+  scheme: https
+  tls_config:
+    insecure_skip_verify: true
+  metrics_path: actuator/prometheus
+  static_configs:
+    - targets: ['ms-usuario:9000']
+    - targets: ['ms-producto:9001']
+    - targets: ['ms-pedido:9002']
+    - targets: ['ms-cuentacorriente:9003']
+    - targets: ['service-gateway:8181']
+    - targets: ['service-discovery:8761']
