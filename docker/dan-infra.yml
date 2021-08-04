@@ -3,7 +3,6 @@ services:
   postgresdb:
     container_name: postgresdb
     image: postgres:latest
-    restart: always
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
       - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -20,7 +19,6 @@ services:
   adminer:
     container_name: adminer
     image: adminer
-    restart: always
     ports:
       - "8080:8080"
     networks:
@@ -29,7 +27,6 @@ services:
 #  mongo:
 #    container_name: mongo
 #    image: mongo
-#    restart: always
 #    ports:
 #      - "27017:27017"
 #    environment:
@@ -42,7 +39,6 @@ services:
 #  mongo-express:
 #    container_name: mongo-express
 #    image: mongo-express
-#    restart: always
 #    ports:
 #      - "8081:8081"
 #    environment:
@@ -54,7 +50,6 @@ services:
   artemis:
     container_name: artemis
     image: artemis:1.0.0
-    restart: always
     ports:
       - "61616:61616"
     networks:
@@ -141,16 +136,34 @@ services:
     networks:
       - app
 
-#   ToDo:
-#   s
-#      http://user:password@localhost:8761/eureka) todo para seguridad
-#  https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.6.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./scripts/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      - app
+#      monitoring:
+#        aliases:
+#          - prometheus
 
-#     Parte 02 – Agregar telemetría
-#       agregar Prometheus
-#       agregar Graphana
-#     Parte 05 – Para el frontend
-#       agregar Node
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.0
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    networks:
+      - app
+      - infra
 
 networks:
   infra:
