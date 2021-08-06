@@ -1,9 +1,23 @@
 package com.brikton.labapps.msusuario.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Empleado {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_empleado")
 	private Integer id;
 	private String mail;
+	@OneToOne
+	@JoinColumn(name = "id_usuario")
 	private Usuario user;
 	
 	public Integer getId() {
