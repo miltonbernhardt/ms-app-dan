@@ -140,6 +140,20 @@ services:
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
+  
+  ms-liquidacion:
+    container_name: ms-liquidacion
+    image: dan/ms-liquidacion:1.0.0
+    ports:
+      - "9004:9004"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9004"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_liquidacion"
+      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+    networks:
+      - app
 
 #   ToDo:
 #   s
