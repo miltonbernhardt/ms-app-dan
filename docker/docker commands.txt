@@ -37,7 +37,7 @@ docker-compose up -d
 docker-compose -f dan-infra.yml up -d
 
 
-
+#./mvnw install -pl ms-cuentacorriente -am
 
 DOCKERFILE
 	* FROM openjdk:11.0.7-slim - Podemos crear una instancia

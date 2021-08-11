@@ -5,10 +5,7 @@ Integrantes del proyecto:
 - Brizi, Elias
 - Luz, Tamara
 
-
-------
-
-
+---
 
 En este proyecto se aloja lo necesario para correr la aplicación basada en microservicios:
 - service-gateway: microservicio que sirve de puerta externa de la aplicación y rutea el tráfico hacia los microservicios internos 
@@ -19,34 +16,11 @@ En este proyecto se aloja lo necesario para correr la aplicación basada en micr
 - ms-cuentacorriente: microservicio de cuentas corrientes
 - docker-container: contiene los archivos necesarios para levantar la aplicación
 
-Pasos para la instalación:
--
-1. Comentar (usando '#') en el archivo [docker/dan-infra.yml](docker/dan-infra.yml) todo de los siguientes servicios (los microservicios no se compilan si las aplicaciones que necesitan no están activas):
-   - **service-gateway**
-   - **service-discovery** 
-   - **ms-cuentacorriente**
-   - **ms-pedido**
-   - **ms-producto**
-   - **ms-usuario**
-2. Levantar las imágenes necesarias para la compilación de los microservicios (postgres, artemis, mongodb)
-   - `docker image build artemis -t artemis:1.0.0`
-   - `docker-compose -f docker/dan-infra.yml up -d`
-3. Se necesitan compilar las imágenes de los microservicios, para eso correr los siguientes comandos:
-   - `cd ./service-discovery`
-   - `./mvnw install`
-   - `cd ../service-gateway`
-   - `./mvnw install`
-   - `cd ../ms-cuentacorriente`
-   - `./mvnw install`
-   - `cd ../ms-pedido`
-   - `./mvnw install`
-   - `cd ../ms-producto`
-   - `./mvnw install`
-   - `cd ../ms-usuario`
-   - `./mvnw install`
-4. Descomentar lo comentado en el paso 1 en [docker/dan-infra.yml](docker/dan-infra.yml)
-5. Levantar el resto de imagenes
-   - `docker-compose -f docker/dan-infra.yml up -d`
+---
+
+Para instalar la aplicación se necesitan tener los microservicios instalados y compilados y asi poder levantar el container de docker.
+
+Para eso ejecutar el script "install-application.bat", el cual primero levanta las imagenes de las cuales los microservicios dependen, luego compilan los ms y luego levanta el container final, que contiene las imagenes de las dependencias y las de los ms.
 
 
 

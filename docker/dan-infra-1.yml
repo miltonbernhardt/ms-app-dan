@@ -1,0 +1,69 @@
+version: '2'
+services:
+  postgresdb:
+    container_name: postgresdb
+    image: postgres:latest
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=dan2021
+      - POSTGRES_USER=dan2021
+      - POSTGRES_PASSWORD=dan2021
+    ports:
+      - "5432:5432"
+    networks:
+      - infra
+      - app
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - infra
+
+  artemis:
+    container_name: artemis
+    image: artemis:1.0.0
+    ports:
+      - "61616:61616"
+    networks:
+      - app
+      - infra
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.6.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./scripts/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      - app
+    #      monitoring:
+    #        aliases:
+    #          - prometheus
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.0
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    networks:
+      - app
+      - infra
+
+networks:
+  infra:
+    driver: bridge
+  app:
+    driver: bridge

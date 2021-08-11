@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>service-gateway</artifactId>
-    <version>${global.version}</version>
+    <version>1.0.0</version>
     <name>${project.artifactId}</name>
     <description>Servicio que actúa como proxy de los otros microservices implementados, permite localizar esos servicios y distribuir su carga que va a dirigida a ellos</description>
 
@@ -28,4 +28,29 @@
             <version>2.2.9.RELEASE</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${spotify-dockerfile.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-docker</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>dan/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

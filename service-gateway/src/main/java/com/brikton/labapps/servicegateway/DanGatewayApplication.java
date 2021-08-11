@@ -1,9 +1,9 @@
-package com.brikton.labapps.gateway;
+package com.brikton.labapps.servicegateway;
 
-import com.brikton.labapps.gateway.filter.ErrorFilter;
-import com.brikton.labapps.gateway.filter.PostFilter;
-import com.brikton.labapps.gateway.filter.RouteFilter;
-import com.brikton.labapps.gateway.filters.PreFilter;
+import com.brikton.labapps.servicegateway.filter.ErrorFilter;
+import com.brikton.labapps.servicegateway.filter.PostFilter;
+import com.brikton.labapps.servicegateway.filter.RouteFilter;
+import com.brikton.labapps.servicegateway.filters.PreFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

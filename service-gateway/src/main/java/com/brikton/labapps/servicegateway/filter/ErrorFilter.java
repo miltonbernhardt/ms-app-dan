@@ -1,12 +1,12 @@
-package com.brikton.labapps.gateway.filter;
+package com.brikton.labapps.servicegateway.filter;
 
 import com.netflix.zuul.ZuulFilter;
 
-public class RouteFilter extends ZuulFilter {
+public class ErrorFilter extends ZuulFilter {
 
 	@Override
 	public String filterType() {
-		return "route";
+		return "error";
 	}
 
 	@Override

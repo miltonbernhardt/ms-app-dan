@@ -17,11 +17,19 @@
     <description>Parent for all microservices for the DAN course</description>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>service-discovery</module>
+        <module>service-gateway</module>
+        <module>ms-cuentacorriente</module>
+        <module>ms-pedido</module>
+        <module>ms-producto</module>
+        <module>ms-usuario</module>
+    </modules>
+
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <global.version>1.0.0</global.version>
         <spring.version>2.4.5</spring.version>
         <spring-cloud.version>2020.0.0</spring-cloud.version>
         <spotify-dockerfile.version>1.4.13</spotify-dockerfile.version>
@@ -54,6 +62,12 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -73,27 +87,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${spotify-dockerfile.version}</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <repository>dan/${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
-                    <buildArgs>
-                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
             </plugin>
         </plugins>
     </build>
