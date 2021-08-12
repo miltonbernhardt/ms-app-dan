@@ -25,7 +25,7 @@ services:
       - "8080:8080"
     networks:
       - infra
-      -
+
   artemis:
     container_name: artemis
     image: artemis:1.0.0
@@ -110,8 +110,6 @@ services:
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_pedido"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "SPRING_ARTEMIS_HOST=artemis"
-      - "SPRING_ARTEMIS_PORT=61616"
     networks:
       - app
 
@@ -156,20 +154,6 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9000"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_usuario"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-    networks:
-      - app
-  
-  ms-liquidacion:
-    container_name: ms-liquidacion
-    image: dan/ms-liquidacion:1.0.0
-    ports:
-      - "9004:9004"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9004"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_liquidacion"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:

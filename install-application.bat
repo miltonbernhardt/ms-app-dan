@@ -1,3 +1,4 @@
-docker-compose -f ./docker/dan-infra-1.yml -p "dan-container" up -d
+docker-compose -f ./docker/dan-infra-without-ms.yml -p "dan-container" up -d
 ./mvnw install
-docker-compose -f ./docker/dan-infra-2.yml -p "dan-container" up -d
+docker-compose -f ./docker/dan-infra.yml -p "dan-container" up -d
+
