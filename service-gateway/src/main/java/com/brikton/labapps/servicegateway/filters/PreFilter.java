@@ -1,4 +1,4 @@
-package com.brikton.labapps.gateway.filters;
+package com.brikton.labapps.servicegateway.filters;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;

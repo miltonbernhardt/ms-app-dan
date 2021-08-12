@@ -1,0 +1,1 @@
+./mvnw install -pl ms-producto -am
