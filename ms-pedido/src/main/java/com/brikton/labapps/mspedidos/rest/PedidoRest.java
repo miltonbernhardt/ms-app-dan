@@ -81,7 +81,7 @@ public class PedidoRest {
 
     @GetMapping(path = "/obra")
     public ResponseEntity<List<Pedido>> pedidosPorObra(@RequestBody Obra obra){
-        ArrayList<Pedido> pedidos = new ArrayList<>();
+        ArrayList<Pedido> pedidos;
         pedidos = pedidoService.pedidosPorObra(obra);
         return ResponseEntity.ok(pedidos);
     }
