@@ -1,76 +1,72 @@
 package com.brikton.labapps.msusuario.rest;
 
-import java.util.List;
-
 import com.brikton.labapps.msusuario.domain.Empleado;
-import com.brikton.labapps.msusuario.servicioInterfaz.EmpleadoServicio;
-
+import com.brikton.labapps.msusuario.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/empleado")
 public class EmpleadoRest {
-	    
-	@Autowired
-	EmpleadoServicio empleadoServicio;
 
-	@PostMapping
-	public ResponseEntity<Empleado> crear(@RequestBody Empleado nuevo){
-		empleadoServicio.crearEmpleado(nuevo);
-	    return ResponseEntity.ok(nuevo);
-	}
+    @Autowired
+    EmpleadoService empleadoServicio;
 
-	@PutMapping(path = "/{id}")
-	public ResponseEntity<?> actualizar(@RequestBody Empleado nuevo, @PathVariable Integer id){
-        try{
-			empleadoServicio.actualizarEmpleado(nuevo,id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} return ResponseEntity.ok(nuevo);
-	}
+    @PostMapping
+    public ResponseEntity<Empleado> createVendedor(@RequestBody Empleado nuevo) {
+        empleadoServicio.createEmpleado(nuevo);
+        return ResponseEntity.ok(nuevo);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> updateEmpleado(@RequestBody Empleado nuevo, @PathVariable Integer id) {
+        try {
+            empleadoServicio.updateEmpleado(nuevo, id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(nuevo);
+    }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> borrar(@PathVariable Integer id){
-    	try{
-			empleadoServicio.borrarEmpleado(id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} return ResponseEntity.ok().build();
-	}
-
-	@GetMapping(path="/{id}")
-    public ResponseEntity<?> empleadoPorId(@PathVariable Integer id) {
-        Empleado emp;
-		try{
-			emp = empleadoServicio.getEmpleado(id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} return ResponseEntity.ok(emp);
+    public ResponseEntity<?> deleteEmpleado(@PathVariable Integer id) {
+        try {
+            empleadoServicio.deleteEmpleado(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok().body("El empleado con el id: " + id + " ha sido borrado.");
     }
 
-	@GetMapping("/nombre")
-   public ResponseEntity<?> empleadoPorNombre(@RequestParam String usuario) {
-	Empleado emp;
-	try{
-		emp = empleadoServicio.empleadoPorNombre(usuario);
-	} catch (Exception e) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-	} return ResponseEntity.ok(emp);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getEmpleadoById(@PathVariable Integer id) {
+        Empleado empleado;
+        try {
+            empleado = empleadoServicio.getEmpleado(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(empleado);
     }
 
-	@GetMapping
-	public ResponseEntity<List<Empleado>> listaEmpleados(){
-		return ResponseEntity.ok(empleadoServicio.listaEmpleados());
-	}
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<?> getEmpleadoByNombre(@PathVariable String nombre) {
+        Optional<Empleado> empleado;
+        try {
+            empleado = empleadoServicio.getEmpleadoByNombre(nombre);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.of(empleado);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Empleado>> getAllEmpleados() {
+        return ResponseEntity.ok(empleadoServicio.getAllEmpleados());
+    }
 }

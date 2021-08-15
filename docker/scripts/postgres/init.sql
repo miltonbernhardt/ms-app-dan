@@ -3,3 +3,4 @@ CREATE SCHEMA IF NOT EXISTS ms_usuario;
 CREATE SCHEMA IF NOT EXISTS ms_producto;
 CREATE SCHEMA IF NOT EXISTS ms_cuentacorriente;
 CREATE SCHEMA IF NOT EXISTS ms_liquidacion;
+

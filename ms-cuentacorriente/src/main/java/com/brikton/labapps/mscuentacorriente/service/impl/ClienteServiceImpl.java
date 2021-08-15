@@ -5,6 +5,7 @@ import com.brikton.labapps.mscuentacorriente.dto.Obra;
 import com.brikton.labapps.mscuentacorriente.repository.ClienteRepository;
 import com.brikton.labapps.mscuentacorriente.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,19 @@ public class ClienteServiceImpl implements ClienteService {
     ClienteRepository clienteRepository;
 
     private RestTemplate restTemplate = new RestTemplate();
-    private final String urlServer = "http://localhost";
-    private final String puerto = "9000";
-    private final String apiObra = "api/obra";
-    private final String apiCliente = "api/cliente";
+
+    @Value("${pedido.host}")
+    private String host;
 
     @Override
     public Cliente getClienteCorrecto(Cliente cliente) throws Exception {
+        String url = "http://" + host + ":9000/api/cliente/cuit/" + cliente.getCuit();//TODO change for feign
 
         Optional<Cliente> clienteFromRepo = Optional.ofNullable(clienteRepository.getClienteByCuit(cliente.getCuit()));
         if (clienteFromRepo.isEmpty()) {
-            String server = urlServer + ":" + puerto + "/" + apiCliente;
             ResponseEntity<Cliente> clienteRespuesta;
             try {
-                clienteRespuesta = restTemplate.exchange(server + "/cuit/" + cliente.getCuit(), HttpMethod.GET, null, Cliente.class);
+                clienteRespuesta = restTemplate.exchange(url, HttpMethod.GET, null, Cliente.class);
                 return clienteRepository.save(Objects.requireNonNull(clienteRespuesta.getBody()));
             } catch (final HttpClientErrorException e) {
                 System.out.println(e.getResponseBodyAsString());
@@ -48,10 +48,11 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<Obra> getObras(Cliente cliente) throws Exception {
-        String server = urlServer + ":" + puerto + "/" + apiObra + "/obrasPorCliente/cuit/" + cliente.getCuit();
+        String url = "http://" + host + ":9000/api/obra/obrasPorCliente/cuit/" + cliente.getCuit();//TODO change for feign
+
         ResponseEntity<List<Obra>> obras;
         try {
-            obras = restTemplate.exchange(server, HttpMethod.GET, null, (Class<List<Obra>>) (Object) List.class);
+            obras = restTemplate.exchange(url, HttpMethod.GET, null, (Class<List<Obra>>) (Object) List.class);
 
         } catch (final HttpClientErrorException e) {
             System.out.println(e.getResponseBodyAsString());

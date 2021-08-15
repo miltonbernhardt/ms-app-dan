@@ -2,7 +2,7 @@ package com.brikton.labapps.msusuario.rest;
 
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
-import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
+import com.brikton.labapps.msusuario.service.ObraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ObraRest {
 
     @Autowired
-    ObraServicio obraServicio;
+    ObraService obraServicio;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> obraPorId(@PathVariable Integer id) {

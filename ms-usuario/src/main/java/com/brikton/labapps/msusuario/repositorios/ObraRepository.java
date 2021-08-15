@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ObraRepositorio extends JpaRepository<Obra, Integer>{
+public interface ObraRepository extends JpaRepository<Obra, Integer>{
 
 	@Query("SELECT o FROM Obra o WHERE o.cliente.id = :idCliente")
 	List<Obra> findAllByCliente(@Param("idCliente") Integer idCliente);

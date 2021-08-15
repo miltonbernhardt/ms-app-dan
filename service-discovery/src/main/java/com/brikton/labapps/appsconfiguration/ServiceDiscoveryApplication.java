@@ -1,4 +1,4 @@
-package com.brikton.labapps.servicediscovery;
+package com.brikton.labapps.appsconfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

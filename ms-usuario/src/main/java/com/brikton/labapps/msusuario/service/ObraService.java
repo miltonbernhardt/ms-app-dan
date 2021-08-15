@@ -1,4 +1,4 @@
-package com.brikton.labapps.msusuario.servicioInterfaz;
+package com.brikton.labapps.msusuario.service;
 
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
@@ -6,7 +6,7 @@ import com.brikton.labapps.msusuario.domain.TipoObra;
 import java.util.List;
 import java.util.Optional;
 
-public interface ObraServicio {
+public interface ObraService {
 
     List<Obra> listarObras(TipoObra tipoObraId);
 

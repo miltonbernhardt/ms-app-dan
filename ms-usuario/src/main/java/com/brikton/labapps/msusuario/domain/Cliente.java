@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @JsonIgnoreProperties(value = { "obras" })
@@ -15,8 +16,10 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_cliente")
 	private Integer id;
+	@NotNull
 	private String razonSocial;
 	private String cuit;
+	@NotNull
 	private String mail;
 	private Double maxCuentaCorriente;
 	private Date fechaBaja;

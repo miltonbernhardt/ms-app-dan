@@ -22,7 +22,6 @@ public class DetallePedidoReceiver {
             m.setStockActual(m.getStockActual()-detalle.get("cantidad"));
             service.update(m);    
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

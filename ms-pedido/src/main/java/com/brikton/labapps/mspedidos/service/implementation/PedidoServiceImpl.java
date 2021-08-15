@@ -121,7 +121,6 @@ public class PedidoServiceImpl implements PedidoService {
 								map.put("cantidad",d.getCantidad());
 								jms.convertAndSend("COLA_PEDIDOS", map);
 							} catch (JmsException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 					} else {
@@ -213,7 +212,6 @@ public class PedidoServiceImpl implements PedidoService {
 		try {
 			return productoSrv.stockDisponible(producto)>=cantidad;
 		} catch (RecursoNoEncontradoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

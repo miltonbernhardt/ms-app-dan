@@ -97,6 +97,8 @@ services:
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_cuentacorriente"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "PEDIDO_HOST=ms-pedido"
+      - "USUARIO_HOST=ms-usuario"
     networks:
       - app
 
@@ -111,6 +113,7 @@ services:
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_liquidacion"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "USUARIO_HOST=ms-usuario"
     networks:
       - app
 
@@ -127,6 +130,8 @@ services:
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
       - "SPRING_ARTEMIS_PORT=61616"
+      - "PRODUCTO_HOST=ms-producto"
+      - "USUARIO_HOST=ms-usuario"
     networks:
       - app
 

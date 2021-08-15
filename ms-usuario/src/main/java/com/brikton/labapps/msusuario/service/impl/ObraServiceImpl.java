@@ -1,11 +1,11 @@
-package com.brikton.labapps.msusuario.servicioImplementacion;
+package com.brikton.labapps.msusuario.service.impl;
 
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
-import com.brikton.labapps.msusuario.repositorios.ObraRepositorio;
-import com.brikton.labapps.msusuario.servicioInterfaz.ClienteServicio;
-import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
+import com.brikton.labapps.msusuario.repositorios.ObraRepository;
+import com.brikton.labapps.msusuario.service.ClienteService;
+import com.brikton.labapps.msusuario.service.ObraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ObraServicioImplementacion implements ObraServicio {
+public class ObraServiceImpl implements ObraService {
 
     @Autowired
-    ClienteServicio clienteServicio;
+    ClienteService clienteServicio;
 
     @Autowired
-    ObraRepositorio repositorio;
+    ObraRepository repositorio;
 
     public List<Obra> listarObras(TipoObra tipoObraId) {
         if (tipoObraId == null) {
