@@ -18,15 +18,15 @@ public class EmpleadoRest {
     EmpleadoService empleadoServicio;
 
     @PostMapping
-    public ResponseEntity<Empleado> createVendedor(@RequestBody Empleado nuevo) {
-        empleadoServicio.createEmpleado(nuevo);
-        return ResponseEntity.ok(nuevo);
+    public ResponseEntity<Empleado> createVendedor(@RequestBody Empleado empleado) {
+        return ResponseEntity.ok(empleadoServicio.saveEmpleado(empleado));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateEmpleado(@RequestBody Empleado nuevo, @PathVariable Integer id) {
+    public ResponseEntity<?> updateEmpleado(@RequestBody Empleado empleado, @PathVariable Integer id) {
+        Empleado nuevo;
         try {
-            empleadoServicio.updateEmpleado(nuevo, id);
+            nuevo = empleadoServicio.updateEmpleado(empleado, id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -35,6 +35,7 @@ public class EmpleadoRest {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteEmpleado(@PathVariable Integer id) {
+
         try {
             empleadoServicio.deleteEmpleado(id);
         } catch (Exception e) {

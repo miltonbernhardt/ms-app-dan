@@ -1,5 +1,6 @@
 package com.brikton.labapps.msusuario.service;
 
+import com.brikton.labapps.msusuario.domain.Empleado;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
 
@@ -8,16 +9,19 @@ import java.util.Optional;
 
 public interface ObraService {
 
-    List<Obra> listarObras(TipoObra tipoObraId);
+    Obra saveObra(Obra obra) throws Exception;
 
-    Optional<Obra> buscarObraPorId(Integer id) throws Exception;
+    Obra updateObra(Obra nueva, Integer id) throws Exception;
 
-    Obra guardarObra(Obra obra) throws Exception;
+    void deleteObra(Integer id) throws Exception;
 
-    List<Obra> listarObrasPorCliente(Integer clienteId) throws Exception;
+    List<Obra> getAllObrasByTipo(TipoObra tipoObraId);
 
-    List<Obra> listarObrasPorCliente(String clienteCuit) throws Exception;
+    Optional<Obra> getObraById(Integer id) throws Exception;
 
-    Double buscarSaldoClienteDeObra(Integer obraId) throws Exception;
+    List<Obra> getObrasByClienteId(Integer clienteId) throws Exception;
 
+    List<Obra> getObrasByClienteCuit(String clienteCuit) throws Exception;
+
+    Double getSaldoPorObrasByClient(Integer obraId) throws Exception;
 }

@@ -22,40 +22,40 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     UsuarioRepository usuarioRepository;
 
     @Override
-    public void createEmpleado(Empleado empleado) {
+    public Empleado saveEmpleado(Empleado empleado) {
         Usuario usuario = new Usuario();
         usuario.setMail(empleado.getNombre().toLowerCase().replaceAll("\\s+", ""));
         usuario.setPassword("dan2021");
         usuario.setTipoUsuario(TipoUsuario.VENDEDOR);
         this.usuarioRepository.save(usuario);
         empleado.setUser(usuario);
-        empleadoRepository.save(empleado);
+        return empleadoRepository.save(empleado);
     }
 
     @Override
-    public void updateEmpleado(Empleado nuevo, Integer id) throws Exception {
-        Optional<Empleado> e = empleadoRepository.findById(id);
-        if (e.isPresent()) {
-            e.get().setNombre(nuevo.getNombre());
-            e.get().setUser(nuevo.getUser());
-            empleadoRepository.save(e.get());
-        } else throw new Exception("Empleado id:" + id + " no encontrado");
+    public Empleado updateEmpleado(Empleado nuevo, Integer id) throws Exception {
+        Optional<Empleado> empleado = empleadoRepository.findById(id);
+        if (empleado.isPresent()) {
+            empleado.get().setNombre(nuevo.getNombre());
+            empleado.get().setUser(nuevo.getUser());
+            return empleadoRepository.save(empleado.get());
+        } else throw new Exception("No se ha encontrado un empleado con el id: " + id);
     }
 
     @Override
     public void deleteEmpleado(Integer id) throws Exception {
-        Optional<Empleado> e = empleadoRepository.findById(id);
-        if (e.isPresent()) {
+        Optional<Empleado> empleado = empleadoRepository.findById(id);
+        if (empleado.isPresent()) {
             empleadoRepository.deleteById(id);
-        } else throw new Exception("Empleado id:" + id + " no encontrado");
+        } else throw new Exception("No se ha encontrado un empleado con el id: " + id);
     }
 
     @Override
     public Empleado getEmpleado(Integer id) throws Exception {
-        Optional<Empleado> e = empleadoRepository.findById(id);
-        if (!e.isPresent())
-            throw new Exception("Empleado id:" + id + " no encontrado");
-        return e.get();
+        Optional<Empleado> empleado = empleadoRepository.findById(id);
+        if (empleado.isEmpty())
+            throw new Exception("No se ha encontrado un empleado con el id: " + id);
+        return empleado.get();
     }
 
     @Override

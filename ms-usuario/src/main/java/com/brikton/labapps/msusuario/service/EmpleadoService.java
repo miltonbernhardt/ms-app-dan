@@ -1,15 +1,15 @@
 package com.brikton.labapps.msusuario.service;
 
+import com.brikton.labapps.msusuario.domain.Empleado;
+
 import java.util.List;
 import java.util.Optional;
 
-import com.brikton.labapps.msusuario.domain.Empleado;
-
 public interface EmpleadoService {
 
-    void createEmpleado(Empleado nuevo);
+    Empleado saveEmpleado(Empleado nuevo);
 
-    void updateEmpleado(Empleado nuevo, Integer id) throws Exception;
+    Empleado updateEmpleado(Empleado nuevo, Integer id) throws Exception;
 
     void deleteEmpleado(Integer id) throws Exception;
 
@@ -18,5 +18,5 @@ public interface EmpleadoService {
     List<Empleado> getAllEmpleados();
 
     Optional<Empleado> getEmpleadoByNombre(String nombre) throws Exception;
-    
+
 }
