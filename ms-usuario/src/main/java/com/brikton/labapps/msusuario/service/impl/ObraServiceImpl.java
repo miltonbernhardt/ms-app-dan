@@ -19,41 +19,33 @@ public class ObraServiceImpl implements ObraService {
     ClienteService clienteServicio;
 
     @Autowired
-    ObraRepository repositorio;
+    ObraRepository obraRepository;
 
-    public List<Obra> listarObras(TipoObra tipoObraId) {
+    @Override
+    public void deleteObra(Integer id) throws Exception {
+        Optional<Obra> obra = obraRepository.findById(id);
+        if (obra.isPresent())
+            obraRepository.deleteById(id);
+        else
+            throw new Exception("No se ha encontrando una obra con el id: " + id);
+    }
+
+    public List<Obra> getAllObrasByTipo(TipoObra tipoObraId) {
         if (tipoObraId == null) {
-            return this.repositorio.findAll();
+            return this.obraRepository.findAll();
         } else {
-            return this.repositorio.findAllByTipoObra(tipoObraId);
+            return this.obraRepository.findAllByTipoObra(tipoObraId);
         }
     }
 
-    public Optional<Obra> buscarObraPorId(Integer id) throws Exception {
-        Optional<Obra> o = this.repositorio.findById(id);
-        if (o.isEmpty())
+    public Optional<Obra> getObraById(Integer id) throws Exception {
+        Optional<Obra> obra = this.obraRepository.findById(id);
+        if (obra.isEmpty())
             throw new Exception("No existe una obra que tenga el id: " + id);
-        return o;
+        return obra;
     }
 
-    // public Obra guardarObra(Obra o, Integer clienteId) throws Exception {
-    // 	Optional<Cliente> clienteBuscado = this.clienteServicio.buscarClientePorId(clienteId);
-    // 	if(clienteBuscado.isPresent()) {
-    // 		if(o.getId() != null && this.buscarObraPorId(o.getId()).isPresent() && clienteId == null) {
-    // 			this.repositorio.save(o);
-    // 		} else {
-    // 				clienteBuscado.get().agregarObra(o);
-    // 				o.setCliente(clienteBuscado.get());
-    // 				this.repositorio.save(o);
-    // 				this.clienteServicio.guardarCliente(clienteBuscado.get());
-    // 		}
-    // 		return o;
-    // 	} else {
-    // 		throw new Exception("No se encontro el cliente con id "+ clienteId);
-    // 	}
-    // }
-
-    public Obra guardarObra(Obra obra) throws Exception {
+    public Obra saveObra(Obra obra) throws Exception {
         Optional<Cliente> clienteBuscado = obra.getCliente().getId() != null
                 ? this.clienteServicio.buscarClientePorId(obra.getCliente().getId())
                 : this.clienteServicio.buscarClientePorCuit(obra.getCliente().getCuit());
@@ -61,20 +53,33 @@ public class ObraServiceImpl implements ObraService {
         if (clienteBuscado.isPresent()) {
             Cliente cliente = clienteBuscado.get();
             obra.setCliente(cliente);
-            //cliente.agregarObra(obra);
-            //this.clienteServicio.guardarCliente(cliente);
-            this.repositorio.save(obra);
+            this.obraRepository.save(obra);
             return obra;
-        } else throw new Exception("No se encontró el cliente indicado.");
+        } else
+            throw new Exception("No se encontró el cliente indicado.");
     }
 
-    public List<Obra> listarObrasPorCliente(Integer clienteId) throws Exception {
+    @Override
+    public Obra updateObra(Obra nueva, Integer id) throws Exception {
+        Optional<Obra> obra = obraRepository.findById(id);
+        if (obra.isPresent()) {
+            obra.get().setDireccion(nueva.getDireccion() == null ? obra.get().getDireccion() : nueva.getDireccion());
+            obra.get().setDescripcion(nueva.getDescripcion() == null ? obra.get().getDescripcion() : nueva.getDescripcion());
+            obra.get().setLatitud(nueva.getLatitud() == null ? obra.get().getLatitud() : nueva.getLatitud());
+            obra.get().setSuperficie(nueva.getSuperficie() == null ? obra.get().getSuperficie() : nueva.getSuperficie());
+            obra.get().setLongitud(nueva.getLongitud() == null ? obra.get().getLongitud() : nueva.getLongitud());
+            obra.get().setTipoObra(nueva.getTipoObra() == null ? obra.get().getTipoObra() : nueva.getTipoObra());
+            return obraRepository.save(obra.get());
+        } else throw new Exception("No se ha encontrado una obra con el id: " + id);
+    }
+
+    public List<Obra> getObrasByClienteId(Integer clienteId) throws Exception {
         Optional<Cliente> cliente = this.clienteServicio.buscarClientePorId(clienteId);
 
         if (cliente.isEmpty())
             throw new Exception("No se encontró un cliente con el id " + clienteId + ".");
 
-        List<Obra> obras = this.repositorio.findAllByCliente(cliente.get().getId());
+        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.get().getId());
 
         if (obras.size() <= 0)
             throw new Exception("El cliente con el id " + clienteId + " no posee obras asociadas.");
@@ -83,13 +88,13 @@ public class ObraServiceImpl implements ObraService {
     }
 
     @Override
-    public List<Obra> listarObrasPorCliente(String clienteCuit) throws Exception {
+    public List<Obra> getObrasByClienteCuit(String clienteCuit) throws Exception {
         Optional<Cliente> cliente = this.clienteServicio.buscarClientePorCuit(clienteCuit);
 
         if (cliente.isEmpty())
             throw new Exception("No se encontró un cliente con el cuit " + clienteCuit + ".");
 
-        List<Obra> obras = this.repositorio.findAllByCliente(cliente.get().getId());
+        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.get().getId());
 
         if (obras.size() <= 0)
             throw new Exception("El cliente con el cuit " + clienteCuit + " no posee obras asociadas.");
@@ -97,11 +102,11 @@ public class ObraServiceImpl implements ObraService {
         return obras;
     }
 
-    public Double buscarSaldoClienteDeObra(Integer obraId) throws Exception {
-        Optional<Obra> o = this.repositorio.findById(obraId);
-        if (o.isEmpty()) {
+    public Double getSaldoPorObrasByClient(Integer obraId) throws Exception {
+        Optional<Obra> obra = this.obraRepository.findById(obraId);
+        if (obra.isEmpty()) {
             throw new Exception("No se encontró una obra con el id " + obraId + ".");
         }
-        return o.get().getCliente().getMaxCuentaCorriente();
+        return obra.get().getCliente().getMaxCuentaCorriente();
     }
 }

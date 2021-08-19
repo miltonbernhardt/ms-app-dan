@@ -18,11 +18,8 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
     private final PedidoService pedidoService;
 
     @Autowired
-    public DetallePedidoServiceImpl(
-            DetallePedidoRepository detallePedidoRepository,
-            ProductoRepository productoRepository,
-            PedidoService pedidoService
-    ) {
+    public DetallePedidoServiceImpl(DetallePedidoRepository detallePedidoRepository,
+            ProductoRepository productoRepository, PedidoService pedidoService) {
         this.detallePedidoRepository = detallePedidoRepository;
         this.productoRepository = productoRepository;
         this.pedidoService = pedidoService;
@@ -59,6 +56,15 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
             detallePedidoRepository.delete(detalle);
         } else {
             throw new RecursoNoEncontradoException("Detalle de pedido no encontrado: ", detalle.getId());
+        }
+    }
+
+    @Override
+    public void eliminarDetalle(Integer detalleId) throws RecursoNoEncontradoException {
+        if (detallePedidoRepository.existsById(detalleId)) {
+            detallePedidoRepository.deleteById(detalleId);
+        } else {
+            throw new RecursoNoEncontradoException("Detalle de pedido no encontrado: ", detalleId);
         }
     }
 

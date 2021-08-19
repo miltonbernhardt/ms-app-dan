@@ -24,8 +24,11 @@ public class ProductoServiceImpl implements ProductoService {
     UnidadRepository unidadRepository;
 
     private Unidad getUnidadCorrecta(Material material) {
-        Optional<Unidad> unidad = unidadRepository.findById(material.getUnidad().getId());
-        return unidad.orElseGet(() -> unidadRepository.save(material.getUnidad()));
+        List<Unidad> unidad = unidadRepository.findByDescripcion(material.getUnidad().getDescripcion());
+        if (unidad.isEmpty())
+            return unidadRepository.save(material.getUnidad());
+        else
+            return unidad.get(0);
     }
 
     @Override
@@ -47,7 +50,8 @@ public class ProductoServiceImpl implements ProductoService {
     public List<Material> getByStockRange(Integer stockMinimo, Integer stockMaximo) throws Exception {
         List<Material> materiales = productoRepository.getMaterialPorRangoStock(stockMinimo, stockMaximo);
         if (materiales.size() == 0)
-            throw new Exception("No hay productos que tenga un stock entre " + stockMinimo + " y " + stockMaximo + " unidades.");
+            throw new Exception(
+                    "No hay productos que tenga un stock entre " + stockMinimo + " y " + stockMaximo + " unidades.");
         return materiales;
     }
 
@@ -73,7 +77,8 @@ public class ProductoServiceImpl implements ProductoService {
         Optional<Material> material = productoRepository.findById(idMaterial);
         if (material.isEmpty())
             throw new Exception("Material no encontrado " + material);
-        else return material.get().getStockActual();
+        else
+            return material.get().getStockActual();
     }
 
     @Override
@@ -81,7 +86,18 @@ public class ProductoServiceImpl implements ProductoService {
         Optional<Material> m = productoRepository.findById(id);
         if (m.isPresent())
             return m.get();
-        else throw new Exception("Recurso no encontrado: material " + id);
+        else
+            throw new Exception("Recurso no encontrado: material " + id);
+    }
+
+    @Override
+    public List<Material> getTodos() throws Exception {
+        return productoRepository.findAll();
+    }
+
+    @Override
+    public List<Unidad> getTodasUnidades() throws Exception {
+        return unidadRepository.findAll();
     }
 
 }

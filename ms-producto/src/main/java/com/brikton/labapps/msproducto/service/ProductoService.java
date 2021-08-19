@@ -1,8 +1,9 @@
 package com.brikton.labapps.msproducto.service;
 
-import com.brikton.labapps.msproducto.domain.Material;
-
 import java.util.List;
+
+import com.brikton.labapps.msproducto.domain.Material;
+import com.brikton.labapps.msproducto.domain.Unidad;
 
 public interface ProductoService {
 
@@ -15,6 +16,10 @@ public interface ProductoService {
     Material getByName(String nombre) throws Exception;
 
     List<Material> getByPrice(Double precio) throws Exception;
+
+    List<Material> getTodos() throws Exception;
+
+    List<Unidad> getTodasUnidades() throws Exception;
 
     Integer getStock(Integer idMaterial) throws Exception;
 

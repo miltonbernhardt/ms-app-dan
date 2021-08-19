@@ -83,13 +83,10 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void bajaCliente(Integer id) throws Exception {
-        // TODO: validar que no haya realizado pedidos
         Optional<Cliente> cliente = this.buscarClientePorId(id);
-
         if (cliente.isEmpty()) {
             throw new Exception("No existen clientes con el id: " + id);
         }
-
         cliente.get().setFechaBaja(new Date());
         this.clienteRepository.save(cliente.get());
     }

@@ -9,6 +9,8 @@ public interface DetallePedidoService {
 
     public DetallePedido actualizarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
 
-    void eliminarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
+    public void eliminarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
+
+    public void eliminarDetalle(Integer detalleId) throws RecursoNoEncontradoException;
 
 }

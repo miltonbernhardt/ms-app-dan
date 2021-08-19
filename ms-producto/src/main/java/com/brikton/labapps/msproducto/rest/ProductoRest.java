@@ -1,6 +1,7 @@
 package com.brikton.labapps.msproducto.rest;
 
 import com.brikton.labapps.msproducto.domain.Material;
+import com.brikton.labapps.msproducto.domain.Unidad;
 import com.brikton.labapps.msproducto.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,14 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/producto")
+@CrossOrigin(origins = { "http://localhost:3000" }, maxAge = 3000)
 public class ProductoRest {
 
     private final ProductoService productoService;
 
     @Autowired
-    public ProductoRest(
-            ProductoService productoService
-    ) {
+    public ProductoRest(ProductoService productoService) {
         this.productoService = productoService;
     }
 
@@ -44,6 +44,17 @@ public class ProductoRest {
         return ResponseEntity.ok(actualizado);
     }
 
+    @GetMapping
+    public ResponseEntity<?> productos() {
+        List<Material> materiales;
+        try {
+            materiales = this.productoService.getTodos();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(materiales);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> obtenerProducto(@PathVariable Integer id) {
         Material material;
@@ -66,7 +77,6 @@ public class ProductoRest {
         return ResponseEntity.ok(material);
     }
 
-
     @GetMapping(path = "/stock/{idProducto}")
     public ResponseEntity<?> obtenerStockProducto(@PathVariable Integer idProducto) {
         Integer stock;
@@ -79,7 +89,8 @@ public class ProductoRest {
     }
 
     @GetMapping(path = "/stock/{stockMinimo}/{stockMaximo}")
-    public ResponseEntity<?> obtenerProductoPorRangoStock(@PathVariable Integer stockMinimo, @PathVariable Integer stockMaximo) {
+    public ResponseEntity<?> obtenerProductoPorRangoStock(@PathVariable Integer stockMinimo,
+            @PathVariable Integer stockMaximo) {
         List<Material> listaMateriales;
         try {
             listaMateriales = this.productoService.getByStockRange(stockMinimo, stockMaximo);
@@ -98,5 +109,16 @@ public class ProductoRest {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
         return ResponseEntity.ok(listaMateriales);
+    }
+
+    @GetMapping(path = "/unidades")
+    public ResponseEntity<?> obtenerUnidadesProducto() {
+        List<Unidad> listaUnidades;
+        try {
+            listaUnidades = this.productoService.getTodasUnidades();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(listaUnidades);
     }
 }

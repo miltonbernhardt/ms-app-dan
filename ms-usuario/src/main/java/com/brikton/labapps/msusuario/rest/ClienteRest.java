@@ -12,6 +12,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cliente")
+@CrossOrigin(origins = { "http://localhost:3000" }, maxAge = 3000)
+
 public class ClienteRest {
 
     @Autowired
@@ -76,7 +78,6 @@ public class ClienteRest {
         }
         return ResponseEntity.ok(actualizado);
     }
-
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Integer id) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/detallepedido")
+@CrossOrigin(origins = { "http://localhost:3000" }, maxAge = 3000)
 public class DetallePedidoRest {
 
     @Autowired
@@ -39,6 +40,16 @@ public class DetallePedidoRest {
     public ResponseEntity<?> eliminarDetalle(@RequestBody DetallePedido detalle) {
         try {
             service.eliminarDetalle(detalle);
+        } catch (RecursoNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok("Detalle Eliminado");
+    }
+
+    @DeleteMapping(path = "/id")
+    public ResponseEntity<?> eliminarDetalleById(@RequestParam Integer idDetalle) {
+        try {
+            service.eliminarDetalle(idDetalle);
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
