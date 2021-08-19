@@ -4,9 +4,8 @@ import com.brikton.labapps.msusuario.domain.Empleado;
 import com.brikton.labapps.msusuario.domain.TipoUsuario;
 import com.brikton.labapps.msusuario.domain.Usuario;
 import com.brikton.labapps.msusuario.repositorios.EmpleadoRepository;
-import com.brikton.labapps.msusuario.repositorios.UsuarioRepository;
 import com.brikton.labapps.msusuario.service.EmpleadoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.brikton.labapps.msusuario.service.UsuarioService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,19 +14,23 @@ import java.util.Optional;
 @Service
 public class EmpleadoServiceImpl implements EmpleadoService {
 
-    @Autowired
-    EmpleadoRepository empleadoRepository;
+    private EmpleadoRepository empleadoRepository;
+    private UsuarioService usuarioService;
 
-    @Autowired
-    UsuarioRepository usuarioRepository;
+    public EmpleadoServiceImpl(
+            EmpleadoRepository empleadoRepository,
+            UsuarioService usuarioService
+    ) {
+        this.empleadoRepository = empleadoRepository;
+        this.usuarioService = usuarioService;
+    }
 
     @Override
-    public Empleado saveEmpleado(Empleado empleado) {
+    public Empleado saveEmpleado(Empleado empleado) throws Exception {
         Usuario usuario = new Usuario();
-        usuario.setMail(empleado.getNombre().toLowerCase().replaceAll("\\s+", ""));
-        usuario.setPassword("dan2021");
+        usuario.setMail(empleado.getNombre());
         usuario.setTipoUsuario(TipoUsuario.VENDEDOR);
-        this.usuarioRepository.save(usuario);
+        this.usuarioService.saveUsuario(usuario);
         empleado.setUser(usuario);
         return empleadoRepository.save(empleado);
     }

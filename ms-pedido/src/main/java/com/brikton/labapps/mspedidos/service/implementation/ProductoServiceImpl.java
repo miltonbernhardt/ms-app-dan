@@ -19,7 +19,7 @@ public class ProductoServiceImpl implements ProductoService {
     private String host;
 
     @Override
-    public Integer stockDisponible(Producto producto) throws RecursoNoEncontradoException {
+    public Integer getStockDisponible(Producto producto) throws RecursoNoEncontradoException {
         String url = "http://" + host + ":9001/api/producto/stock/" + producto.getId();//TODO change for feign
         // ResponseEntity<Integer> respuesta = restTemplate.exchange(server+"/stock?idProducto="+producto.getId(), HttpMethod.GET, null , Integer .class);
         ResponseEntity<Integer> respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Integer.class);

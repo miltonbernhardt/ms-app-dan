@@ -1,13 +1,10 @@
-package com.brikton.labapps.msusuario.domain;
+package com.brikton.labapps.servicegateway.domain;
 
-import javax.persistence.*;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Entity
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_usuario")
     private Long id;
     private String mail;
     private String password;
@@ -26,7 +23,7 @@ public class Usuario {
     }
 
     public void setMail(String email) {
-        this.mail = email.toLowerCase().replaceAll("\\s+", "");
+        this.mail = email;
     }
 
     public String getPassword() {
@@ -34,7 +31,8 @@ public class Usuario {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        PasswordEncoder pwEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        this.password = pwEncoder.encode(password);
     }
 
     public TipoUsuario getTipoUsuario() {

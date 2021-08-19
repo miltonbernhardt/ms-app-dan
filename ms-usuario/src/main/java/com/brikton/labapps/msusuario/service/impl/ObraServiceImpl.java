@@ -47,8 +47,8 @@ public class ObraServiceImpl implements ObraService {
 
     public Obra saveObra(Obra obra) throws Exception {
         Optional<Cliente> clienteBuscado = obra.getCliente().getId() != null
-                ? this.clienteServicio.buscarClientePorId(obra.getCliente().getId())
-                : this.clienteServicio.buscarClientePorCuit(obra.getCliente().getCuit());
+                ? this.clienteServicio.getClienteById(obra.getCliente().getId())
+                : this.clienteServicio.getClienteByCuit(obra.getCliente().getCuit());
 
         if (clienteBuscado.isPresent()) {
             Cliente cliente = clienteBuscado.get();
@@ -74,7 +74,7 @@ public class ObraServiceImpl implements ObraService {
     }
 
     public List<Obra> getObrasByClienteId(Integer clienteId) throws Exception {
-        Optional<Cliente> cliente = this.clienteServicio.buscarClientePorId(clienteId);
+        Optional<Cliente> cliente = this.clienteServicio.getClienteById(clienteId);
 
         if (cliente.isEmpty())
             throw new Exception("No se encontró un cliente con el id " + clienteId + ".");
@@ -89,7 +89,7 @@ public class ObraServiceImpl implements ObraService {
 
     @Override
     public List<Obra> getObrasByClienteCuit(String clienteCuit) throws Exception {
-        Optional<Cliente> cliente = this.clienteServicio.buscarClientePorCuit(clienteCuit);
+        Optional<Cliente> cliente = this.clienteServicio.getClienteByCuit(clienteCuit);
 
         if (cliente.isEmpty())
             throw new Exception("No se encontró un cliente con el cuit " + clienteCuit + ".");

@@ -1,7 +1,7 @@
 version: '2'
 services:
-  postgresdb:
-    container_name: postgresdb
+  postgres:
+    container_name: postgres
     image: postgres:latest
     restart: always
     volumes:
@@ -17,14 +17,13 @@ services:
       - infra
       - app
 
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
-    ports:
-      - "8080:8080"
-    networks:
-      - infra
+#  adminer:
+#    container_name: adminer
+#    image: adminer
+#    ports:
+#      - "8282:8080"
+#    networks:
+#      - infra
 
   artemis:
     container_name: artemis
@@ -37,34 +36,34 @@ services:
       - app
       - infra
 
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus:v2.6.1
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./scripts/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
-    networks:
-      - app
-  #      monitoring:
-  #        aliases:
-  #          - prometheus
-
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:6.5.0
-    depends_on:
-      - prometheus
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-    env_file:
-      - ./grafana/config.monitoring
-    networks:
-      - app
-      - infra
+  #  prometheus:
+  #    container_name: prometheus
+  #    image: prom/prometheus:v2.6.1
+  #    ports:
+  #      - "9090:9090"
+  #    volumes:
+  #      - ./scripts/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #      - ./prometheus:/prometheus
+  #    networks:
+  #      - app
+  #  #      monitoring:
+  #  #        aliases:
+  #  #          - prometheus
+  #
+  #  grafana:
+  #    container_name: grafana
+  #    image: grafana/grafana:6.5.0
+  #    depends_on:
+  #      - prometheus
+  #    ports:
+  #      - "3000:3000"
+  #    volumes:
+  #      - ./grafana/provisioning/:/etc/grafana/provisioning/
+  #    env_file:
+  #      - ./grafana/config.monitoring
+  #    networks:
+  #      - app
+  #      - infra
 
   service-discovery:
     container_name: service-discovery
@@ -74,17 +73,17 @@ services:
     networks:
       - app
 
-  service-gateway:
-    container_name: service-gateway
-    image: dan/service-gateway:1.0.0
-    ports:
-      - "8181:8181"
-    environment:
-      - "SERVER_PORT=8181"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-    networks:
-      - app
-      - infra
+#  service-gateway:
+#    container_name: service-gateway
+#    image: dan/service-gateway:1.0.0
+#    ports:
+#      - "8181:8181"
+#    environment:
+#      - "SERVER_PORT=8181"
+#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+#    networks:
+#      - app
+#      - infra
 
   ms-cuentacorriente:
     container_name: ms-cuentacorriente
@@ -94,7 +93,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9003"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_cuentacorriente"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "PEDIDO_HOST=ms-pedido"
@@ -110,7 +109,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9004"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_liquidacion"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "USUARIO_HOST=ms-usuario"
@@ -125,7 +124,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9002"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_pedido"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
@@ -143,7 +142,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9001"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_producto"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_producto"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
@@ -159,7 +158,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9000"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_usuario"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_usuario"
       - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:

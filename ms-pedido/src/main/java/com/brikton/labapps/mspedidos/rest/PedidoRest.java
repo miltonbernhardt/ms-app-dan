@@ -42,7 +42,7 @@ public class PedidoRest {
         Pedido creado = null;
         if (validarPedido(nuevoPedido)) {
             try {
-                creado = this.pedidoService.crearPedido(nuevoPedido);
+                creado = this.pedidoService.savePedido(nuevoPedido);
             } catch (RiesgoException e2) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e2.getMessage());
             }
@@ -70,7 +70,7 @@ public class PedidoRest {
                                     @RequestParam String nuevoEstado){
         Pedido pedido = null;
         try {
-            pedido = pedidoService.actualizarEstadoPedido(id,EstadoPedido.valueOf(nuevoEstado.toUpperCase()));
+            pedido = pedidoService.updateEstadoPedido(id,EstadoPedido.valueOf(nuevoEstado.toUpperCase()));
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RiesgoException e1) {
@@ -82,14 +82,14 @@ public class PedidoRest {
     @GetMapping(path = "/obra")
     public ResponseEntity<List<Pedido>> pedidosPorObra(@RequestBody Obra obra){
         ArrayList<Pedido> pedidos;
-        pedidos = pedidoService.pedidosPorObra(obra);
+        pedidos = pedidoService.getPedidosByObra(obra);
         return ResponseEntity.ok(pedidos);
     }
 
     @GetMapping(path = "/estado")
     public ResponseEntity<List<Pedido>> pedidosPorEstado(@RequestParam String estadoPedido){
         ArrayList<Pedido> pedidos = new ArrayList<>();
-        pedidos = pedidoService.pedidosPorEstado(EstadoPedido.valueOf(estadoPedido));
+        pedidos = pedidoService.getPedidosByEstado(EstadoPedido.valueOf(estadoPedido));
         return ResponseEntity.ok(pedidos);
     }
 
@@ -97,7 +97,7 @@ public class PedidoRest {
     public ResponseEntity<?> pedidosPorCliente(@RequestParam Integer idCliente){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         try {
-            pedidos = pedidoService.pedidosPorCliente(idCliente);
+            pedidos = pedidoService.getPedidosByCliente(idCliente);
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
