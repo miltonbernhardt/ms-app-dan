@@ -1,0 +1,2 @@
+Corre en el puerto 9005
+todos los rest tienen que tener habilitado el crossOrigin para que pueda hacer las consultas
