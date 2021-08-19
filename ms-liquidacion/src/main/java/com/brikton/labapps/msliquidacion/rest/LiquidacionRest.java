@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/liquidacion")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3000)
+@CrossOrigin(origins = "http://localhost:9005", maxAge = 3000)
 public class LiquidacionRest {
 
   @Autowired

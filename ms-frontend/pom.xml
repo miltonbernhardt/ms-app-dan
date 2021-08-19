@@ -10,10 +10,10 @@
 	</parent>
 	<groupId>com.brikton.labapps</groupId>
 	<artifactId>ms-frontend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>ms-frontend</name>
-	<description>Frontend for DAN </description>
-	<properties>
+	<description>Frontend for DAN ms</description>
+	<properties> 
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>

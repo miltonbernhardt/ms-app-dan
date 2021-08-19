@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/obra")
-@CrossOrigin(origins = { "http://localhost:3000" }, maxAge = 3000)
+@CrossOrigin(origins = { "http://localhost:9005" }, maxAge = 3000)
 
 public class ObraRest {
 
