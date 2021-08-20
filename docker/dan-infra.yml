@@ -95,7 +95,6 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9001"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_producto"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
       - "SPRING_ARTEMIS_PORT=61616"
@@ -111,7 +110,6 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9000"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_usuario"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
@@ -125,7 +123,6 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9003"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
 #      - "PEDIDO_HOST=ms-pedido"#TODO revisar por qué no funciona
 #      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
@@ -141,7 +138,6 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9004"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
 #      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
     networks:
@@ -156,12 +152,24 @@ services:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9002"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
       - "SPRING_ARTEMIS_PORT=61616"
 #      - "PRODUCTO_HOST=ms-producto"#TODO revisar por qué no funciona
 #      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+    networks:
+      - app
+      - infra
+
+  ms-frontend:
+    container_name: ms-frontend
+    image: dan/ms-frontend:1.0.0
+    ports:
+      - "9005:9005"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9005"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
 
