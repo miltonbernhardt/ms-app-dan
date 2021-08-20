@@ -1,6 +1,6 @@
 package com.brikton.labapps.servicegateway.config;
 
-import com.brikton.labapps.servicegateway.impl.UsuarioServiceImpl;
+import com.brikton.labapps.servicegateway.impl.UserDetailsServiceImpl;
 import com.brikton.labapps.servicegateway.jwt.AuthEntryPointJwt;
 import com.brikton.labapps.servicegateway.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UsuarioServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;

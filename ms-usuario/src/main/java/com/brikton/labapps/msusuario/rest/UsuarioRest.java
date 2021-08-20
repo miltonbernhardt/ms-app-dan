@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioRest {
@@ -16,10 +18,14 @@ public class UsuarioRest {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping(path = "/{mail}")
-    public ResponseEntity<?> getUsuarioByMail(@PathVariable String mail) {
+    @GetMapping(path = "/{username}")
+    public ResponseEntity<?> getUsuarioByUsername(@PathVariable String username) {
         try {
-            return ResponseEntity.of(this.usuarioService.getUsuario(mail));
+            Optional<Usuario> usuario = this.usuarioService.getUsuario(username);
+            if (usuario.isPresent()) {
+                return ResponseEntity.ok(usuario);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró al usuario " + username);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

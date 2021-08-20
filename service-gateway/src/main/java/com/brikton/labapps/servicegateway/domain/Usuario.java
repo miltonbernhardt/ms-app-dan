@@ -1,21 +1,18 @@
 package com.brikton.labapps.servicegateway.domain;
 
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 public class Usuario {
 
     private Long id;
-    private String mail;
+    private String username;
     private String password;
     private TipoUsuario tipoUsuario;
 
-    public Usuario(){
+    public Usuario() {
 
     }
 
-    public Usuario(String mail, String password, TipoUsuario tipoUsuario) {
-        this.mail = mail;
+    public Usuario(String username, String password, TipoUsuario tipoUsuario) {
+        this.username = username;
         this.password = password;
         this.tipoUsuario = tipoUsuario;
     }
@@ -28,12 +25,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getMail() {
-        return mail;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMail(String email) {
-        this.mail = email;
+    public void setUsername(String username) {
+        this.username = username.toLowerCase().replaceAll("\\s+", "");
     }
 
     public String getPassword() {
@@ -41,8 +38,7 @@ public class Usuario {
     }
 
     public void setPassword(String password) {
-        PasswordEncoder pwEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        this.password = pwEncoder.encode(password);
+        this.password = password;
     }
 
     public TipoUsuario getTipoUsuario() {
@@ -51,5 +47,15 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{\n" +
+                " id=" + id +
+                ",\n username='" + username + '\'' +
+                ",\n password='" + password + '\'' +
+                ",\n tipoUsuario=" + tipoUsuario +
+                "\n}";
     }
 }

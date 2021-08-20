@@ -3,12 +3,12 @@ package com.brikton.labapps.servicegateway.domain;
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
-    private String mail;
+    private String username;
     private TipoUsuario rol;
 
-    public JwtResponse(String accessToken, String email, TipoUsuario rol) {
+    public JwtResponse(String accessToken, String username, TipoUsuario rol) {
         this.token = accessToken;
-        this.mail = email;
+        this.username = username;
         this.rol = rol;
     }
 
@@ -28,12 +28,12 @@ public class JwtResponse {
         this.type = tokenType;
     }
 
-    public String getMail() {
-        return mail;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public TipoUsuario getRol() {

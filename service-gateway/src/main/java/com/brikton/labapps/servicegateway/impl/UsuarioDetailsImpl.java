@@ -13,17 +13,14 @@ public class UsuarioDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
-    private String mail;
-
+    private String username;
     @JsonIgnore
     private String password;
-
     private TipoUsuario rol;
 
-    public UsuarioDetailsImpl(Long id, String email, String password, TipoUsuario rol) {
+    public UsuarioDetailsImpl(Long id, String username, String password, TipoUsuario rol) {
         this.id = id;
-        this.mail = email;
+        this.username = username;
         this.password = password;
         this.rol = rol;
     }
@@ -31,7 +28,7 @@ public class UsuarioDetailsImpl implements UserDetails {
     public static UsuarioDetailsImpl build(Usuario usuario) {
         return new UsuarioDetailsImpl(
                 usuario.getId(),
-                usuario.getMail(),
+                usuario.getUsername(),
                 usuario.getPassword(),
                 usuario.getTipoUsuario()
         );
@@ -48,7 +45,7 @@ public class UsuarioDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return mail;
+        return username;
     }
 
     @Override
@@ -84,14 +81,6 @@ public class UsuarioDetailsImpl implements UserDetails {
             return false;
         UsuarioDetailsImpl user = (UsuarioDetailsImpl) o;
         return Objects.equals(id, user.id);
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
     }
 
     public void setPassword(String password) {

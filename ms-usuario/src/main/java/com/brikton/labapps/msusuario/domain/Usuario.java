@@ -9,7 +9,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_usuario")
     private Long id;
-    private String mail;
+    private String username;
     private String password;
     private TipoUsuario tipoUsuario;
 
@@ -21,12 +21,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getMail() {
-        return mail;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMail(String email) {
-        this.mail = email.toLowerCase().replaceAll("\\s+", "");
+    public void setUsername(String email) {
+        this.username = email.toLowerCase().replaceAll("\\s+", "");
     }
 
     public String getPassword() {
@@ -43,5 +43,15 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", mail='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", tipoUsuario=" + tipoUsuario +
+                '}';
     }
 }

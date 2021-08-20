@@ -1,7 +1,7 @@
 package com.brikton.labapps.msusuario.service.impl;
 
 import com.brikton.labapps.msusuario.domain.Usuario;
-import com.brikton.labapps.msusuario.repositorios.UsuarioRepository;
+import com.brikton.labapps.msusuario.repositories.UsuarioRepository;
 import com.brikton.labapps.msusuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,22 +23,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<Usuario> getUsuario(String mail) throws Exception {
-        return this.usuarioRepository.findByMail(mail);
+    public Optional<Usuario> getUsuario(String username) throws Exception {
+        return this.usuarioRepository.findByUsername(username);
     }
 
     @Override
     @Transactional
     public Usuario saveUsuario(Usuario usuario) throws Exception {
-        if (usuario.getMail() == null || usuario.getMail().isEmpty()) {
-            throw new Exception("El usuario debe tener un username/mail.");
+        if (usuario.getUsername() == null || usuario.getUsername().isEmpty()) {
+            throw new Exception("El usuario debe tener un username.");
         } else {
-            if (this.getUsuario(usuario.getMail()).isPresent()) {
-                throw new Exception("Ya existe un usuario con ese username/mail");
+            if (this.getUsuario(usuario.getUsername()).isPresent()) {
+                throw new Exception("Ya existe un usuario con ese username.");
             }
         }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String pass = encoder.encode(password);
 
         if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {

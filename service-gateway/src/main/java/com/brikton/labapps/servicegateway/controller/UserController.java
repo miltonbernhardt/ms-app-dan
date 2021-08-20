@@ -11,7 +11,6 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,34 +42,20 @@ public class UserController {
         try {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getMail(),
+                            loginRequest.getUsername(),
                             loginRequest.getPassword()
                     )
             );
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No se pudo autenticar el usuario. Verifique la contraseña y/o el username/email");
-        } catch (InternalAuthenticationServiceException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error");
+        } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo autenticar el usuario. Verifique la contraseña y/o el username/email");
         }
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         UsuarioDetailsImpl userDetails = (UsuarioDetailsImpl) authentication.getPrincipal();
 
-
-
-
-//        TipoUsuario rol = userDetails.getTipoUsuario();
-
-
         return ResponseEntity.ok(
-                new JwtResponse(
-                        jwt,
-                        userDetails.getMail(),
-                        userDetails.getRol()
-                )
+                new JwtResponse(jwt, userDetails.getUsername(), userDetails.getRol())
         );
     }
 
@@ -94,7 +79,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo de usuario que se requiere no es válido. \nLos siguientes valores son válidos: \"CLIENTE y EMPLEADO\".");
         }
 
-        Usuario user = new Usuario(signUpRequest.getMail(), encoder.encode(signUpRequest.getPassword()), tipoUsuario);
+        Usuario user = new Usuario(signUpRequest.getUsername(), signUpRequest.getPassword(), tipoUsuario);
 
 //        try {
 //            usuarioService.saveUser(user);
@@ -104,4 +89,6 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+
+    //TODO hacer un logout
 }

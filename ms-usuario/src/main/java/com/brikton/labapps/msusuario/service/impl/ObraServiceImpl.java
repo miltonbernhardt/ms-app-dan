@@ -3,7 +3,7 @@ package com.brikton.labapps.msusuario.service.impl;
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
-import com.brikton.labapps.msusuario.repositorios.ObraRepository;
+import com.brikton.labapps.msusuario.repositories.ObraRepository;
 import com.brikton.labapps.msusuario.service.ClienteService;
 import com.brikton.labapps.msusuario.service.ObraService;
 import org.springframework.beans.factory.annotation.Autowired;

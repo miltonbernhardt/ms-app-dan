@@ -3,11 +3,10 @@ package com.brikton.labapps.msusuario.service.impl;
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.TipoUsuario;
 import com.brikton.labapps.msusuario.domain.Usuario;
-import com.brikton.labapps.msusuario.repositorios.ClienteRepository;
+import com.brikton.labapps.msusuario.repositories.ClienteRepository;
 import com.brikton.labapps.msusuario.service.ClienteService;
 import com.brikton.labapps.msusuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -72,7 +71,7 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.setId(clienteAntiguo.get().getId());
             } else {
                 Usuario usuario = new Usuario();
-                usuario.setMail(cliente.getRazonSocial());
+                usuario.setUsername(cliente.getRazonSocial());
                 usuario.setTipoUsuario(TipoUsuario.CLIENTE);
                 this.usuarioService.saveUsuario(usuario);
                 cliente.setUsuario(usuario);

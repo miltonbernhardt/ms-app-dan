@@ -1,8 +1,7 @@
-package com.brikton.labapps.msusuario.repositorios;
+package com.brikton.labapps.msusuario.repositories;
 
 import java.util.List;
 
-import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
 

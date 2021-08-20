@@ -3,7 +3,7 @@ package com.brikton.labapps.msusuario.service.impl;
 import com.brikton.labapps.msusuario.domain.Empleado;
 import com.brikton.labapps.msusuario.domain.TipoUsuario;
 import com.brikton.labapps.msusuario.domain.Usuario;
-import com.brikton.labapps.msusuario.repositorios.EmpleadoRepository;
+import com.brikton.labapps.msusuario.repositories.EmpleadoRepository;
 import com.brikton.labapps.msusuario.service.EmpleadoService;
 import com.brikton.labapps.msusuario.service.UsuarioService;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public Empleado saveEmpleado(Empleado empleado) throws Exception {
         Usuario usuario = new Usuario();
-        usuario.setMail(empleado.getNombre());
+        usuario.setUsername(empleado.getNombre());
         usuario.setTipoUsuario(TipoUsuario.VENDEDOR);
         this.usuarioService.saveUsuario(usuario);
         empleado.setUser(usuario);
