@@ -1,17 +1,21 @@
-package com.brikton.labapps.msusuario.domain;
+package com.brikton.labapps.servicegateway.domain;
 
-import javax.persistence.*;
-
-@Entity
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_usuario")
     private Long id;
     private String username;
     private String password;
     private TipoUsuario tipoUsuario;
+
+    public Usuario() {
+
+    }
+
+    public Usuario(String username, String password, TipoUsuario tipoUsuario) {
+        this.username = username;
+        this.password = password;
+        this.tipoUsuario = tipoUsuario;
+    }
 
     public Long getId() {
         return id;
@@ -25,8 +29,8 @@ public class Usuario {
         return username;
     }
 
-    public void setUsername(String email) {
-        this.username = email.toLowerCase().replaceAll("\\s+", "");
+    public void setUsername(String username) {
+        this.username = username.toLowerCase().replaceAll("\\s+", "");
     }
 
     public String getPassword() {
@@ -47,11 +51,11 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", mail='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", tipoUsuario=" + tipoUsuario +
-                '}';
+        return "Usuario{\n" +
+                " id=" + id +
+                ",\n username='" + username + '\'' +
+                ",\n password='" + password + '\'' +
+                ",\n tipoUsuario=" + tipoUsuario +
+                "\n}";
     }
 }

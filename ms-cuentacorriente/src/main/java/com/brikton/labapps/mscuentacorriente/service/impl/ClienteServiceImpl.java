@@ -24,7 +24,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${pedido.host}")
+    @Value("${usuario.host}")
     private String host;
 
     @Override

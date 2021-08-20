@@ -22,6 +22,8 @@ Para instalar la aplicación se necesitan tener los microservicios instalados y 
 
 Para eso ejecutar el script "install-application.bat", el cual primero levanta las imagenes de las cuales los microservicios dependen, luego compilan los ms y luego levanta el container final, que contiene las imagenes de las dependencias y las de los ms.
 
+---
+Password: "dan2021" es tanto el usuario y contraseña requerida por la base de datos y por la aplicación.
 
 
 

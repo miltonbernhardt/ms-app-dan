@@ -5,12 +5,11 @@ import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 
 public interface DetallePedidoService {
 
-    public DetallePedido agregarDetalle(DetallePedido detalle, Integer idPedido) throws RecursoNoEncontradoException;
+    DetallePedido addDetalle(DetallePedido detalle, Integer idPedido) throws RecursoNoEncontradoException;
 
-    public DetallePedido actualizarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
+    DetallePedido updateDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
 
-    public void eliminarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
+    void deleteDetalle(DetallePedido detalle) throws RecursoNoEncontradoException;
 
-    public void eliminarDetalle(Integer detalleId) throws RecursoNoEncontradoException;
-
+    void eliminarDetalle(Integer detalleId) throws RecursoNoEncontradoException;
 }

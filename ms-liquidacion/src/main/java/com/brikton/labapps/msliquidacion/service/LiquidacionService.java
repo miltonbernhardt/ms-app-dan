@@ -5,15 +5,15 @@ import com.brikton.labapps.msliquidacion.domain.Sueldo;
 import java.util.List;
 
 public interface LiquidacionService {
-  public List<LiquidacionSueldo> liquidarSueldoTodos();
+  List<LiquidacionSueldo> liquidarSueldoTodos();
 
-  public List<LiquidacionSueldo> getLiquidaciones();
+  List<LiquidacionSueldo> getLiquidaciones();
 
-  public Double getComisiones(Integer empleado) throws Exception;
+  Double getComisiones(Integer empleado) throws Exception;
 
-  public LiquidacionSueldo liquidarSueldoEmpleado(Integer empleado) throws Exception;
+  LiquidacionSueldo liquidarSueldoEmpleado(Integer empleado) throws Exception;
 
-  public void actualizarSueldoEmpleado(Sueldo sueldo) throws Exception;
+  void actualizarSueldoEmpleado(Sueldo sueldo) throws Exception;
 
-  public Sueldo getSueldoEmpleado(Integer empleado) throws Exception;
+  Sueldo getSueldoEmpleado(Integer empleado) throws Exception;
 }

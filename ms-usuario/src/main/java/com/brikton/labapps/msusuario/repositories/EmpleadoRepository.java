@@ -1,4 +1,4 @@
-package com.brikton.labapps.msusuario.repositorios;
+package com.brikton.labapps.msusuario.repositories;
 
 import com.brikton.labapps.msusuario.domain.Empleado;
 import org.springframework.data.jpa.repository.JpaRepository;

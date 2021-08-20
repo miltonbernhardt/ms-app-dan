@@ -19,7 +19,7 @@ public class DetallePedidoRest {
     @PostMapping()
     public ResponseEntity<?> agregarItem(@RequestBody DetallePedido detalle, @RequestParam Integer idPedido) {
         try {
-            detalle = service.agregarDetalle(detalle, idPedido);
+            detalle = service.addDetalle(detalle, idPedido);
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -29,7 +29,7 @@ public class DetallePedidoRest {
     @PutMapping
     public ResponseEntity<?> modificarDetalle(@RequestBody DetallePedido detalle) {
         try {
-            service.actualizarDetalle(detalle);
+            service.updateDetalle(detalle);
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -39,7 +39,7 @@ public class DetallePedidoRest {
     @DeleteMapping
     public ResponseEntity<?> eliminarDetalle(@RequestBody DetallePedido detalle) {
         try {
-            service.eliminarDetalle(detalle);
+            service.deleteDetalle(detalle);
         } catch (RecursoNoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

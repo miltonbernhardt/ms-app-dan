@@ -3,9 +3,9 @@ package com.brikton.labapps.msusuario.service.impl;
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.TipoUsuario;
 import com.brikton.labapps.msusuario.domain.Usuario;
-import com.brikton.labapps.msusuario.repositorios.ClienteRepository;
-import com.brikton.labapps.msusuario.repositorios.UsuarioRepository;
+import com.brikton.labapps.msusuario.repositories.ClienteRepository;
 import com.brikton.labapps.msusuario.service.ClienteService;
+import com.brikton.labapps.msusuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class ClienteServiceImpl implements ClienteService {
     ClienteRepository clienteRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UsuarioService usuarioService;
 
     @Override
     public List<Cliente> listarClientes() {
@@ -29,7 +29,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> buscarClientePorId(Integer id) throws Exception {
+    public Optional<Cliente> getClienteById(Integer id) throws Exception {
         Optional<Cliente> cliente = this.clienteRepository.findById(id);
 
         if (cliente.isEmpty() || cliente.get().getFechaBaja() != null)
@@ -38,7 +38,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> buscarClientePorCuit(String cuit) throws Exception {
+    public Optional<Cliente> getClienteByCuit(String cuit) throws Exception {
         List<Cliente> clientes = this.clienteRepository.findByCuit(cuit);
         if (clientes.size() > 0) {
             return Optional.ofNullable(clientes.get(0));
@@ -47,21 +47,22 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> buscarClientePorRazonSocial(String razonSocial) throws Exception {
+    public Optional<Cliente> getClienteByRazonSocial(String razonSocial) throws Exception {
         Optional<Cliente> c = this.clienteRepository.findByRazonSocial(razonSocial);
         if (c.isEmpty() || c.get().getFechaBaja() != null)
             throw new Exception("No existen clientes con la razón social " + razonSocial);
         return c;
     }
 
+
     @Override
     @Transactional
-    public Cliente guardarCliente(Cliente cliente) throws Exception {
-        if (cliente.getId() == null || this.buscarClientePorId(cliente.getId()).isEmpty()) {
+    public Cliente saveCliente(Cliente cliente) throws Exception {
+        if (cliente.getId() == null || this.getClienteById(cliente.getId()).isEmpty()) {
             Optional<Cliente> clienteAntiguo;
 
             try {
-                clienteAntiguo = this.buscarClientePorCuit(cliente.getCuit());
+                clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
             } catch (Exception e) {
                 clienteAntiguo = Optional.empty();
             }
@@ -70,10 +71,9 @@ public class ClienteServiceImpl implements ClienteService {
                 cliente.setId(clienteAntiguo.get().getId());
             } else {
                 Usuario usuario = new Usuario();
-                usuario.setMail(cliente.getRazonSocial().toLowerCase().replaceAll("\\s+", ""));
-                usuario.setPassword("dan2021");
+                usuario.setUsername(cliente.getRazonSocial());
                 usuario.setTipoUsuario(TipoUsuario.CLIENTE);
-                this.usuarioRepository.save(usuario);
+                this.usuarioService.saveUsuario(usuario);
                 cliente.setUsuario(usuario);
             }
         }
@@ -83,7 +83,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void bajaCliente(Integer id) throws Exception {
-        Optional<Cliente> cliente = this.buscarClientePorId(id);
+        Optional<Cliente> cliente = this.getClienteById(id);
         if (cliente.isEmpty()) {
             throw new Exception("No existen clientes con el id: " + id);
         }

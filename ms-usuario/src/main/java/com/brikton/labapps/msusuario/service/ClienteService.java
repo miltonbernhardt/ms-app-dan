@@ -8,13 +8,13 @@ import java.util.Optional;
 public interface ClienteService {
     List<Cliente> listarClientes();
 
-    Optional<Cliente> buscarClientePorId(Integer id) throws Exception;
+    Optional<Cliente> getClienteById(Integer id) throws Exception;
 
-    Optional<Cliente> buscarClientePorCuit(String cuit) throws Exception;
+    Optional<Cliente> getClienteByCuit(String cuit) throws Exception;
 
-    Optional<Cliente> buscarClientePorRazonSocial(String razonSocial) throws Exception;
+    Optional<Cliente> getClienteByRazonSocial(String razonSocial) throws Exception;
 
-    Cliente guardarCliente(Cliente cliente) throws Exception;
+    Cliente saveCliente(Cliente cliente) throws Exception;
 
     void bajaCliente(Integer id) throws Exception;
 }

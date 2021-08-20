@@ -11,21 +11,19 @@ import com.brikton.labapps.mspedidos.exception.RiesgoException;
 
 public interface PedidoService {
 
-    public Pedido crearPedido(Pedido p) throws RiesgoException;
+    Pedido savePedido(Pedido p) throws RiesgoException;
 
-    public Pedido actualizarEstadoPedido(Integer id, EstadoPedido estadoPedido)
-            throws RecursoNoEncontradoException, RiesgoException;
+    Pedido updateEstadoPedido(Integer id, EstadoPedido estadoPedido) throws RecursoNoEncontradoException, RiesgoException;
 
-    public Pedido getPedido(Integer idPedido) throws RecursoNoEncontradoException;
+    Pedido getPedido(Integer idPedido) throws RecursoNoEncontradoException;
 
-    public void actualizarPedido(Pedido p);
+    void updatePedido(Pedido p);
 
-    public ArrayList<Pedido> pedidosPorObra(Obra obra);
+    ArrayList<Pedido> getPedidosByObra(Obra obra);
 
-    public List<Pedido> getPedidos();
+    ArrayList<Pedido> getPedidosByEstado(EstadoPedido estadoPedidos);
 
-    public ArrayList<Pedido> pedidosPorEstado(EstadoPedido estadoPedidos);
+    ArrayList<Pedido> getPedidosByCliente(Integer idCliente) throws RecursoNoEncontradoException;
 
-    public ArrayList<Pedido> pedidosPorCliente(Integer idCliente) throws RecursoNoEncontradoException;
-
+    List<Pedido> getPedidos();
 }

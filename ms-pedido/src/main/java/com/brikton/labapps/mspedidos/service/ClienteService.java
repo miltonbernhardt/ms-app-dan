@@ -7,8 +7,8 @@ import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 
 public interface ClienteService {
     
-    public Double deudaCliente(Obra obra) throws RecursoNoEncontradoException;
+    Double deudaCliente(Obra obra) throws RecursoNoEncontradoException;
 
-    public List<Obra> getObrasCliente(Integer idCliente) throws RecursoNoEncontradoException;
+    List<Obra> getObrasCliente(Integer idCliente) throws RecursoNoEncontradoException;
     
 }

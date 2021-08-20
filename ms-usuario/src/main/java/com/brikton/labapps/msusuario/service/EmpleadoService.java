@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmpleadoService {
-
-    Empleado saveEmpleado(Empleado nuevo);
+    Empleado saveEmpleado(Empleado nuevo) throws Exception;
 
     Empleado updateEmpleado(Empleado nuevo, Integer id) throws Exception;
 
