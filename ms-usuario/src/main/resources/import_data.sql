@@ -2,10 +2,10 @@
 
 INSERT INTO ms_usuario.usuario (id_usuario, password, mail, tipo_usuario)
 VALUES
-    (100, 'dan2021', 'martinperez@mail.com',1),
-    (101, 'dan2021', 'lizamartinez@mail.com', 1),
-    (103, 'dan2021', 'luciagaribaldi@mail.com', 0),
-    (104, 'dan2021', 'lucasferrero@mail.com', 0);
+    (100, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'martinperez@mail.com',1),
+    (101, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lizamartinez@mail.com', 1),
+    (103, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'luciagaribaldi@mail.com', 0),
+    (104, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lucasferrero@mail.com', 0);
 
 INSERT INTO ms_usuario.cliente (id_cliente, cuit, habilitado_online, mail, max_cuenta_corriente, razon_social, id_usuario)
 VALUES

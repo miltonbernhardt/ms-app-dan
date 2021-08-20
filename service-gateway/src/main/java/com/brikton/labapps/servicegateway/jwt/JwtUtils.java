@@ -1,11 +1,13 @@
 package com.brikton.labapps.servicegateway.jwt;
 
 import com.brikton.labapps.servicegateway.domain.Usuario;
+import com.brikton.labapps.servicegateway.impl.UsuarioDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -20,9 +22,12 @@ public class JwtUtils {
     @Value("${jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    /**
+     * Crea el token luego de una correcta autentificacion por parte del usuario.
+     */
     public String generateJwtToken(Authentication authentication) {
 
-        Usuario userPrincipal = (Usuario) authentication.getPrincipal();
+        UsuarioDetailsImpl userPrincipal = (UsuarioDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getMail()))

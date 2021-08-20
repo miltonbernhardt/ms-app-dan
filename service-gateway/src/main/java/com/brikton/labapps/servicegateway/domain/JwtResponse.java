@@ -3,13 +3,11 @@ package com.brikton.labapps.servicegateway.domain;
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
-    private Long id;
     private String mail;
     private TipoUsuario rol;
 
-    public JwtResponse(String accessToken, Long id, String email, TipoUsuario rol) {
+    public JwtResponse(String accessToken, String email, TipoUsuario rol) {
         this.token = accessToken;
-        this.id = id;
         this.mail = email;
         this.rol = rol;
     }
@@ -28,14 +26,6 @@ public class JwtResponse {
 
     public void setTokenType(String tokenType) {
         this.type = tokenType;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getMail() {

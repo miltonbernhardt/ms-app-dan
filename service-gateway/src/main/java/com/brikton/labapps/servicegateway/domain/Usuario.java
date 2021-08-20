@@ -10,6 +10,16 @@ public class Usuario {
     private String password;
     private TipoUsuario tipoUsuario;
 
+    public Usuario(){
+
+    }
+
+    public Usuario(String mail, String password, TipoUsuario tipoUsuario) {
+        this.mail = mail;
+        this.password = password;
+        this.tipoUsuario = tipoUsuario;
+    }
+
     public Long getId() {
         return id;
     }

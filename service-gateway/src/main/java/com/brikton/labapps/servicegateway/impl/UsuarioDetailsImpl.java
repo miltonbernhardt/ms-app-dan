@@ -85,4 +85,24 @@ public class UsuarioDetailsImpl implements UserDetails {
         UsuarioDetailsImpl user = (UsuarioDetailsImpl) o;
         return Objects.equals(id, user.id);
     }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public TipoUsuario getRol() {
+        return rol;
+    }
+
+    public void setRol(TipoUsuario rol) {
+        this.rol = rol;
+    }
 }

@@ -1,5 +1,6 @@
 package com.brikton.labapps.servicegateway.impl;
 
+import com.brikton.labapps.servicegateway.domain.TipoUsuario;
 import com.brikton.labapps.servicegateway.domain.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -23,29 +24,31 @@ public class UsuarioServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
-        String url = "http://localhost/api/usuario/" + mail;//TODO change for feign
-        ResponseEntity<Usuario> respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Usuario.class);
+//        String url = "http://localhost/api/usuario/" + mail;//TODO change for feign
+//        ResponseEntity<Usuario> respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Usuario.class);
+//
+//        if (respuesta.getStatusCode() == HttpStatus.OK) {
+//            return UsuarioDetailsImpl.build(Objects.requireNonNull(respuesta.getBody()));
+//        } else {
+//            if (respuesta.getStatusCode() == HttpStatus.NOT_FOUND) {
+//                throw new UsernameNotFoundException("No existe un usuario con ese username/mail");
+//            } else {
+//                url = "http://" + host + ":9000/api/usuario/" + mail;//TODO change for feign
+//                respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Usuario.class);
+//                if (respuesta.getStatusCode() == HttpStatus.OK) {
+//                    return UsuarioDetailsImpl.build(Objects.requireNonNull(respuesta.getBody()));
+//                } else {
+//                    if (respuesta.getStatusCode() == HttpStatus.NOT_FOUND) {
+//                        throw new UsernameNotFoundException("No existe un usuario con ese username/mail");
+//                    } else {
+//                        throw new UsernameNotFoundException("Hubo un problema. " + respuesta.getBody());
+//                    }
+//                }
+//            }
+//        }
 
-        if (respuesta.getStatusCode() == HttpStatus.OK) {
-            return UsuarioDetailsImpl.build(Objects.requireNonNull(respuesta.getBody()));
-        } else {
-            if (respuesta.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new UsernameNotFoundException("No existe un usuario con ese username/mail");
-            } else {
-                url = "http://" + host + ":9000/api/usuario/" + mail;//TODO change for feign
-                respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Usuario.class);
-                if (respuesta.getStatusCode() == HttpStatus.OK) {
-                    return UsuarioDetailsImpl.build(Objects.requireNonNull(respuesta.getBody()));
-                } else {
-                    if (respuesta.getStatusCode() == HttpStatus.NOT_FOUND) {
-                        throw new UsernameNotFoundException("No existe un usuario con ese username/mail");
-                    } else {
-                        throw new UsernameNotFoundException("Hubo un problema. " + respuesta.getBody());
-                    }
-                }
-            }
-        }
-
+        Usuario usuario = new Usuario("martinperez@mail.com", "$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.", TipoUsuario.CLIENTE);
+        return UsuarioDetailsImpl.build(Objects.requireNonNull(usuario));
     }
 
 }
