@@ -73,66 +73,18 @@ services:
     networks:
       - app
 
-#  service-gateway:
-#    container_name: service-gateway
-#    image: dan/service-gateway:1.0.0
-#    ports:
-#      - "8181:8181"
-#    environment:
-#      - "SERVER_PORT=8181"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#    networks:
-#      - app
-#      - infra
-
-  ms-cuentacorriente:
-    container_name: ms-cuentacorriente
-    image: dan/ms-cuentacorriente:1.0.0
+  service-gateway:
+    container_name: service-gateway
+    image: dan/service-gateway:1.0.0
     ports:
-      - "9003:9003"
+      - "8181:8181"
     environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9003"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "SERVER_PORT=8181"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "PEDIDO_HOST=ms-pedido"
-      - "USUARIO_HOST=ms-usuario"
+#      - "USUARIO_HOST=ms-usuario" #TODO revisar por qué no funciona
     networks:
       - app
-
-  ms-liquidacion:
-    container_name: ms-liquidacion
-    image: dan/ms-liquidacion:1.0.0
-    ports:
-      - "9004:9004"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9004"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "USUARIO_HOST=ms-usuario"
-    networks:
-      - app
-
-  ms-pedido:
-    container_name: ms-pedido
-    image: dan/ms-pedido:1.0.0
-    ports:
-      - "9002:9002"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9002"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "SPRING_ARTEMIS_HOST=artemis"
-      - "SPRING_ARTEMIS_PORT=61616"
-      - "PRODUCTO_HOST=ms-producto"
-      - "USUARIO_HOST=ms-usuario"
-    networks:
-      - app
+      - infra
 
   ms-producto:
     container_name: ms-producto
@@ -163,6 +115,56 @@ services:
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
+
+  ms-cuentacorriente:
+    container_name: ms-cuentacorriente
+    image: dan/ms-cuentacorriente:1.0.0
+    ports:
+      - "9003:9003"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9003"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
+      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+#      - "PEDIDO_HOST=ms-pedido"#TODO revisar por qué no funciona
+#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+    networks:
+      - app
+
+  ms-liquidacion:
+    container_name: ms-liquidacion
+    image: dan/ms-liquidacion:1.0.0
+    ports:
+      - "9004:9004"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9004"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
+      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+    networks:
+      - app
+
+  ms-pedido:
+    container_name: ms-pedido
+    image: dan/ms-pedido:1.0.0
+    ports:
+      - "9002:9002"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9002"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
+      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "SPRING_ARTEMIS_HOST=artemis"
+      - "SPRING_ARTEMIS_PORT=61616"
+#      - "PRODUCTO_HOST=ms-producto"#TODO revisar por qué no funciona
+#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+    networks:
+      - app
+
 
 networks:
   infra:

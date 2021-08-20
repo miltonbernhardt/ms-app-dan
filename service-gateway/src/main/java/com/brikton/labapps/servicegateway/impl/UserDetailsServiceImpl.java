@@ -48,4 +48,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
+    public Usuario saveUser(Usuario usuario){
+        //TODO hacer
+        return usuario;
+    }
+
+    public boolean existsByUsername(String username) {
+        //TODO hacer
+        return false;
+    }
 }

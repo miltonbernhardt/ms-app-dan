@@ -1,8 +1,8 @@
 INSERT INTO ms_usuario.usuario (id_usuario, password, username, tipo_usuario)
-VALUES (100, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'martinperez@mail.com', 1),
-       (101, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lizamartinez@mail.com', 1),
-       (103, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'luciagaribaldi@mail.com', 0),
-       (104, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lucasferrero@mail.com', 0),
+VALUES (100, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'martinperez', 1),
+       (101, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lizamartinez', 1),
+       (103, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'luciagaribaldi', 0),
+       (104, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'lucasferrero', 0),
        (1000, '$2a$10$7tm4QB5I8tgjQ8tAKQWwHO..LT6ZKwoSYNNc6qUt.E1XKqftbuYd.', 'dan2021', 1);
 
 INSERT INTO ms_usuario.cliente (id_cliente, cuit, habilitado_online, mail, max_cuenta_corriente, razon_social, id_usuario)
