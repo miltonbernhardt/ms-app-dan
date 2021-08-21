@@ -1,44 +1,53 @@
 global:
-  scrape_interval:     15s
-  evaluation_interval: 15s
+  scrape_interval:     5s
+  evaluation_interval: 5s
 
 scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: [ 'localhost:9090' ]
-  #        -
-  #  scrape_interval: 15s
-  #  scheme: https
-  #  tls_config:
-  #    insecure_skip_verify: true
-  #  metrics_path: actuator/prometheus
 
   - job_name: 'ms-usuario'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-usuario:9000' ]
 
   - job_name: 'ms-producto'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-producto:9001' ]
 
   - job_name: 'ms-pedido'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-pedido:9002' ]
 
   - job_name: 'ms-cuentacorriente'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-cuentacorriente:9003' ]
 
+  - job_name: 'ms-liquidacion'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets: [ 'ms-liquidacion:9004' ]
+
+  - job_name: 'ms-frontend'
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'ms-frontend:9005' ]
+
   - job_name: 'service-gateway'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-gateway:8181' ]
 
   - job_name: 'service-discovery'
-    scrape_interval: 5s
+    scrape_interval: 2s
+    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-discovery:8761' ]
