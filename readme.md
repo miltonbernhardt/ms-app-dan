@@ -25,6 +25,7 @@ Para eso ejecutar el script "install-application.bat", el cual primero levanta l
 ---
 Se necesitan tener los siguientes puertos disponibles:
 - 3000: servicio de gráficos relacionados con los microservicios activos proveído por grafana.
+- 5432: para el acceso a postgres.
 - 8761: microservicio encargado de descubrir los servicios disponibles.
 - 8181: para correr el microservicio que sirve de gateway para el resto de servicios.
 - 9000: microservicio de gestión de usuarios, clientes, empleados y obras.
@@ -34,9 +35,12 @@ Se necesitan tener los siguientes puertos disponibles:
 - 9004: microservicio que sirve para gestión las liquidaciones de los empleados.
 - 9005: para correr el frontend de la aplicación.
 - 9090: para correr el servicio de prometheus.
-
+- 61616: artemis
 ---
 Password: "dan2021" es tanto el usuario y contraseña requerida por la base de datos y por la aplicación.
+Para grafana usar "admin" como usuario y "dan2021" como password.
+---
+Para usar un dashboard precreado de grafana, importar el archivo grafana/dashboards/mydashboards.json en grafana.
 
 
 

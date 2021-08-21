@@ -17,14 +17,6 @@ services:
       - infra
       - app
 
-#  adminer:
-#    container_name: adminer
-#    image: adminer
-#    ports:
-#      - "8282:8080"
-#    networks:
-#      - infra
-
   artemis:
     container_name: artemis
     build:
@@ -54,8 +46,8 @@ services:
       - prometheus
     ports:
       - "3000:3000"
-#    volumes:
-#      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
     env_file:
       - ./grafana/config.monitoring
     networks:

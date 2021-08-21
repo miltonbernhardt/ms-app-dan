@@ -9,45 +9,61 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-usuario:9000' ]
+        labels:
+            instance: 'ms-usuario'
 
   - job_name: 'ms-producto'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-producto:9001' ]
+        labels:
+          instance: 'ms-producto'
 
   - job_name: 'ms-pedido'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-pedido:9002' ]
+        labels:
+          instance: 'ms-pedido'
 
   - job_name: 'ms-cuentacorriente'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-cuentacorriente:9003' ]
+        labels:
+          instance: 'ms-cuentacorriente'
 
   - job_name: 'ms-liquidacion'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 2s
     static_configs:
       - targets: [ 'ms-liquidacion:9004' ]
+        labels:
+          instance: 'ms-liquidacion'
 
   - job_name: 'ms-frontend'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-frontend:9005' ]
+        labels:
+          instance: 'ms-frontend'
 
   - job_name: 'service-gateway'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-gateway:8181' ]
+        labels:
+          instance: 'service-gateway'
 
   - job_name: 'service-discovery'
     scrape_interval: 2s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-discovery:8761' ]
+        labels:
+          instance: 'service-discovery'
