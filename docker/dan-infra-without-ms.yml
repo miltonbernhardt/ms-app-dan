@@ -16,14 +16,6 @@ services:
       - infra
       - app
 
-  adminer:
-    container_name: adminer
-    image: adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - infra
-
   artemis:
     container_name: artemis
     build:

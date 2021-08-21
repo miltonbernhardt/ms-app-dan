@@ -57,7 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //TODO tocar acá las config
                 .authorizeRequests()
                     .antMatchers("/api/usuario/**").permitAll()
-                    .antMatchers("/api/cliente/**").permitAll()//TODO remover
                     .antMatchers("/actuator/**").permitAll()
                     .antMatchers("/login").permitAll()
                     .antMatchers("/register").permitAll()

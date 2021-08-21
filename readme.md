@@ -40,7 +40,11 @@ Se necesitan tener los siguientes puertos disponibles:
 Password: "dan2021" es tanto el usuario y contraseña requerida por la base de datos y por la aplicación.
 Para grafana usar "admin" como usuario y "dan2021" como password.
 ---
+Para probar con insomnia y usar la gateway fijarse que en auth tenga "Authorization: Bearer " más el token generado por al loguearse (se puede generar uno con el método gateway - /api/login -> loginUser en insomnia) 
+
+---
 Para usar un dashboard precreado de grafana, importar el archivo grafana/dashboards/mydashboards.json en grafana.
+
 
 
 

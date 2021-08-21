@@ -1,11 +1,11 @@
 global:
-  scrape_interval:     5s
-  evaluation_interval: 5s
+  scrape_interval:     15s
+  evaluation_interval: 15s
 
 scrape_configs:
 
   - job_name: 'ms-usuario'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-usuario:9000' ]
@@ -13,7 +13,7 @@ scrape_configs:
             instance: 'ms-usuario'
 
   - job_name: 'ms-producto'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-producto:9001' ]
@@ -21,7 +21,7 @@ scrape_configs:
           instance: 'ms-producto'
 
   - job_name: 'ms-pedido'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-pedido:9002' ]
@@ -29,7 +29,7 @@ scrape_configs:
           instance: 'ms-pedido'
 
   - job_name: 'ms-cuentacorriente'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-cuentacorriente:9003' ]
@@ -38,14 +38,14 @@ scrape_configs:
 
   - job_name: 'ms-liquidacion'
     metrics_path: '/actuator/prometheus'
-    scrape_interval: 2s
+    scrape_interval: 5s
     static_configs:
       - targets: [ 'ms-liquidacion:9004' ]
         labels:
           instance: 'ms-liquidacion'
 
   - job_name: 'ms-frontend'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'ms-frontend:9005' ]
@@ -53,7 +53,7 @@ scrape_configs:
           instance: 'ms-frontend'
 
   - job_name: 'service-gateway'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-gateway:8181' ]
@@ -61,7 +61,7 @@ scrape_configs:
           instance: 'service-gateway'
 
   - job_name: 'service-discovery'
-    scrape_interval: 2s
+    scrape_interval: 5s
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'service-discovery:8761' ]

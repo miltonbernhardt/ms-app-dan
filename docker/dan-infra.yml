@@ -21,7 +21,6 @@ services:
     container_name: artemis
     build:
       context: ./artemis/
-    restart: always
     ports:
       - "61616:61616"
     networks:
@@ -70,7 +69,7 @@ services:
     environment:
       - "SERVER_PORT=8181"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "USUARIO_HOST=ms-usuario" #TODO revisar por qué no funciona
+      - "USUARIO_HOST=host.docker.internal"#ms-usuario" #TODO revisar por qué no funciona
     networks:
       - app
       - infra
@@ -113,8 +112,8 @@ services:
       - "SERVER_PORT=9003"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "PEDIDO_HOST=ms-pedido"#TODO revisar por qué no funciona
-#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+      - "PEDIDO_HOST=host.docker.internal"#ms-pedido"#TODO revisar por qué no funciona
+      - "USUARIO_HOST=host.docker.internal"#ms-usuario"#TODO revisar por qué no funciona
     networks:
       - app
 
@@ -128,7 +127,7 @@ services:
       - "SERVER_PORT=9004"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+      - "USUARIO_HOST=host.docker.internal" #ms-usuario"#TODO revisar por qué no funciona
     networks:
       - app
 
@@ -144,8 +143,8 @@ services:
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
       - "SPRING_ARTEMIS_PORT=61616"
-#      - "PRODUCTO_HOST=ms-producto"#TODO revisar por qué no funciona
-#      - "USUARIO_HOST=ms-usuario"#TODO revisar por qué no funciona
+      - "PRODUCTO_HOST=host.docker.internal"#ms-producto"#TODO revisar por qué no funciona
+      - "USUARIO_HOST=host.docker.internal"#ms-usuario"#TODO revisar por qué no funciona
     networks:
       - app
       - infra
