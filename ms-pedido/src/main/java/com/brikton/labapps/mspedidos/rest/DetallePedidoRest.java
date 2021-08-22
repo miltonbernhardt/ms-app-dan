@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/detallepedido")
-@CrossOrigin(origins = { "http://localhost:9005" }, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
 public class DetallePedidoRest {
 
-    @Autowired
-    DetallePedidoService service;
+    private final DetallePedidoService service;
+
+    public DetallePedidoRest(DetallePedidoService service) {
+        this.service = service;
+    }
 
     @PostMapping()
     public ResponseEntity<?> agregarItem(@RequestBody DetallePedido detalle, @RequestParam Integer idPedido) {

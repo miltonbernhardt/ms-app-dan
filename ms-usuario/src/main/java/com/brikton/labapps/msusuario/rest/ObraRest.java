@@ -3,6 +3,8 @@ package com.brikton.labapps.msusuario.rest;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
 import com.brikton.labapps.msusuario.service.ObraService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,7 +19,9 @@ import java.util.List;
 @RequestMapping("/api/obra")
 public class ObraRest {
 
-    private ObraService obraServicio;
+    protected final Logger logger = LoggerFactory.getLogger(ObraRest.class);
+
+    private final ObraService obraServicio;
 
     public ObraRest(ObraService obraServicio) {
         this.obraServicio = obraServicio;
@@ -28,7 +32,8 @@ public class ObraRest {
         try {
             return ResponseEntity.of(this.obraServicio.getObraById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener la obra debido a un error interno.");
         }
     }
 
@@ -43,6 +48,7 @@ public class ObraRest {
             TipoObra tipoObra = TipoObra.valueOf(tipoObraId);
             return ResponseEntity.ok(this.obraServicio.getAllObrasByTipo(tipoObra));
         } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("El tipo de obra que se requiere no es válido. \nLos siguientes valores son válidos: \"REFORMA, CASA, EDIFICIO y VIAL\".");
         }
     }
@@ -52,7 +58,8 @@ public class ObraRest {
         try {
             return ResponseEntity.ok(this.obraServicio.saveObra(nueva));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar la obra debido a un error interno.");
         }
     }
 
@@ -62,13 +69,15 @@ public class ObraRest {
             Obra actualizada = this.obraServicio.updateObra(nueva, id);
             return ResponseEntity.ok(actualizada);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo actualizar la obra debido a un error interno.");
         }
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     private ResponseEntity<ModelMap> handleError(HttpServletRequest req, Exception ex) {
+        logger.error(ex.getMessage());
         ModelAndView mav = new ModelAndView();
         mav.addObject("reason", "El tipo de obra que se requiere no es válido. Los siguientes valores son válidos: REFORMA, CASA, EDIFICIO y VIAL.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mav.getModelMap());
@@ -80,7 +89,8 @@ public class ObraRest {
             List<Obra> obras = this.obraServicio.getObrasByClienteId(clienteId);
             return ResponseEntity.ok(obras);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener las obras debido a un error interno.");
         }
     }
 
@@ -90,8 +100,8 @@ public class ObraRest {
             List<Obra> obras = this.obraServicio.getObrasByClienteCuit(clienteCuit);
             return ResponseEntity.ok(obras);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo obtener las obras debido a un error interno.");
         }
     }
 
@@ -101,7 +111,8 @@ public class ObraRest {
             Double saldo = this.obraServicio.getSaldoPorObrasByClient(obraId);
             return ResponseEntity.ok(saldo);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo obtener el saldo por obras debido a un error interno.");
         }
     }
 
@@ -111,7 +122,8 @@ public class ObraRest {
             obraServicio.deleteObra(id);
             return ResponseEntity.ok().body("La obra con el id: " + id + " ha sido borrada");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo borrar la obra debido a un error interno.");
         }
     }
 }

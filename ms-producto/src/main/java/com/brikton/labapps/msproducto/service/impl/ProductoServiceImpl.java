@@ -17,11 +17,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
-    @Autowired
-    ProductoRepository productoRepository;
+    private final ProductoRepository productoRepository;
+    private final UnidadRepository unidadRepository;
 
-    @Autowired
-    UnidadRepository unidadRepository;
+    public ProductoServiceImpl(ProductoRepository productoRepository, UnidadRepository unidadRepository) {
+        this.productoRepository = productoRepository;
+        this.unidadRepository = unidadRepository;
+    }
 
     private Unidad getUnidadCorrecta(Material material) {
         List<Unidad> unidad = unidadRepository.findByDescripcion(material.getUnidad().getDescripcion());
@@ -33,7 +35,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Material save(Material materialNuevo) {
+    public Material saveProducto(Material materialNuevo) {
         materialNuevo.setId(null);
         materialNuevo.setUnidad(getUnidadCorrecta(materialNuevo));
         return productoRepository.save(materialNuevo);
@@ -41,62 +43,50 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public Material update(Material materialActualizado) {
+    public Material updateProducto(Material materialActualizado) {
         materialActualizado.setUnidad(getUnidadCorrecta(materialActualizado));
         return productoRepository.save(materialActualizado);
     }
 
     @Override
-    public List<Material> getByStockRange(Integer stockMinimo, Integer stockMaximo) throws Exception {
-        List<Material> materiales = productoRepository.getMaterialPorRangoStock(stockMinimo, stockMaximo);
-        if (materiales.size() == 0)
-            throw new Exception(
-                    "No hay productos que tenga un stock entre " + stockMinimo + " y " + stockMaximo + " unidades.");
-        return materiales;
+    public List<Material> getProductoByRangoStock(Integer stockMinimo, Integer stockMaximo) {
+        return productoRepository.getMaterialPorRangoStock(stockMinimo, stockMaximo);
     }
 
     @Override
-    public Material getByName(String nombre) throws Exception {
+    public Material getProductoByNombre(String nombre) {
         List<Material> material = productoRepository.getMaterialPorNombre(nombre);
         if (material.size() <= 0)
-            throw new Exception("No hay un producto que tenga a " + nombre + " como nombre. ");
+            return null;
         return material.get(0);
     }
 
     @Override
-    public List<Material> getByPrice(Double precio) throws Exception {
-        List<Material> materiales = productoRepository.getMaterialPorPrecio(precio);
-        System.out.println(materiales);
-        if (materiales.size() == 0)
-            throw new Exception("No hay productos que tenga un precio de " + precio);
-        return materiales;
+    public List<Material> getProductoByPrecio(Double precio) {
+        return productoRepository.getMaterialPorPrecio(precio);
     }
 
     @Override
-    public Integer getStock(Integer idMaterial) throws Exception {
+    public Integer getStockProducto(Integer idMaterial) {
         Optional<Material> material = productoRepository.findById(idMaterial);
         if (material.isEmpty())
-            throw new Exception("Material no encontrado " + material);
+            return 0;
         else
             return material.get().getStockActual();
     }
 
     @Override
-    public Material getMaterial(Integer id) throws Exception {
-        Optional<Material> m = productoRepository.findById(id);
-        if (m.isPresent())
-            return m.get();
-        else
-            throw new Exception("Recurso no encontrado: material " + id);
+    public Material getMaterial(Integer id) {
+        return productoRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Material> getTodos() throws Exception {
+    public List<Material> getAllProductos() {
         return productoRepository.findAll();
     }
 
     @Override
-    public List<Unidad> getTodasUnidades() throws Exception {
+    public List<Unidad> getUnidadesProducto() {
         return unidadRepository.findAll();
     }
 

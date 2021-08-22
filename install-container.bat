@@ -1,1 +1,1 @@
-docker-compose -f ./docker/dan-infra.yml -p "dan-container" up -d
+docker-compose -f ./docker/dan-infra.yml -p "dan-container" up -d  --remove-orphans

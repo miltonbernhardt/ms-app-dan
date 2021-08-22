@@ -1,7 +1,7 @@
 version: '2'
 services:
-  postgresdb:
-    container_name: postgresdb
+  postgres:
+    container_name: postgres
     image: postgres:latest
     volumes:
       - ./postgres_data:/var/lib/postgresql/data

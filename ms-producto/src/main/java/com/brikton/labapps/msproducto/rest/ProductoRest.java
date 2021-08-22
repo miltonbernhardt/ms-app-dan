@@ -3,6 +3,8 @@ package com.brikton.labapps.msproducto.rest;
 import com.brikton.labapps.msproducto.domain.Material;
 import com.brikton.labapps.msproducto.domain.Unidad;
 import com.brikton.labapps.msproducto.service.ProductoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/producto")
-@CrossOrigin(origins = { "http://localhost:9005" }, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
 public class ProductoRest {
+
+    protected final Logger logger = LoggerFactory.getLogger(ProductoRest.class);
 
     private final ProductoService productoService;
 
@@ -24,101 +28,110 @@ public class ProductoRest {
 
     @PostMapping
     public ResponseEntity<?> crearProducto(@RequestBody Material materialNuevo) {
-        Material creado;
         try {
-            creado = this.productoService.save(materialNuevo);
+            return ResponseEntity.ok(this.productoService.saveProducto(materialNuevo));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo crear el producto.");
         }
-        return ResponseEntity.ok(creado);
     }
 
     @PutMapping
     public ResponseEntity<?> actualizarProducto(@RequestBody Material materialActualizado) {
-        Material actualizado;
         try {
-            actualizado = this.productoService.update(materialActualizado);
+            return ResponseEntity.ok(this.productoService.updateProducto(materialActualizado));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo actualizar el producto.");
         }
-        return ResponseEntity.ok(actualizado);
     }
 
     @GetMapping
-    public ResponseEntity<?> productos() {
-        List<Material> materiales;
+    public ResponseEntity<?> getAllProductos() {
         try {
-            materiales = this.productoService.getTodos();
+            List<Material> materiales = this.productoService.getAllProductos();
+            if (materiales.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron productos disponibles");
+            return ResponseEntity.ok(materiales);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron encontrar productos.");
         }
-        return ResponseEntity.ok(materiales);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> obtenerProducto(@PathVariable Integer id) {
-        Material material;
+    public ResponseEntity<?> getMaterial(@PathVariable Integer id) {
         try {
-            material = this.productoService.getMaterial(id);
+            Material material = this.productoService.getMaterial(id);
+            if (material == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un producto con el id " + id);
+            return ResponseEntity.ok(material);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo encontrar el producto.");
         }
-        return ResponseEntity.ok(material);
     }
 
     @GetMapping(path = "/nombre/{nombre}")
-    public ResponseEntity<?> obtenerProductoPorNombre(@PathVariable String nombre) {
-        Material material;
+    public ResponseEntity<?> getProductoByNombre(@PathVariable String nombre) {
         try {
-            material = this.productoService.getByName(nombre);
+            Material material = this.productoService.getProductoByNombre(nombre);
+            if (material == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay un producto que tenga a " + nombre + " como nombre. ");
+            return ResponseEntity.ok(material);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener el producto");
         }
-        return ResponseEntity.ok(material);
     }
 
     @GetMapping(path = "/stock/{idProducto}")
-    public ResponseEntity<?> obtenerStockProducto(@PathVariable Integer idProducto) {
-        Integer stock;
+    public ResponseEntity<?> getStockProducto(@PathVariable Integer idProducto) {
         try {
-            stock = this.productoService.getStock(idProducto);
+            return ResponseEntity.ok(this.productoService.getStockProducto(idProducto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener el stock del producto.");
         }
-        return ResponseEntity.ok(stock);
     }
 
     @GetMapping(path = "/stock/{stockMinimo}/{stockMaximo}")
-    public ResponseEntity<?> obtenerProductoPorRangoStock(@PathVariable Integer stockMinimo,
-            @PathVariable Integer stockMaximo) {
-        List<Material> listaMateriales;
+    public ResponseEntity<?> getProductoByRangoStock(@PathVariable Integer stockMinimo,
+                                                     @PathVariable Integer stockMaximo) {
         try {
-            listaMateriales = this.productoService.getByStockRange(stockMinimo, stockMaximo);
+            List<Material> materiales = this.productoService.getProductoByRangoStock(stockMinimo, stockMaximo);
+            if (materiales.size() == 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay productos que tenga un stock entre " + stockMinimo + " y " + stockMaximo + " unidades.");
+            return ResponseEntity.ok(materiales);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo encontrar los productos.");
         }
-        return ResponseEntity.ok(listaMateriales);
     }
 
     @GetMapping(path = "/precio/{precio}")
-    public ResponseEntity<?> obtenerProductoPorPrecio(@PathVariable Double precio) {
-        List<Material> listaMateriales;
+    public ResponseEntity<?> getProductoByPrecio(@PathVariable Double precio) {
         try {
-            listaMateriales = this.productoService.getByPrice(precio);
+            List<Material> listaMateriales = this.productoService.getProductoByPrecio(precio);
+            if (listaMateriales.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay productos que tenga un precio de " + precio);
+            return ResponseEntity.ok(listaMateriales);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron encontrar los productos.");
         }
-        return ResponseEntity.ok(listaMateriales);
     }
 
     @GetMapping(path = "/unidades")
-    public ResponseEntity<?> obtenerUnidadesProducto() {
-        List<Unidad> listaUnidades;
+    public ResponseEntity<?> getUnidadesProducto() {
         try {
-            listaUnidades = this.productoService.getTodasUnidades();
+            List<Unidad> listaUnidades = this.productoService.getUnidadesProducto();
+            if (listaUnidades.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay unidades del producto");
+            return ResponseEntity.ok(listaUnidades);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron encontrar unidades.");
         }
-        return ResponseEntity.ok(listaUnidades);
     }
 }

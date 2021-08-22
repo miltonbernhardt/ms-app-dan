@@ -15,82 +15,82 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/liquidacion")
-@CrossOrigin(origins = "http://localhost:9005", maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
 public class LiquidacionRest {
 
-  @Autowired
-  LiquidacionService liquidacionService;
+    @Autowired
+    LiquidacionService liquidacionService;
 
-  @Autowired
-  VentaService ventaService;
+    @Autowired
+    VentaService ventaService;
 
-  @PostMapping(path = "/todos")
-  public ResponseEntity<?> liquidarSueldoTodos() {
-    List<LiquidacionSueldo> liquidaciones = liquidacionService.liquidarSueldoTodos();
-    return ResponseEntity.ok(liquidaciones);
-  }
-
-  @PostMapping(path = "/empleado")
-  public ResponseEntity<?> liquidarSueldoEmpleado(@RequestParam Integer idEmpleado) {
-    LiquidacionSueldo ls;
-    try {
-      ls = liquidacionService.liquidarSueldoEmpleado(idEmpleado);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @PostMapping(path = "/todos")
+    public ResponseEntity<?> liquidarSueldoTodos() {
+        List<LiquidacionSueldo> liquidaciones = liquidacionService.liquidarSueldoTodos();
+        return ResponseEntity.ok(liquidaciones);
     }
-    return ResponseEntity.ok(ls);
-  }
 
-  @GetMapping("/comisiones")
-  public ResponseEntity<?> getComisiones(@RequestParam Integer idEmpleado) {
-    Double comisiones = 0d;
-    try {
-      comisiones = liquidacionService.getComisiones(idEmpleado);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @PostMapping(path = "/empleado")
+    public ResponseEntity<?> liquidarSueldoEmpleado(@RequestParam Integer idEmpleado) {
+        LiquidacionSueldo ls;
+        try {
+            ls = liquidacionService.liquidarSueldoEmpleado(idEmpleado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(ls);
     }
-    return ResponseEntity.ok(comisiones);
-  }
 
-  @GetMapping
-  public ResponseEntity<?> getLiquidaciones() {
-    List<LiquidacionSueldo> listaLiquidaciones = liquidacionService.getLiquidaciones();
-
-    return ResponseEntity.ok(listaLiquidaciones);
-  }
-
-  @PostMapping(path = "/empleado/sueldo")
-  public ResponseEntity<?> actualizarSueldoEmpleado(@RequestBody Sueldo sueldo) {
-    try {
-      liquidacionService.actualizarSueldoEmpleado(sueldo);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @GetMapping("/comisiones")
+    public ResponseEntity<?> getComisiones(@RequestParam Integer idEmpleado) {
+        Double comisiones = 0d;
+        try {
+            comisiones = liquidacionService.getComisiones(idEmpleado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(comisiones);
     }
-    return ResponseEntity.ok().build();
-  }
 
-  @GetMapping(path = "/empleado/sueldo")
-  public ResponseEntity<?> getSueldoEmpleado(@RequestParam Integer idEmpleado) {
-    Sueldo sueldo;
-    try {
-      sueldo = liquidacionService.getSueldoEmpleado(idEmpleado);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-    return ResponseEntity.ok(sueldo);
-  }
+    @GetMapping
+    public ResponseEntity<?> getLiquidaciones() {
+        List<LiquidacionSueldo> listaLiquidaciones = liquidacionService.getLiquidaciones();
 
-  /*
-   * Direccion para registrar ventas y poder probar el ms
-   */
-  @PostMapping("/ventas")
-  public ResponseEntity<?> registrarVentas(@RequestBody List<Venta> ventas) {
-    List<Venta> registradas;
-    try {
-      registradas = ventaService.registrarVentas(ventas);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.ok(listaLiquidaciones);
     }
-    return ResponseEntity.ok(registradas);
-  }
+
+    @PostMapping(path = "/empleado/sueldo")
+    public ResponseEntity<?> actualizarSueldoEmpleado(@RequestBody Sueldo sueldo) {
+        try {
+            liquidacionService.actualizarSueldoEmpleado(sueldo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/empleado/sueldo")
+    public ResponseEntity<?> getSueldoEmpleado(@RequestParam Integer idEmpleado) {
+        Sueldo sueldo;
+        try {
+            sueldo = liquidacionService.getSueldoEmpleado(idEmpleado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(sueldo);
+    }
+
+    /*
+     * Direccion para registrar ventas y poder probar el ms
+     */
+    @PostMapping("/ventas")
+    public ResponseEntity<?> registrarVentas(@RequestBody List<Venta> ventas) {
+        List<Venta> registradas;
+        try {
+            registradas = ventaService.registrarVentas(ventas);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(registradas);
+    }
 }

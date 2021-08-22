@@ -20,7 +20,7 @@ public class DetallePedidoReceiver {
         try {
             Material m = service.getMaterial(detalle.get("idMaterial"));
             m.setStockActual(m.getStockActual()-detalle.get("cantidad"));
-            service.update(m);    
+            service.updateProducto(m);
         } catch (Exception e) {
             e.printStackTrace();
         }

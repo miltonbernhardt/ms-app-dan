@@ -1,6 +1,9 @@
 package com.brikton.labapps.servicegateway.impl;
 
+import com.brikton.labapps.servicegateway.controller.UserController;
 import com.brikton.labapps.servicegateway.domain.Usuario;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

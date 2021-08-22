@@ -2,6 +2,8 @@ package com.brikton.labapps.msusuario.rest;
 
 import com.brikton.labapps.msusuario.domain.Empleado;
 import com.brikton.labapps.msusuario.service.EmpleadoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,9 @@ import java.util.List;
 @RequestMapping("/api/empleado")
 public class EmpleadoRest {
 
-    private EmpleadoService empleadoServicio;
+    protected final Logger logger = LoggerFactory.getLogger(EmpleadoRest.class);
+
+    private final EmpleadoService empleadoServicio;
 
     public EmpleadoRest(EmpleadoService empleadoServicio) {
         this.empleadoServicio = empleadoServicio;
@@ -23,7 +27,8 @@ public class EmpleadoRest {
         try {
             return ResponseEntity.ok(empleadoServicio.saveEmpleado(empleado));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo crear al empleado.");
         }
     }
 
@@ -32,7 +37,8 @@ public class EmpleadoRest {
         try {
             return ResponseEntity.ok(empleadoServicio.updateEmpleado(empleado, id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo actualizar al empleado.");
         }
     }
 
@@ -42,7 +48,8 @@ public class EmpleadoRest {
             empleadoServicio.deleteEmpleado(id);
             return ResponseEntity.ok().body("El empleado con el id: " + id + " ha sido borrado.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo borrar al empleado.");
         }
     }
 
@@ -51,7 +58,8 @@ public class EmpleadoRest {
         try {
             return ResponseEntity.ok(empleadoServicio.getEmpleado(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo obtener al empleado.");
         }
     }
 
@@ -60,7 +68,8 @@ public class EmpleadoRest {
         try {
             return ResponseEntity.of(empleadoServicio.getEmpleadoByNombre(nombre));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo obtener al empleado.");
         }
     }
 

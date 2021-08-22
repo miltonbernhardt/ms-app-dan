@@ -1,4 +1,4 @@
-package com.brikton.labapps.msproducto.restV2;
+package com.brikton.labapps.msproducto.feign;
 
 import com.brikton.labapps.msproducto.domain.Material;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -19,7 +19,6 @@ public interface ProductoRestInterface {
 
     @GetMapping(path = "/nombre/{nombre}")
     ResponseEntity<?> obtenerProductoPorNombre(@PathVariable String nombre);
-
 
     @GetMapping(path = "/stock/{idProducto}")
     ResponseEntity<?> obtenerStockProducto(@PathVariable Integer idProducto);

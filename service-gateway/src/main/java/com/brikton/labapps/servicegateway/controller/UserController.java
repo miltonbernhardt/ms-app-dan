@@ -4,6 +4,8 @@ import com.brikton.labapps.servicegateway.domain.*;
 import com.brikton.labapps.servicegateway.impl.UserDetailsServiceImpl;
 import com.brikton.labapps.servicegateway.impl.UsuarioDetailsImpl;
 import com.brikton.labapps.servicegateway.jwt.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,8 @@ import javax.validation.Valid;
 
 @RestController
 public class UserController {
+
+    protected final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
@@ -47,6 +51,7 @@ public class UserController {
                     )
             );
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo autenticar el usuario. Verifique la contraseña y/o el username/email");
         }
 
@@ -69,6 +74,7 @@ public class UserController {
         try {
             tipoUsuario = TipoUsuario.valueOf(signUpRequest.getTipoUsuario());
         } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo de usuario que se requiere no es válido. \nLos siguientes valores son válidos: \"CLIENTE y EMPLEADO\".");
         }
 
@@ -77,6 +83,7 @@ public class UserController {
         try {
             userDetailsService.saveUser(user);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 
