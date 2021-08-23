@@ -26,10 +26,13 @@ public class ClienteRest {
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getClienteById(@PathVariable Integer id) {
         try {
-            return ResponseEntity.of(this.clienteServicio.getClienteById(id));
+            Cliente cliente = this.clienteServicio.getClienteById(id);
+            if(cliente == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con el id: " + id);
+            return ResponseEntity.ok(cliente);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
         }
     }
 
@@ -41,20 +44,25 @@ public class ClienteRest {
     @GetMapping(path = "/cuit/{cuit}")
     public ResponseEntity<?> getClienteByCuit(@PathVariable String cuit) {
         try {
-            return ResponseEntity.of(this.clienteServicio.getClienteByCuit(cuit));
+            Cliente cliente = this.clienteServicio.getClienteByCuit(cuit);
+            if (cliente == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con el número de CUIT: " + cuit);
+            return ResponseEntity.ok(cliente);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
         }
     }
 
     @GetMapping(path = "/razonSocial/{razonSocial}")
     public ResponseEntity<?> getClienteByRazonSocial(@PathVariable(required = false) String razonSocial) {
         try {
-            return ResponseEntity.of(this.clienteServicio.getClienteByRazonSocial(razonSocial));
+            if(clienteServicio == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con la razón social: " + razonSocial);
+            return ResponseEntity.ok(this.clienteServicio.getClienteByRazonSocial(razonSocial));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
         }
     }
 
@@ -64,7 +72,7 @@ public class ClienteRest {
             return ResponseEntity.ok(this.clienteServicio.saveCliente(cliente));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede crear el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede crear el cliente.");
         }
     }
 
@@ -74,7 +82,7 @@ public class ClienteRest {
             return ResponseEntity.ok(this.clienteServicio.saveCliente(cliente));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede actualizar el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede actualizar el cliente.");
         }
     }
 
@@ -85,7 +93,7 @@ public class ClienteRest {
             return ResponseEntity.ok().body("El cliente con el id: " + id + " ha sido borrado.");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede borrar el cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede borrar el cliente.");
         }
     }
 }

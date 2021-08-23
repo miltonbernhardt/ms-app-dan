@@ -56,7 +56,10 @@ public class ObraRest {
     @PostMapping
     public ResponseEntity<?> saveObra(@RequestBody Obra nueva) {
         try {
-            return ResponseEntity.ok(this.obraServicio.saveObra(nueva));
+            Obra obra = this.obraServicio.saveObra(nueva);
+            if(obra == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el cliente indicado.");
+            return ResponseEntity.ok(obra);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar la obra debido a un error interno.");
@@ -123,7 +126,7 @@ public class ObraRest {
             return ResponseEntity.ok().body("La obra con el id: " + id + " ha sido borrada");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo borrar la obra debido a un error interno.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

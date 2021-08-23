@@ -15,11 +15,13 @@ import java.util.Optional;
 @Service
 public class ObraServiceImpl implements ObraService {
 
-    @Autowired
-    ClienteService clienteServicio;
+    private final ClienteService clienteServicio;
+    private final ObraRepository obraRepository;
 
-    @Autowired
-    ObraRepository obraRepository;
+    public ObraServiceImpl(ClienteService clienteServicio, ObraRepository obraRepository) {
+        this.clienteServicio = clienteServicio;
+        this.obraRepository = obraRepository;
+    }
 
     @Override
     public void deleteObra(Integer id) throws Exception {
@@ -45,18 +47,17 @@ public class ObraServiceImpl implements ObraService {
         return obra;
     }
 
-    public Obra saveObra(Obra obra) throws Exception {
-        Optional<Cliente> clienteBuscado = obra.getCliente().getId() != null
+    public Obra saveObra(Obra obra) {
+        Cliente clienteBuscado = obra.getCliente().getId() != null
                 ? this.clienteServicio.getClienteById(obra.getCliente().getId())
                 : this.clienteServicio.getClienteByCuit(obra.getCliente().getCuit());
 
-        if (clienteBuscado.isPresent()) {
-            Cliente cliente = clienteBuscado.get();
-            obra.setCliente(cliente);
+        if (clienteBuscado != null) {
+            obra.setCliente(clienteBuscado);
             this.obraRepository.save(obra);
             return obra;
-        } else
-            throw new Exception("No se encontró el cliente indicado.");
+        }
+        return null;
     }
 
     @Override
@@ -74,12 +75,12 @@ public class ObraServiceImpl implements ObraService {
     }
 
     public List<Obra> getObrasByClienteId(Integer clienteId) throws Exception {
-        Optional<Cliente> cliente = this.clienteServicio.getClienteById(clienteId);
+        Cliente cliente = this.clienteServicio.getClienteById(clienteId);
 
-        if (cliente.isEmpty())
+        if (cliente == null)
             throw new Exception("No se encontró un cliente con el id " + clienteId + ".");
 
-        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.get().getId());
+        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.getId());
 
         if (obras.size() <= 0)
             throw new Exception("El cliente con el id " + clienteId + " no posee obras asociadas.");
@@ -89,12 +90,12 @@ public class ObraServiceImpl implements ObraService {
 
     @Override
     public List<Obra> getObrasByClienteCuit(String clienteCuit) throws Exception {
-        Optional<Cliente> cliente = this.clienteServicio.getClienteByCuit(clienteCuit);
+        Cliente cliente = this.clienteServicio.getClienteByCuit(clienteCuit);
 
-        if (cliente.isEmpty())
+        if (cliente == null)
             throw new Exception("No se encontró un cliente con el cuit " + clienteCuit + ".");
 
-        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.get().getId());
+        List<Obra> obras = this.obraRepository.findAllByCliente(cliente.getId());
 
         if (obras.size() <= 0)
             throw new Exception("El cliente con el cuit " + clienteCuit + " no posee obras asociadas.");

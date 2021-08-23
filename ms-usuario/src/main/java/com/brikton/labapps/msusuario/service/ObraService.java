@@ -1,6 +1,5 @@
 package com.brikton.labapps.msusuario.service;
 
-import com.brikton.labapps.msusuario.domain.Empleado;
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
 
@@ -9,7 +8,7 @@ import java.util.Optional;
 
 public interface ObraService {
 
-    Obra saveObra(Obra obra) throws Exception;
+    Obra saveObra(Obra obra);
 
     Obra updateObra(Obra nueva, Integer id) throws Exception;
 

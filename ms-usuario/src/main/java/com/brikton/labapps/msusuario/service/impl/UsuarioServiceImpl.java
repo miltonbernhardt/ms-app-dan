@@ -23,7 +23,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<Usuario> getUsuario(String username) throws Exception {
+    public Optional<Usuario> getUsuario(String username) {
         return this.usuarioRepository.findByUsername(username);
     }
 

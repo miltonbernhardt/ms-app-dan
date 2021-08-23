@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface ClienteService {
     List<Cliente> listarClientes();
 
-    Optional<Cliente> getClienteById(Integer id) throws Exception;
+    Cliente getClienteById(Integer id);
 
-    Optional<Cliente> getClienteByCuit(String cuit) throws Exception;
+    Cliente getClienteByCuit(String cuit);
 
-    Optional<Cliente> getClienteByRazonSocial(String razonSocial) throws Exception;
+    Cliente getClienteByRazonSocial(String razonSocial);
 
     Cliente saveCliente(Cliente cliente) throws Exception;
 

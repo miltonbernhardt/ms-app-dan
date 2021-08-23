@@ -29,46 +29,39 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> getClienteById(Integer id) throws Exception {
+    public Cliente getClienteById(Integer id) {
         Optional<Cliente> cliente = this.clienteRepository.findById(id);
-
         if (cliente.isEmpty() || cliente.get().getFechaBaja() != null)
-            throw new Exception("No existen clientes con el id: " + id);
-        return cliente;
+            return null;
+        return cliente.get();
     }
 
     @Override
-    public Optional<Cliente> getClienteByCuit(String cuit) throws Exception {
+    public Cliente getClienteByCuit(String cuit) {
         List<Cliente> clientes = this.clienteRepository.findByCuit(cuit);
         if (clientes.size() > 0) {
-            return Optional.ofNullable(clientes.get(0));
+            return clientes.get(0);
         }
-        throw new Exception("No existen clientes con el número de CUIT: " + cuit);
+        return null;
     }
 
     @Override
-    public Optional<Cliente> getClienteByRazonSocial(String razonSocial) throws Exception {
+    public Cliente getClienteByRazonSocial(String razonSocial) {
         Optional<Cliente> c = this.clienteRepository.findByRazonSocial(razonSocial);
         if (c.isEmpty() || c.get().getFechaBaja() != null)
-            throw new Exception("No existen clientes con la razón social " + razonSocial);
-        return c;
+            return null;
+        return c.get();
     }
 
 
     @Override
     @Transactional
     public Cliente saveCliente(Cliente cliente) throws Exception {
-        if (cliente.getId() == null || this.getClienteById(cliente.getId()).isEmpty()) {
-            Optional<Cliente> clienteAntiguo;
+        if (cliente.getId() == null || this.getClienteById(cliente.getId()) == null) {
+            Cliente clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
 
-            try {
-                clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
-            } catch (Exception e) {
-                clienteAntiguo = Optional.empty();
-            }
-
-            if (clienteAntiguo.isPresent()) {
-                cliente.setId(clienteAntiguo.get().getId());
+            if (clienteAntiguo != null) {
+                cliente.setId(clienteAntiguo.getId());
             } else {
                 Usuario usuario = new Usuario();
                 usuario.setUsername(cliente.getRazonSocial());
@@ -83,12 +76,12 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void bajaCliente(Integer id) throws Exception {
-        Optional<Cliente> cliente = this.getClienteById(id);
-        if (cliente.isEmpty()) {
+        Cliente cliente = this.getClienteById(id);
+        if (cliente == null) {
             throw new Exception("No existen clientes con el id: " + id);
         }
-        cliente.get().setFechaBaja(new Date());
-        this.clienteRepository.save(cliente.get());
+        cliente.setFechaBaja(new Date());
+        this.clienteRepository.save(cliente);
     }
 }
 
