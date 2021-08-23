@@ -69,26 +69,26 @@ services:
     environment:
       - "SERVER_PORT=8181"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "USUARIO_HOST=ms-usuario" #TODO revisar por qué no funciona
+      - "USUARIO_HOST=ms-usuario"
     networks:
       - app
       - infra
 
-#  ms-producto:
-#    container_name: ms-producto
-#    image: dan/ms-producto:1.0.0
-#    ports:
-#      - "9001:9001"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
-#      - "SERVER_PORT=9001"
-#      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_producto"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "SPRING_ARTEMIS_HOST=artemis"
-#      - "SPRING_ARTEMIS_PORT=61616"
-#    networks:
-#      - app
-#
+  ms-producto:
+    container_name: ms-producto
+    image: dan/ms-producto:1.0.0
+    ports:
+      - "9001:9001"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9001"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_producto"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "SPRING_ARTEMIS_HOST=artemis"
+      - "SPRING_ARTEMIS_PORT=61616"
+    networks:
+      - app
+
   ms-usuario:
     container_name: ms-usuario
     image: dan/ms-usuario:1.0.0
@@ -101,65 +101,65 @@ services:
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
-#
-#  ms-cuentacorriente:
-#    container_name: ms-cuentacorriente
-#    image: dan/ms-cuentacorriente:1.0.0
-#    ports:
-#      - "9003:9003"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
-#      - "SERVER_PORT=9003"
-#      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "PEDIDO_HOST=host.docker.internal"#ms-pedido"#TODO revisar por qué no funciona
-#      - "USUARIO_HOST=host.docker.internal"#ms-usuario"#TODO revisar por qué no funciona
-#    networks:
-#      - app
-#
-#  ms-liquidacion:
-#    container_name: ms-liquidacion
-#    image: dan/ms-liquidacion:1.0.0
-#    ports:
-#      - "9004:9004"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
-#      - "SERVER_PORT=9004"
-#      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "USUARIO_HOST=host.docker.internal" #ms-usuario"#TODO revisar por qué no funciona
-#    networks:
-#      - app
-#
-#  ms-pedido:
-#    container_name: ms-pedido
-#    image: dan/ms-pedido:1.0.0
-#    ports:
-#      - "9002:9002"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
-#      - "SERVER_PORT=9002"
-#      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#      - "SPRING_ARTEMIS_HOST=artemis"
-#      - "SPRING_ARTEMIS_PORT=61616"
-#      - "PRODUCTO_HOST=host.docker.internal"#ms-producto"#TODO revisar por qué no funciona
-#      - "USUARIO_HOST=host.docker.internal"#ms-usuario"#TODO revisar por qué no funciona
-#    networks:
-#      - app
-#      - infra
-#
-#  ms-frontend:
-#    container_name: ms-frontend
-#    image: dan/ms-frontend:1.0.0
-#    ports:
-#      - "9005:9005"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
-#      - "SERVER_PORT=9005"
-#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-#    networks:
-#      - app
+
+  ms-cuentacorriente:
+    container_name: ms-cuentacorriente
+    image: dan/ms-cuentacorriente:1.0.0
+    ports:
+      - "9003:9003"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9003"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "PEDIDO_HOST=ms-pedido"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
+
+  ms-liquidacion:
+    container_name: ms-liquidacion
+    image: dan/ms-liquidacion:1.0.0
+    ports:
+      - "9004:9004"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9004"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
+
+  ms-pedido:
+    container_name: ms-pedido
+    image: dan/ms-pedido:1.0.0
+    ports:
+      - "9002:9002"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9002"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "SPRING_ARTEMIS_HOST=artemis"
+      - "SPRING_ARTEMIS_PORT=61616"
+      - "PRODUCTO_HOST=ms-producto"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
+      - infra
+
+  ms-frontend:
+    container_name: ms-frontend
+    image: dan/ms-frontend:1.0.0
+    ports:
+      - "9005:9005"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9005"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+    networks:
+      - app
 
 networks:
   infra:
