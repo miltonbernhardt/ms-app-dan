@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface CuentaCorrienteService {
 
-    Pago save(Pago pagoNuevo) throws Exception;
+    Pago savePago(Pago pagoNuevo) throws Exception;
 
-    List<Pago> getDetallePagos(Cliente cliente) throws Exception;
+    List<Pago> getDetallePagos(Cliente cliente);
 
     List<Pedido> getFacturas(Cliente cliente) throws Exception;
 }

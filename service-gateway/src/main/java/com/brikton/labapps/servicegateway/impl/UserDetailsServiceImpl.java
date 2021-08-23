@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String url = "http://localhost:9000/api/usuario/" + username;//TODO change for feign
+        String url = "http://" + host + ":9000/api/usuario/" + username;//TODO change for feign
         ResponseEntity<Usuario> respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Usuario.class);
         if (respuesta.getStatusCode() == HttpStatus.OK) {
             return UsuarioDetailsImpl.build(Objects.requireNonNull(respuesta.getBody()));

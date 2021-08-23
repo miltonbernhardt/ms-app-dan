@@ -1,6 +1,5 @@
 package com.brikton.labapps.mspedidos.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.brikton.labapps.mspedidos.domain.DetallePedido;
@@ -11,53 +10,49 @@ import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 import com.brikton.labapps.mspedidos.exception.RiesgoException;
 import com.brikton.labapps.mspedidos.service.PedidoService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/pedido")
-// @Api(value = "PedidoRest", description = "Permite gestionar los pedidos de la empresa")
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
 public class PedidoRest {
-    @Autowired
-    PedidoService pedidoService;
+    protected final Logger logger = LoggerFactory.getLogger(DetallePedidoRest.class);
+
+    private final PedidoService pedidoService;
+
+    public PedidoRest(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
+    }
 
     @PostMapping
-    // @ApiResponses(value = {
-    //     @ApiResponse(code = 200, message = "Creado correctamente"),
-    //     @ApiResponse(code = 400, message = "El pedido no es correcto")})
-    public ResponseEntity<?> crearPedido(@RequestBody Pedido nuevoPedido){
-        
-        /*
-        Valido que obra, detalle y el detalle tenga productos y cantidad
-        */
-
-        Pedido creado = null;
+    public ResponseEntity<?> crearPedido(@RequestBody Pedido nuevoPedido) {
         if (validarPedido(nuevoPedido)) {
             try {
-                creado = this.pedidoService.savePedido(nuevoPedido);
-            } catch (RiesgoException e2) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e2.getMessage());
+                return ResponseEntity.ok(this.pedidoService.savePedido(nuevoPedido));
+            } catch (RiesgoException e) {
+                logger.error(e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             }
-            return ResponseEntity.ok(creado);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
+    /**
+     * Válida que obra, detalle y el detalle tenga productos y cantidad
+     */
     private Boolean validarPedido(Pedido p) {
-        Boolean valido = true;
+        boolean valido = true;
         if (p.getDetalle() != null) {
-            for(DetallePedido d : p.getDetalle()) {
-                if ((d.getProducto() == null) || (d.getCantidad() == null))
+            for (DetallePedido d : p.getDetalle()) {
+                if ((d.getProducto() == null) || (d.getCantidad() == null)) {
                     valido = false;
+                    break;
+                }
             }
         } else {
             valido = false;
@@ -67,40 +62,51 @@ public class PedidoRest {
 
     @PutMapping
     public ResponseEntity<?> actualizarEstadoPedido(@RequestParam Integer id,
-                                    @RequestParam String nuevoEstado){
-        Pedido pedido = null;
+                                                    @RequestParam String nuevoEstado) {
         try {
-            pedido = pedidoService.updateEstadoPedido(id,EstadoPedido.valueOf(nuevoEstado.toUpperCase()));
+            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, EstadoPedido.valueOf(nuevoEstado.toUpperCase())));
         } catch (RecursoNoEncontradoException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RiesgoException e1) {
+            logger.error(e1.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e1.getMessage());
         }
-        return ResponseEntity.ok(pedido);
     }
 
     @GetMapping(path = "/obra")
-    public ResponseEntity<List<Pedido>> pedidosPorObra(@RequestBody Obra obra){
-        ArrayList<Pedido> pedidos;
-        pedidos = pedidoService.getPedidosByObra(obra);
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<?> pedidosPorObra(@RequestBody Obra obra) {
+        try {
+            List<Pedido> pedidos = pedidoService.getPedidosByObra(obra);
+            if (pedidos.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudieron obtener los pedidos.");
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron obtener los pedidos.");
+        }
     }
 
     @GetMapping(path = "/estado")
-    public ResponseEntity<List<Pedido>> pedidosPorEstado(@RequestParam String estadoPedido){
-        ArrayList<Pedido> pedidos = new ArrayList<>();
-        pedidos = pedidoService.getPedidosByEstado(EstadoPedido.valueOf(estadoPedido));
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<?> pedidosPorEstado(@RequestParam String estadoPedido) {
+        try {
+            List<Pedido> pedidos = pedidoService.getPedidosByEstado(EstadoPedido.valueOf(estadoPedido));
+            if (pedidos.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudieron obtener los pedidos.");
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron obtener los pedidos.");
+        }
     }
 
     @GetMapping(path = "/cliente")
-    public ResponseEntity<?> pedidosPorCliente(@RequestParam Integer idCliente){
-        ArrayList<Pedido> pedidos = new ArrayList<>();
+    public ResponseEntity<?> pedidosPorCliente(@RequestParam Integer idCliente) {
         try {
-            pedidos = pedidoService.getPedidosByCliente(idCliente);
+            return ResponseEntity.ok(pedidoService.getPedidosByCliente(idCliente));
         } catch (RecursoNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudieron obtener los pedidos del cliente.");
         }
-        return ResponseEntity.ok(pedidos);
     }
 }

@@ -69,7 +69,7 @@ services:
     environment:
       - "SERVER_PORT=8181"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "usuario.host=ms-usuario" #TODO revisar por qué no funciona
+      - "USUARIO_HOST=ms-usuario" #TODO revisar por qué no funciona
     networks:
       - app
       - infra

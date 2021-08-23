@@ -40,7 +40,7 @@ public class CuentaCorrienteServiceImpl implements CuentaCorrienteService {
 
     @Override
     @Transactional
-    public Pago save(Pago pagoNuevo) throws Exception {
+    public Pago savePago(Pago pagoNuevo) throws Exception {
         pagoNuevo.setId(null);
         pagoNuevo.setFechaPago(Instant.now());
         if (pagoNuevo.getCliente() != null) {
@@ -95,15 +95,12 @@ public class CuentaCorrienteServiceImpl implements CuentaCorrienteService {
     }
 
     @Override
-    public List<Pago> getDetallePagos(Cliente cliente) throws Exception {
-        List<Pago> pagos = pagoRepository.getAllPagosCliente(cliente.getCuit());
-        if (pagos.size() == 0)
-            throw new Exception("No existen pagos registrados por el cliente " + cliente.getRazonSocial());
-        return pagos;
+    public List<Pago> getDetallePagos(Cliente cliente) {
+        return pagoRepository.getAllPagosCliente(cliente.getCuit());
     }
 
     @Override
-    public List<Pedido> getFacturas(Cliente cliente) throws Exception {//TODO ver bien si eso es lo que retorna
+    public List<Pedido> getFacturas(Cliente cliente) throws Exception {
         List<Pedido> pedidos = new ArrayList<>();
         Optional<List<Obra>> obras = Optional.ofNullable(clienteService.getObras(cliente));
         obras.ifPresent(listaObras -> {

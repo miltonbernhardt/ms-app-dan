@@ -84,7 +84,7 @@ public class UserController {
             userDetailsService.saveUser(user);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo registrar al usuario.");
         }
 
         return ResponseEntity.ok(user);

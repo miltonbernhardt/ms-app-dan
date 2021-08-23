@@ -8,6 +8,8 @@ import com.brikton.labapps.msliquidacion.domain.Venta;
 import com.brikton.labapps.msliquidacion.service.LiquidacionService;
 import com.brikton.labapps.msliquidacion.service.VentaService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,79 +20,78 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
 public class LiquidacionRest {
 
-    @Autowired
-    LiquidacionService liquidacionService;
+    protected final Logger logger = LoggerFactory.getLogger(LiquidacionRest.class);
 
-    @Autowired
-    VentaService ventaService;
+    private final LiquidacionService liquidacionService;
+    private final VentaService ventaService;
+
+    public LiquidacionRest(LiquidacionService liquidacionService, VentaService ventaService) {
+        this.liquidacionService = liquidacionService;
+        this.ventaService = ventaService;
+    }
 
     @PostMapping(path = "/todos")
     public ResponseEntity<?> liquidarSueldoTodos() {
-        List<LiquidacionSueldo> liquidaciones = liquidacionService.liquidarSueldoTodos();
-        return ResponseEntity.ok(liquidaciones);
+        return ResponseEntity.ok(liquidacionService.liquidarSueldoTodos());
     }
 
     @PostMapping(path = "/empleado")
     public ResponseEntity<?> liquidarSueldoEmpleado(@RequestParam Integer idEmpleado) {
-        LiquidacionSueldo ls;
         try {
-            ls = liquidacionService.liquidarSueldoEmpleado(idEmpleado);
+            return ResponseEntity.ok(liquidacionService.liquidarSueldoEmpleado(idEmpleado));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo liquidar el sueldo del empleado.");
         }
-        return ResponseEntity.ok(ls);
+
     }
 
     @GetMapping("/comisiones")
     public ResponseEntity<?> getComisiones(@RequestParam Integer idEmpleado) {
-        Double comisiones = 0d;
         try {
-            comisiones = liquidacionService.getComisiones(idEmpleado);
+            return ResponseEntity.ok(liquidacionService.getComisiones(idEmpleado));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener las comisiones.");
         }
-        return ResponseEntity.ok(comisiones);
     }
 
     @GetMapping
     public ResponseEntity<?> getLiquidaciones() {
-        List<LiquidacionSueldo> listaLiquidaciones = liquidacionService.getLiquidaciones();
-
-        return ResponseEntity.ok(listaLiquidaciones);
+        return ResponseEntity.ok(liquidacionService.getLiquidaciones());
     }
 
     @PostMapping(path = "/empleado/sueldo")
     public ResponseEntity<?> actualizarSueldoEmpleado(@RequestBody Sueldo sueldo) {
         try {
             liquidacionService.actualizarSueldoEmpleado(sueldo);
+            return ResponseEntity.ok("Sueldo correctamente actualizado");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo actualizar el sueldo del empleado.");
         }
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/empleado/sueldo")
     public ResponseEntity<?> getSueldoEmpleado(@RequestParam Integer idEmpleado) {
-        Sueldo sueldo;
         try {
-            sueldo = liquidacionService.getSueldoEmpleado(idEmpleado);
+            return ResponseEntity.ok(liquidacionService.getSueldoEmpleado(idEmpleado));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener el sueldo del empleado.");
         }
-        return ResponseEntity.ok(sueldo);
     }
 
     /*
-     * Direccion para registrar ventas y poder probar el ms
+     * Dirección para registrar ventas y poder probar el ms
      */
     @PostMapping("/ventas")
     public ResponseEntity<?> registrarVentas(@RequestBody List<Venta> ventas) {
-        List<Venta> registradas;
         try {
-            registradas = ventaService.registrarVentas(ventas);
+            return ResponseEntity.ok(ventaService.registrarVentas(ventas));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo registrar las ventas.");
         }
-        return ResponseEntity.ok(registradas);
     }
 }
