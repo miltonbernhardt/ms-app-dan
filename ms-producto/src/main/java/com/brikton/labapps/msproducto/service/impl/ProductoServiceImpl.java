@@ -70,7 +70,7 @@ public class ProductoServiceImpl implements ProductoService {
     public Integer getStockProducto(Integer idMaterial) {
         Optional<Material> material = productoRepository.findById(idMaterial);
         if (material.isEmpty())
-            return 0;
+            return -1;
         else
             return material.get().getStockActual();
     }

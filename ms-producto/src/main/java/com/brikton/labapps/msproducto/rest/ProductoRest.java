@@ -88,7 +88,10 @@ public class ProductoRest {
     @GetMapping(path = "/stock/{idProducto}")
     public ResponseEntity<?> getStockProducto(@PathVariable Integer idProducto) {
         try {
-            return ResponseEntity.ok(this.productoService.getStockProducto(idProducto));
+            Integer stock = this.productoService.getStockProducto(idProducto);
+            if (stock == -1)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe un producto con ese id " + idProducto);
+            return ResponseEntity.ok(stock);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener el stock del producto.");
