@@ -1,10 +1,9 @@
 import ClientesForm from './ClientesForm';
-import { Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla } from '../Tabla';
-import { useEffect, useState } from 'react';
+import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '../Tabla';
+import {useEffect, useState} from 'react';
 import '../styles/Clientes.css';
 import '../styles/Tabla.css';
-import '../services/ClienteService';
-import { getClientes, postCliente, putCliente } from '../services/ClienteService';
+import {getClientes, postCliente, putCliente} from '../../RestServices';
 
 const clienteInicial = {
     razonSocial: '-',
@@ -20,16 +19,16 @@ const Clientes = () => {
     const [listaClientes, setListaClientes] = useState([]);
 
     useEffect(() => {
-        fetchClientes();
+        getClientes().then(data => setListaClientes(data));
     }, []);
 
-    const fetchClientes = async () => {
-        getClientes().then(res => setListaClientes(res.data));
+    const fetchClientes = () => {
+        getClientes().then(data => setListaClientes(data));
     }
 
 
     const actualizarCliente = (atributo, valor) => {
-        const clienteNuevo = { ...cliente, [atributo]: valor };
+        const clienteNuevo = {...cliente, [atributo]: valor};
         setCliente(clienteNuevo);
     }
 
@@ -39,17 +38,22 @@ const Clientes = () => {
         setCliente(clienteInicial);
     };
 
-    const filasCliente = listaClientes.map((e, indice) => {
-        return <FilaTabla clave={e.indice} >
-            <CeldaTabla dato={e.id} />
-            <CeldaTabla dato={e.razonSocial} />
-            <CeldaTabla dato={e.mail} />
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => setCliente(e)} />
-        </FilaTabla>
-    });
+    const filasCliente = () => {
+        if (listaClientes)
+            return listaClientes.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={e.razonSocial}/>
+                    <CeldaTabla dato={e.mail}/>
+                    <CeldaBotonTabla titulo="Seleccionar" accion={() => setCliente(e)}/>
+                </FilaTabla>
+            });
+        else
+            return <></>
+    }
 
-    const encabezado = ["ID Usuario", "Razon Social", "e-mail", ""].map((e) => {
-        return <EncabezadoTabla>{e}</EncabezadoTabla>
+    const encabezado = ["ID Usuario", "Razon Social", "e-mail", ""].map((e, i) => {
+        return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
     })
 
     const limpiarCampos = () => {
@@ -62,17 +66,14 @@ const Clientes = () => {
             <div className="panelForm">
                 <div className="panelFormAlta">
                     <ClientesForm cliente={cliente}
-                        actualizarCliente={actualizarCliente}
-                        saveOrUpdate={saveOrUpdate}
-                        clean={limpiarCampos} />
+                                  actualizarCliente={actualizarCliente}
+                                  saveOrUpdate={saveOrUpdate}
+                                  clean={limpiarCampos}/>
                 </div>
                 <div className="panelFormBusqueda">Busqueda</div>
             </div>
             <div className="panel">
-                <Tabla >
-                    {encabezado}
-                    {filasCliente}
-                </Tabla>
+                <Tabla encabezado={encabezado} filas={filasCliente()}/>
             </div>
         </div>
     )

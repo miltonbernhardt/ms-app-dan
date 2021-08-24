@@ -1,11 +1,9 @@
 import CampoForm, { ComboForm } from "../FormComponents";
-import { getObras } from "../services/ObraService";
 
 const PedidosForm = ({ pedido, actualizarCampos, clean, saveOrUpdate, verDetalle, obras }) => {
 
     const handleChange = (evt) => {
         evt.preventDefault();
-        // console.log(evt.target.value);
         const nombreAtributo = evt.target.name;
         const valorAtributo = evt.target.value;
         if (evt.target.validity.valid) actualizarCampos(nombreAtributo, valorAtributo);

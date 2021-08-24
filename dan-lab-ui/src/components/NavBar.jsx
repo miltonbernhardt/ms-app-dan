@@ -5,23 +5,23 @@ const NavBar = () => {
     return (
         <nav>
             <ul className="nav-links">
-                <Link className="nav-links" to='/clientes'>
+                <Link className="nav-links" to='/page/clientes'>
                     <li>Clientes</li>
                 </Link>
-                <Link className="nav-links" to='/obras'>
+                <Link className="nav-links" to='/page/obras'>
                     <li>Obras</li>
                 </Link>
-                <Link className="nav-links" to='/pagos'>
+                <Link className="nav-links" to='/page/pagos'>
                     <li>Pagos</li>
                 </Link>
-                <Link className="nav-links" to='/pedidos'>
+                <Link className="nav-links" to='/page/pedidos'>
                     <li>Pedidos</li>
                 </Link>
-                <Link className="nav-links" to='/productos'>
+                <Link className="nav-links" to='/page/productos'>
                     <li>Productos</li>
                 </Link>
-                <Link className="nav-links" to='/liquidacion'>
-                    <li>Liquidacion</li>
+                <Link className="nav-links" to='/page/liquidacion'>
+                    <li>Liquidación</li>
                 </Link>
                 <Link className="nav-links" to='/'>
                     <li>Login</li>

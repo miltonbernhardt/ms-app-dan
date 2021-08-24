@@ -10,9 +10,9 @@ import Liquidacion from './components/liquidacion/Liquidacion'
 import NavBar from './components/NavBar';
 
 const usuarioInicial = {
-  id: null,
-  nombre: "",
-  password: "",
+  id: 103,
+  nombre: "dan2021",
+  password: "dan2021",
   autenticado: false
 }
 
@@ -40,12 +40,12 @@ function App() {
           <Route exact path="/"  >
             <Login usuario={usuario} ingresar={ingresar} actualizarCampos={actualizarUsuario} />
           </Route>
-          <Route path="/clientes" component={Clientes} />
-          <Route path="/obras" component={Obras} />
-          <Route path="/productos" component={Productos} />
-          <Route path="/pedidos" component={Pedidos} />
-          <Route path="/pagos" component={Pagos} />
-          <Route path="/liquidacion" component={Liquidacion} name='Liquidacion' />
+          <Route path="/page/clientes" component={Clientes} />
+          <Route path="/page/obras" component={Obras} />
+          <Route path="/page/productos" component={Productos} />
+          <Route path="/page/pedidos" component={Pedidos} />
+          <Route path="/page/pagos" component={Pagos} />
+          <Route path="/page/liquidacion" component={Liquidacion} name='Liquidación' />
         </Switch>
       </Router>
     </div>

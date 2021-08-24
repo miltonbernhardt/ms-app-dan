@@ -4,7 +4,6 @@ import CampoForm, { ComboForm } from '../FormComponents'
 const LiquidacionForm = ({ empleado, actualizarCampos, listaEmpleados, liquidarTodos, liquidarEmpleado, actualizarCamposSueldo, actualizarSueldoEmpleado, sueldoEmpleado }) => {
 
     const handleChange = (evt) => {
-        const nombreAtributo = evt.target.name;
         const valorAtributo = evt.target.value;
         if (evt.target.validity.valid) actualizarCampos(valorAtributo);
     }

@@ -1,11 +1,10 @@
-import { Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla } from '../Tabla';
+import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import ObrasForm from "./ObrasForm";
 import ClienteObrasForm from "./ClienteObrasForm";
 import "../styles/Form.css";
 import "../styles/Tabla.css";
-import { useState, useEffect } from "react";
-import { getClientes } from '../services/ClienteService';
-import { getObras, postObra, putObra } from '../services/ObraService';
+import {useEffect, useState} from "react";
+import {getClientes, getObras, postObra, putObra} from '../../RestServices';
 
 const clienteInicial = {
     id: null,
@@ -36,23 +35,23 @@ const Obras = () => {
         fetchObras();
     }, []);
 
-    const fetchClientes = async () => {
-        getClientes().then(res => setListaClientes(res.data));
+    const fetchClientes = () => {
+        getClientes().then(data => setListaClientes(data));
     }
 
-    const fetchObras = async () => {
-        getObras().then(res => setListaObras(res.data));
+    const fetchObras = () => {
+        getObras().then(data => setListaObras(data));
     }
 
     const actualizarObra = (nombreAtributo, valorAtributo) => {
-        const nuevaObra = { ...obra, [nombreAtributo]: valorAtributo };
+        const nuevaObra = {...obra, [nombreAtributo]: valorAtributo};
         setObra(nuevaObra);
     }
 
     const actualizarCliente = (nombreAtributo, valorAtributo) => {
         const index = listaClientes.findIndex(c => c.[nombreAtributo] === valorAtributo);
         setCliente(listaClientes[index])
-        const nuevaObra = { ...obra, cliente: listaClientes[index] };
+        const nuevaObra = {...obra, cliente: listaClientes[index]};
         setObra(nuevaObra);
     }
 
@@ -68,16 +67,17 @@ const Obras = () => {
         setCliente(clienteInicial);
     }
 
-    const filasObras = listaObras.map((e, indice) => {
-        return <FilaTabla clave={e.indice} >
-            <CeldaTabla dato={e.id} />
-            <CeldaTabla dato={e.descripcion} />
-            <CeldaTabla dato={e.direccion} />
-            <CeldaTabla dato={e.superficie} />
-            <CeldaTabla dato={e.tipoObra} />
+    const filasObras = listaObras.map((e, i) => {
+        return <FilaTabla key={i}>
+            <CeldaTabla dato={e.id}/>
+            <CeldaTabla dato={e.descripcion}/>
+            <CeldaTabla dato={e.direccion}/>
+            <CeldaTabla dato={e.superficie}/>
+            <CeldaTabla dato={e.tipoObra}/>
             <CeldaBotonTabla titulo="Seleccionar" accion={() => {
-                setObra(e); setCliente(e.cliente);
-            }} />
+                setObra(e);
+                setCliente(e.cliente);
+            }}/>
         </FilaTabla>
     });
 
@@ -96,7 +96,7 @@ const Obras = () => {
                         obra={obra}
                         actualizarCampos={actualizarObra}
                         clean={cleanObra}
-                        saveOrUpdate={saveOrUpdate} />
+                        saveOrUpdate={saveOrUpdate}/>
                 </div>
 
                 <div className="panelFormBusqueda">
@@ -104,14 +104,11 @@ const Obras = () => {
                     <ClienteObrasForm
                         cliente={cliente}
                         actualizarCampos={actualizarCliente}
-                        listaClientes={listaClientes} />
+                        listaClientes={listaClientes}/>
                 </div>
             </div>
             <div className="panel">
-                <Tabla >
-                    {encabezado}
-                    {filasObras}
-                </Tabla>
+                <Tabla filas={filasObras} encabezado={encabezado}/>
             </div>
         </div>
     );

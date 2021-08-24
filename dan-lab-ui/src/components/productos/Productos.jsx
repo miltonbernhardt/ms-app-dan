@@ -1,9 +1,9 @@
-import { Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla } from '../Tabla';
+import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '../Tabla';
 import ProductosForm from './ProductosForm';
 import '../styles/Form.css';
 import '../styles/Clientes.css';
-import { useEffect, useState } from 'react';
-import { getProductos, getUnidades, postProducto, putProducto } from '../services/ProductoService';
+import {useEffect, useState} from 'react';
+import {getClientes, getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
 
 const unidadInicial = {
     descripcion: ''
@@ -28,14 +28,14 @@ const Productos = () => {
         fetchProductos();
     }, []);
 
-    const fetchProductos = async () => {
-        getProductos().then(res => setListaProductos(res.data));
-        getUnidades().then(res => setListaUnidades(res.data));
+    const fetchProductos = () => {
+        getProductos().then(data => setListaProductos(data));
+        getUnidades().then(data => setListaUnidades(data));
     }
 
     const actualizarProducto = (nombreAtributo, valorAtributo) => {
-        if (nombreAtributo === 'unidad') valorAtributo = { ...unidadInicial, descripcion: valorAtributo };
-        const nuevoProducto = { ...producto, [nombreAtributo]: valorAtributo };
+        if (nombreAtributo === 'unidad') valorAtributo = {...unidadInicial, descripcion: valorAtributo};
+        const nuevoProducto = {...producto, [nombreAtributo]: valorAtributo};
         setProducto(nuevoProducto);
     }
 
@@ -49,17 +49,22 @@ const Productos = () => {
         setProducto(productoInicial);
     }
 
-    const filasProductos = listaProductos.map((e, indice) => {
-        return <FilaTabla clave={e.indice} >
-            <CeldaTabla dato={e.id} />
-            <CeldaTabla dato={e.nombre} />
-            <CeldaTabla dato={e.descripcion} />
-            <CeldaTabla dato={e.precio} />
-            <CeldaTabla dato={e.stockActual} />
-            <CeldaTabla dato={e.stockMinimo} />
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => setProducto(e)} />
-        </FilaTabla>
-    });
+    const filasProductos = () => {
+        if (listaProductos)
+            return listaProductos.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={e.nombre}/>
+                    <CeldaTabla dato={e.descripcion}/>
+                    <CeldaTabla dato={e.precio}/>
+                    <CeldaTabla dato={e.stockActual}/>
+                    <CeldaTabla dato={e.stockMinimo}/>
+                    <CeldaBotonTabla titulo="Seleccionar" accion={() => setProducto(e)}/>
+                </FilaTabla>
+            });
+        else
+            return <></>
+    }
 
     const encabezado = ["ID Producto", "Nombre", "Descripcion", "Precio", "Stock Actual", "Stock Minimo", ""]
         .map((e) => {
@@ -75,10 +80,10 @@ const Productos = () => {
                     unidades={listaUnidades}
                     actualizarCampos={actualizarProducto}
                     clean={cleanProducto}
-                    saveOrUpdate={saveOrUpdate} />
+                    saveOrUpdate={saveOrUpdate}/>
             </div>
             <div className="panel">
-                <Tabla >
+                <Tabla>
                     {encabezado}
                     {filasProductos}
                 </Tabla>

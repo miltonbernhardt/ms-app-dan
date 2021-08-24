@@ -1,11 +1,17 @@
-import { useState } from "react";
+import {useState} from "react";
 import LiquidacionForm from "./LiquidacionForm";
 import '../Tabla';
 import '../styles/Form.css';
 import '../styles/Clientes.css';
-import { getEmpleados } from "../services/EmpleadoSertvice";
-import { CeldaTabla, Tabla, EncabezadoTabla, FilaTabla } from '../Tabla';
-import { getLiquidaciones, getSueldo, postLiquidacionEmpleado, postLiquidacionTodos, postSueldo } from "../services/LiquidacionService";
+import {CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
+import {
+    getEmpleados,
+    getLiquidaciones,
+    getSueldo,
+    postLiquidacionEmpleado,
+    postLiquidacionTodos,
+    postSueldo
+} from "../../RestServices";
 
 const empleadoInicial = {
     nombre: ''
@@ -23,18 +29,16 @@ const Liquidacion = () => {
     const [empleado, setEmpleado] = useState(empleadoInicial);
     const [sueldo, setSueldo] = useState(sueldoInicial);
 
-    const fetchEmpleados = async () => {
-        getEmpleados().then(res => {
-            setListaEmpleados(res.data)
-        });
+    const fetchEmpleados = () => {
+        getEmpleados().then(data => setListaEmpleados(data));
     }
 
-    const fetchLiquidacion = async () => {
-        getLiquidaciones().then(res => setListaLiquidacion(res.data));
+    const fetchLiquidacion = () => {
+        getLiquidaciones().then(data => setListaLiquidacion(data));
     }
 
-    const fetchSueldo = async (empleado) => {
-        getSueldo(empleado).then(res => setSueldo(res.data));
+    const fetchSueldo = (empleado) => {
+        getSueldo(empleado).then(data => setSueldo(data));
     }
 
     useState(() => {
@@ -52,13 +56,13 @@ const Liquidacion = () => {
     }
 
     const actualizarEmpleado = (valorAtributo) => {
-        const index = listaEmpleados.findIndex(e => e.nombre == valorAtributo);
+        const index = listaEmpleados.findIndex(e => e.nombre === valorAtributo);
         setEmpleado(listaEmpleados[index]);
         fetchSueldo(listaEmpleados[index]);
     }
 
     const actualizarCamposSueldo = (nombreAtributo, valorAtributo) => {
-        const nuevoSueldo = { ...sueldo, [nombreAtributo]: valorAtributo };
+        const nuevoSueldo = {...sueldo, [nombreAtributo]: valorAtributo};
         setSueldo(nuevoSueldo);
     }
 
@@ -67,21 +71,19 @@ const Liquidacion = () => {
         postSueldo(sueldo).then(() => fetchSueldo());
     }
 
-    const filasLiquidacion = listaLiquidacion.map((e, indice) => {
-        return <FilaTabla clave={indice} >
-            <CeldaTabla dato={e.id} />
+    const filasLiquidacion = listaLiquidacion.map((e, i) => {
+        return <FilaTabla key={i}>
+            <CeldaTabla dato={e.id}/>
             <CeldaTabla dato={
-                listaEmpleados[listaEmpleados.findIndex(o => o.id == e.empleado.id)].nombre
-            } />
-            <CeldaTabla dato={e.fecha} />
-            <CeldaTabla dato={e.monto} />
+                listaEmpleados[listaEmpleados.findIndex(o => o.id === e.empleado.id)].nombre
+            }/>
+            <CeldaTabla dato={e.fecha}/>
+            <CeldaTabla dato={e.monto}/>
         </FilaTabla>
     });
 
-    const encabezado = ["ID Liquidacion", "Empleado", "Fecha", "Monto"]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
-        })
+    const encabezado = ["ID Liquidacion", "Empleado", "Fecha", "Monto"].map((e) =>
+        <EncabezadoTabla>{e}</EncabezadoTabla>)
 
     return (
         <div className='box'>
@@ -99,19 +101,13 @@ const Liquidacion = () => {
                         liquidarTodos={liquidarTodos}
                         sueldoEmpleado={sueldo}
                     />
-
                 </div>
-
             </div>
             <div className="panelForm">
-                <Tabla>
-                    {encabezado}
-                    {filasLiquidacion}
-                </Tabla>
+                <Tabla encabezado={encabezado} filas={filasLiquidacion}/>
             </div>
         </div>
     );
 }
 
 export default Liquidacion
-    ;

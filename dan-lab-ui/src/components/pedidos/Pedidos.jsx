@@ -1,13 +1,19 @@
-import { Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla } from '../Tabla';
+import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '../Tabla';
 import PedidosForm from './PedidosForm';
 import DetallePedidoForm from './DetallePedidoForm'
 import '../styles/Form.css';
 import '../styles/Clientes.css';
-import { useEffect, useState } from "react";
-import { getPedidos, postPedido, putPedido, postDetalle, putDetalle, deleteDetalle } from '../services/PedidoService';
-import '../services/ProductoService';
-import { getProductos } from '../services/ProductoService';
-import { getObras } from '../services/ObraService';
+import {useEffect, useState} from "react";
+import {
+    getPedidos,
+    postPedido,
+    putPedido,
+    postDetalle,
+    putDetalle,
+    deleteDetalle,
+    getProductos,
+    getObras
+} from '../../RestServices';
 
 const pedidoInicial = {
     id: null,
@@ -41,24 +47,24 @@ const Pedidos = () => {
     }, [listaPedidos, listaDetalle]);
 
     const fetchPedidos = () => {
-        getPedidos().then(res => setListaPedidos(res.data))
+        getPedidos().then(data => setListaPedidos(data))
     }
 
     const fetchProductos = () => {
-        getProductos().then(res => setListaProductos(res.data));
+        getProductos().then(data => setListaProductos(data));
     }
 
     const fetchObras = () => {
-        getObras().then(res => setListaObras(res.data));
+        getObras().then(data => setListaObras(data));
     }
 
     const actualizarPedido = (nombreAtributo, valorAtributo) => {
         if (nombreAtributo === 'obra') {
-            const index = listaObras.findIndex(o => o.id == valorAtributo);
-            const nuevoPedido = { ...pedido, obra: listaObras[index] };
+            const index = listaObras.findIndex(o => o.id === valorAtributo);
+            const nuevoPedido = {...pedido, obra: listaObras[index]};
             setPedido(nuevoPedido);
         } else {
-            const nuevoPedido = { ...pedido, [nombreAtributo]: valorAtributo };
+            const nuevoPedido = {...pedido, [nombreAtributo]: valorAtributo};
             setPedido(nuevoPedido);
         }
     }
@@ -84,9 +90,8 @@ const Pedidos = () => {
                 precio: detallePedido.cantidad * listaProductos[index].precio
             };
             setDetalle(nuevoDetalle)
-        }
-        else {
-            const nuevoDetalle = { ...detallePedido, [nombreAtributo]: valorAtributo };
+        } else {
+            const nuevoDetalle = {...detallePedido, [nombreAtributo]: valorAtributo};
             setDetalle(nuevoDetalle);
         }
     }
@@ -96,13 +101,13 @@ const Pedidos = () => {
             putDetalle(detallePedido).then(() => fetchPedidos());
     };
 
-    const filasPedidos = listaPedidos.map((e, indice) => {
-        return <FilaTabla clave={e.indice} >
-            <CeldaTabla dato={e.id} />
-            <CeldaTabla dato={e.fechaPedido} />
-            <CeldaTabla dato={e.obra.id} />
-            <CeldaTabla dato={e.estado} />
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => seleccionarPedido(e)} />
+    const filasPedidos = listaPedidos.map((e, i) => {
+        return <FilaTabla key={i}>
+            <CeldaTabla dato={e.id}/>
+            <CeldaTabla dato={e.fechaPedido}/>
+            <CeldaTabla dato={e.obra.id}/>
+            <CeldaTabla dato={e.estado}/>
+            <CeldaBotonTabla titulo="Seleccionar" accion={() => seleccionarPedido(e)}/>
         </FilaTabla>
     });
 
@@ -121,14 +126,14 @@ const Pedidos = () => {
         deleteDetalle(d).then(() => fetchPedidos());
     }
 
-    const filasDetalle = listaDetalle.map((e, indice) => {
-        return <FilaTabla clave={e.indice} >
-            <CeldaTabla dato={e.id} />
-            <CeldaTabla dato={e.cantidad} />
-            <CeldaTabla dato={e.precio} />
-            <CeldaTabla dato={e.producto.nombre} />
-            <CeldaBotonTabla titulo="Eliminar" accion={() => eliminarDetalle(e)} />
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => setDetalle(e)} />
+    const filasDetalle = listaDetalle.map((e, i) => {
+        return <FilaTabla key={i}>
+            <CeldaTabla dato={e.id}/>
+            <CeldaTabla dato={e.cantidad}/>
+            <CeldaTabla dato={e.precio}/>
+            <CeldaTabla dato={e.producto.nombre}/>
+            <CeldaBotonTabla titulo="Eliminar" accion={() => eliminarDetalle(e)}/>
+            <CeldaBotonTabla titulo="Seleccionar" accion={() => setDetalle(e)}/>
         </FilaTabla>
     });
 
@@ -147,27 +152,24 @@ const Pedidos = () => {
                         actualizarCampos={actualizarPedido}
                         clean={cleanPedido}
                         saveOrUpdate={saveOrUpdatePedido}
-                        obras={listaObras} />
+                        obras={listaObras}/>
                 </div>
                 <div className="panelFormAlta">
                     <DetallePedidoForm
                         detallePedido={detallePedido}
                         listaProductos={listaProductos}
                         actualizarCampos={actualizarDetalle}
-                        saveOrUpdate={saveOrUpdateDetalle} />
+                        saveOrUpdate={saveOrUpdateDetalle}/>
                 </div>
             </div>
             <div className="panel">
                 <div><h3>Detalle</h3></div>
-                <Tabla >
+                <Tabla>
                     {encabezadoDetalle}
                     {filasDetalle}
                 </Tabla>
                 <div><h3>Pedidos</h3></div>
-                <Tabla >
-                    {encabezado}
-                    {filasPedidos}
-                </Tabla>
+                <Tabla encabezado={encabezado} filas={filasPedidos}/>
             </div>
         </div>
     );

@@ -46,7 +46,7 @@ const ProductosForm = ({ producto, unidades, actualizarCampos, clean, saveOrUpda
                 label="Unidad"
                 name="unidad"
                 value={producto.unidad.descripcion}
-                opciones={unidades.map(u => { return u.descripcion })}
+                opciones={unidades ? unidades.map(u => { return u.descripcion }) : []}
                 onChange={handleChange} />
 
             <div className="row">

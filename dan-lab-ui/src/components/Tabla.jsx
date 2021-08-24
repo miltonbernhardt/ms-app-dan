@@ -1,38 +1,46 @@
 import React from 'react';
-export const Tabla = ({ titulo, children }) => {
+
+export const Tabla = ({titulo = '', encabezado, filas}) => {
 
     return (
-        <div >
+        <div>
             <h2>{titulo}</h2>
             <table>
-                {children}
+                <thead>
+                    <tr>
+                        {encabezado}
+                    </tr>
+                </thead>
+                <tbody>
+                     {filas}
+                </tbody>
             </table>
         </div>
     )
 }
 
-export const EncabezadoTabla = ({ children }) => {
+export const EncabezadoTabla = ({children}) => {
     return (
         <th>
             {children}
         </th>
     )
 }
-export const FilaTabla = ({ children, clave }) => {
+export const FilaTabla = ({children}) => {
     return (
-        <tr key={clave}>
+        <tr>
             {children}
         </tr>
     )
 }
-export const CeldaTabla = ({ dato }) => {
+export const CeldaTabla = ({dato}) => {
     return (
         <td className="celdaTabla">
             {dato}
         </td>
     )
 }
-export const CeldaBotonTabla = ({ titulo, accion }) => {
+export const CeldaBotonTabla = ({titulo, accion}) => {
     return (
         <td className="celdaTabla">
             <button onClick={accion}>{titulo}</button>
