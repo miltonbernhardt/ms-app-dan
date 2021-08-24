@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cliente")
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class ClienteRest {
 
     protected final Logger logger = LoggerFactory.getLogger(ClienteRest.class);

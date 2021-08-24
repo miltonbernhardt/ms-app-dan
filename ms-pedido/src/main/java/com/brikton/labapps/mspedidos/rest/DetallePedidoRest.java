@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/detallepedido")
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class DetallePedidoRest {
 
     protected final Logger logger = LoggerFactory.getLogger(DetallePedidoRest.class);

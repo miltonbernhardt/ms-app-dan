@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/empleado")
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class EmpleadoRest {
 
     protected final Logger logger = LoggerFactory.getLogger(EmpleadoRest.class);

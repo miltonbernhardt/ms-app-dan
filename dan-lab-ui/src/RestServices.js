@@ -12,9 +12,11 @@ const API_EMPLEADO = 'empleado'
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",
+    'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+    'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",//Origin, Content-Type, X-Auth-Token
     'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW4yMDIxIiwiaWF0IjoxNjI5Njc5MzE4fQ.S0vnGCmthN6yHcVK2t2ldbeJbYhQsqufpmc4CFxLUONwYUY1sgRuIrc0lBrKm9cyDQ0T6Mi4bZ8zJQZRxoCWxg'
 }
+
 
 // --- OBRA METHODS ---
 export const getObras = async () => GET(`${API_OBRA}`);
