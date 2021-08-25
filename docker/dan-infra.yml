@@ -149,18 +149,6 @@ services:
       - app
       - infra
 
-  ms-frontend:
-    container_name: ms-frontend
-    image: dan/ms-frontend:1.0.0
-    ports:
-      - "9005:9005"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9005"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-    networks:
-      - app
-
 networks:
   infra:
     driver: bridge

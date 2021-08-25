@@ -21,7 +21,6 @@
         <module>service-discovery</module>
         <module>service-gateway</module>
         <module>ms-cuentacorriente</module>
-        <module>ms-frontend</module>
         <module>ms-liquidacion</module>
         <module>ms-pedido</module>
         <module>ms-producto</module>
