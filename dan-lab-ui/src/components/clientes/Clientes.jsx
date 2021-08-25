@@ -18,24 +18,25 @@ const clienteInicial = {
 const Clientes = () => {
     const [cliente, setCliente] = useState(clienteInicial);
     const [listaClientes, setListaClientes] = useState([]);
-
     const history = useHistory();
 
     useEffect(() => {
-        if (window.accessToken) {
+        if (localStorage.getItem("token")) {
             getClientes().then(data => {
-                if (data)
+                if (data) {
                     setListaClientes(data)
+                }
             });
         } else {
-            history.push(RUTAS.login)
+            history.push(RUTAS.login[2])
         }
-    }, []);
+    }, [history]);
 
     const fetchClientes = () => {
         getClientes().then(data => {
-            if (data)
+            if (data) {
                 setListaClientes(data)
+            }
         });
     }
 
@@ -65,9 +66,7 @@ const Clientes = () => {
             return <></>
     }
 
-    const encabezado = ["ID Usuario", "Razon Social", "e-mail", ""].map((e, i) => {
-        return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
-    })
+    const encabezado = ["ID Usuario", "Razón Social", "e-mail", ""].map((e, i) => <EncabezadoTabla key={i}>{e}</EncabezadoTabla>)
 
     const limpiarCampos = () => {
         setCliente(clienteInicial);

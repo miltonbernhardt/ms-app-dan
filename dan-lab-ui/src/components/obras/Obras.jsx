@@ -27,27 +27,31 @@ const obraInicial = {
 
 const Obras = () => {
     const history = useHistory();
-
     const [obra, setObra] = useState(obraInicial);
     const [cliente, setCliente] = useState(clienteInicial);
     const [listaClientes, setListaClientes] = useState([]);
     const [listaObras, setListaObras] = useState([]);
 
     useEffect(() => {
-        if (window.accessToken){
+        if (localStorage.getItem("token")) {
             fetchClientes();
             fetchObras();
-        }
-        else
+        } else
             history.push(RUTAS.login)
-    }, []);
+    }, [history]);
 
     const fetchClientes = () => {
-        getClientes().then(data => setListaClientes(data));
+        getClientes().then(data => {
+            if (data)
+                setListaClientes(data)
+        });
     }
 
     const fetchObras = () => {
-        getObras().then(data => setListaObras(data));
+        getObras().then(data => {
+            if (data)
+                setListaObras(data)
+        });
     }
 
     const actualizarObra = (nombreAtributo, valorAtributo) => {
@@ -63,8 +67,10 @@ const Obras = () => {
     }
 
     const saveOrUpdate = () => {
-        !(obra.id) ? postObra(obra).then(() => fetchObras()) :
-            putObra(obra).then(() => fetchObras());
+        const algoObra = () => {
+            fetchObras()
+        }
+        !(obra.id) ? postObra(obra).then(algoObra) : putObra(obra).then(algoObra);
         setObra(obraInicial);
         setCliente(clienteInicial);
     };
@@ -75,7 +81,7 @@ const Obras = () => {
     }
 
     const filasObras = () => {
-        if (listaObras){
+        if (listaObras) {
             return listaObras.map((e, i) => {
                 return <FilaTabla key={i}>
                     <CeldaTabla dato={e.id}/>
@@ -89,8 +95,7 @@ const Obras = () => {
                     }}/>
                 </FilaTabla>
             });
-        }
-        else{
+        } else {
             return <></>
         }
 
@@ -106,7 +111,6 @@ const Obras = () => {
             <div><h1>Gestion de Obras</h1></div>
             <div className="panelForm">
                 <div className="panelFormAlta">
-
                     <ObrasForm
                         obra={obra}
                         actualizarCampos={actualizarObra}
@@ -115,7 +119,6 @@ const Obras = () => {
                 </div>
 
                 <div className="panelFormBusqueda">
-
                     <ClienteObrasForm
                         cliente={cliente}
                         actualizarCampos={actualizarCliente}
@@ -123,7 +126,7 @@ const Obras = () => {
                 </div>
             </div>
             <div className="panel">
-                <Tabla filas={filasObras} encabezado={encabezado}/>
+                <Tabla encabezado={encabezado} filas={filasObras}/>
             </div>
         </div>
     );

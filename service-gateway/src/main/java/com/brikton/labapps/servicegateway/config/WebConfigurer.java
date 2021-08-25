@@ -9,10 +9,6 @@ public class WebConfigurer extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
-                .setCachePeriod(31556926)
-                .resourceChain(true);
+        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
     }
 }

@@ -9,10 +9,10 @@ const Pagos = () => {
     const [listaPedidos, setListaPedidos] = useState([]);
 
     useEffect(() => {
-        if (!window.accessToken) {
+        if (!localStorage.getItem("token")) {
             history.push(RUTAS.login)
         }
-    }, []);
+    }, [history]);
 
     const abonarPedido = () => {
         console.log("Abonar pedido listo")

@@ -26,13 +26,10 @@ const sueldoInicial = {
 
 const Liquidacion = () => {
     const history = useHistory();
-
     const [listaLiquidacion, setListaLiquidacion] = useState([]);
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const [empleado, setEmpleado] = useState(empleadoInicial);
     const [sueldo, setSueldo] = useState(sueldoInicial);
-
-
 
     const fetchEmpleados = () => {
         getEmpleados().then(data => {
@@ -56,13 +53,13 @@ const Liquidacion = () => {
     }
 
     useState(() => {
-        if (window.accessToken) {
+        if (localStorage.getItem("token")) {
             fetchEmpleados();
             fetchLiquidacion();
         } else
             history.push(RUTAS.login)
 
-    }, []);
+    }, [history]);
 
     const liquidarEmpleado = () => {
         postLiquidacionEmpleado(empleado).then(() => fetchLiquidacion());
@@ -85,7 +82,9 @@ const Liquidacion = () => {
 
     const actualizarSueldoEmpleado = () => {
         console.log(sueldo);
-        postSueldo(sueldo).then(() => fetchSueldo());
+        postSueldo(sueldo).then(() => {
+            fetchSueldo()
+        });
     }
 
 

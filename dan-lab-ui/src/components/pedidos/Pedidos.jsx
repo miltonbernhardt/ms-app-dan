@@ -45,7 +45,7 @@ const Pedidos = () => {
     const [listaObras, setListaObras] = useState([]);
 
     useEffect(() => {
-        if (window.accessToken){
+        if (localStorage.getItem("token")){
             fetchPedidos();
             fetchProductos();
             fetchObras();
@@ -53,7 +53,7 @@ const Pedidos = () => {
         else
             history.push(RUTAS.login)
 
-    }, [listaPedidos, listaDetalle]);
+    }, [listaPedidos, listaDetalle, history]);
 
     const fetchPedidos = () => {
         getPedidos().then(data => {
@@ -105,7 +105,7 @@ const Pedidos = () => {
             const nuevoDetalle = {
                 ...detallePedido,
                 producto: listaProductos[index],
-                precio: detallePedido.cantidad * listaProductos[index].precio
+                precio: (detallePedido.cantidad ?? 0) * (listaProductos[index] ? listaProductos[index].precio : 1)
             };
             setDetalle(nuevoDetalle)
         } else {
@@ -135,9 +135,9 @@ const Pedidos = () => {
             return <></>
     }
 
-    const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+    const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado"]
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     const seleccionarPedido = (p) => {
@@ -161,9 +161,9 @@ const Pedidos = () => {
         </FilaTabla>
     });
 
-    const encabezadoDetalle = ["ID Detalle", "Cantidad", "Precio", "Producto", "", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+    const encabezadoDetalle = ["ID Detalle", "Cantidad", "Precio", "Producto", "Eliminar", "Seleccionar"]
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     return (
@@ -188,10 +188,7 @@ const Pedidos = () => {
             </div>
             <div className="panel">
                 <div><h3>Detalle</h3></div>
-                <Tabla>
-                    {encabezadoDetalle}
-                    {filasDetalle}
-                </Tabla>
+                <Tabla encabezado={encabezadoDetalle} filas={filasDetalle}/>
                 <div><h3>Pedidos</h3></div>
                 <Tabla encabezado={encabezado} filas={filasPedidos}/>
             </div>

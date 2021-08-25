@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const RAIZ_URL = 'http://localhost';
-const PORT = 8181; //TODO arreglar esto pordio
+const RAIZ_URL = `http://localhost`;
 const API_PRODUCTO = 'producto'
 const API_PEDIDO = 'pedido'
-const API_OBRA = 'user'
+const API_OBRA = 'obra'
 const API_DETALLE_PEDIDO = 'detallepedido'
 const API_LIQUIDACION = 'liquidacion'
 const API_CLIENTE = 'cliente'
@@ -18,12 +17,14 @@ const headers = {
 
 // --- USER METHODS ---
 export const login = async ({username, password}) => {
-    const URL = `http://localhost:8181/login`;
+    const URL = `${RAIZ_URL}:8181/login`;
     try {
         const response = await axios.post(URL, {username, password}, {headers})
-
         const {data: dataResponse, status} = response
         if (typeof dataResponse === 'string' || status !== 200) {
+            if (status === 404){
+                localStorage.removeItem("token")
+            }
             throw new Error(dataResponse)
         } else {
             return dataResponse
@@ -74,19 +75,22 @@ export const postEmpleado = async (empleado) => POST(`${API_EMPLEADO}`, empleado
 export const putEmpleado = async (empleado) => PUT(`${API_EMPLEADO}`, empleado);
 
 const getNewHeader = () => {
-    let newHeader = headers;
-    newHeader.Authorization = `Bearer ${window.accessToken}`;
-    return newHeader;
+    const token = localStorage.getItem('token');
+    return {...headers, Authorization:`Bearer ${token}`}
 }
 
 // --- GENERAL METHODS ---
 export const POST = async (postfixUrl, data,) => {
-    const URL = `${RAIZ_URL}:${PORT}/api/${postfixUrl}`;
+    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
     console.log({post_request: URL, data})
     try {
         const response = await axios.post(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
         if (typeof dataResponse === 'string' || status !== 200) {
+            if (status === 401){
+                localStorage.removeItem("token")
+                localStorage.removeItem("username")
+            }
             throw new Error(dataResponse)
         } else {
             console.log({post_response: URL, dataResponse})
@@ -99,7 +103,7 @@ export const POST = async (postfixUrl, data,) => {
 }
 
 export const PUT = async (postfixUrl, data) => {
-    const URL = `${RAIZ_URL}:${PORT}/api/${postfixUrl}`;
+    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
 
     console.log({put_request: URL, data})
 
@@ -107,6 +111,10 @@ export const PUT = async (postfixUrl, data) => {
         const response = await axios.put(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
         if (typeof dataResponse === 'string' || status !== 200) {
+            if (status === 401){
+                localStorage.removeItem("token")
+                localStorage.removeItem("username")
+            }
             throw new Error(dataResponse)
         } else {
             console.log({put_response: URL, dataResponse})
@@ -119,7 +127,7 @@ export const PUT = async (postfixUrl, data) => {
 }
 
 export const GET = async (postfixUrl) => {
-    const URL = `${RAIZ_URL}:${PORT}/api/${postfixUrl}`;
+    const URL = `${RAIZ_URL}:8181/api/${postfixUrl}`;
     console.log({get_request: URL})
 
     try {
@@ -128,6 +136,10 @@ export const GET = async (postfixUrl) => {
         const {data: dataResponse, status} = response
 
         if (typeof dataResponse === 'string' || status !== 200) {
+            if (status === 401){
+                localStorage.removeItem("token")
+                localStorage.removeItem("username")
+            }
             throw new Error(dataResponse)
         } else {
             console.log("Error en método: ", {get_response: URL, dataResponse})
@@ -140,7 +152,7 @@ export const GET = async (postfixUrl) => {
 }
 
 export const DELETE = async (postfixUrl) => {
-    const URL = `${RAIZ_URL}:${PORT}/api/${postfixUrl}`;
+    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
     console.log({delete_request: URL})
 
     try {
@@ -150,6 +162,10 @@ export const DELETE = async (postfixUrl) => {
         const {data: dataResponse, status} = response
 
         if (typeof dataResponse === 'string' || status !== 200) {
+            if (status === 401){
+                localStorage.removeItem("token")
+                localStorage.removeItem("username")
+            }
             throw new Error(dataResponse)
         } else {
             console.log("Error en método: ", {delete_response: URL, dataResponse})

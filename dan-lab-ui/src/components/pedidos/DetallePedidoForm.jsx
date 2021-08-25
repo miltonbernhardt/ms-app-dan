@@ -23,7 +23,7 @@ const DetallePedidoForm = ({ detallePedido, actualizarCampos, listaProductos, sa
                 label='Precio'
                 name='precio'
                 readOnly={true}
-                value={detallePedido.cantidad * detallePedido.producto.precio} />
+                value={(detallePedido.cantidad ?? 0) * (detallePedido.producto.precio ?? 1)} />
 
             <ComboForm
                 label='Producto'

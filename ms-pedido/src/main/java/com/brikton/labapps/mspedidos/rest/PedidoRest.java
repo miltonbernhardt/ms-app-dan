@@ -74,6 +74,19 @@ public class PedidoRest {
         }
     }
 
+    @GetMapping(path = "/")
+    public ResponseEntity<?> getAllPedidos() {
+        try {
+            List<Pedido> pedidos = pedidoService.getPedidos();
+            if (pedidos.size() <= 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudieron obtener los pedidos.");
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudieron obtener los pedidos.");
+        }
+    }
+
     @GetMapping(path = "/obra")
     public ResponseEntity<?> pedidosPorObra(@RequestBody Obra obra) {
         try {

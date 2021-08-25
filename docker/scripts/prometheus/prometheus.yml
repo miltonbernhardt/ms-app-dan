@@ -44,14 +44,6 @@ scrape_configs:
         labels:
           instance: 'ms-liquidacion'
 
-  - job_name: 'ms-frontend'
-    scrape_interval: 5s
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: [ 'ms-frontend:9005' ]
-        labels:
-          instance: 'ms-frontend'
-
   - job_name: 'service-gateway'
     scrape_interval: 5s
     metrics_path: '/actuator/prometheus'

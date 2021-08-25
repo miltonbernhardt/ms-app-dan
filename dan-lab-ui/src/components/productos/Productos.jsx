@@ -6,6 +6,7 @@ import {useEffect, useState} from 'react';
 import {getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
+import {useAlert} from "react-alert";
 
 const unidadInicial = {
     descripcion: ''
@@ -22,21 +23,27 @@ const productoInicial = {
 
 const Productos = () => {
     const history = useHistory();
-
+    const alert = useAlert();
     const [producto, setProducto] = useState(productoInicial);
     const [listaProductos, setListaProductos] = useState([]);
     const [listaUnidades, setListaUnidades] = useState([]);
 
     useEffect(() => {
-        if (window.accessToken) {
+        if (localStorage.getItem("token")) {
             fetchProductos();
         } else
             history.push(RUTAS.login)
-    }, []);
+    }, [history]);
 
     const fetchProductos = () => {
-        getProductos().then(data => setListaProductos(data));
-        getUnidades().then(data => setListaUnidades(data));
+        getProductos().then(data => {
+            if (data)
+                setListaProductos(data)
+        });
+        getUnidades().then(data => {
+            if (data)
+                setListaUnidades(data)
+        });
     }
 
     const actualizarProducto = (nombreAtributo, valorAtributo) => {
@@ -73,8 +80,8 @@ const Productos = () => {
     }
 
     const encabezado = ["ID Producto", "Nombre", "Descripcion", "Precio", "Stock Actual", "Stock Minimo", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     return (
@@ -89,10 +96,7 @@ const Productos = () => {
                     saveOrUpdate={saveOrUpdate}/>
             </div>
             <div className="panel">
-                <Tabla>
-                    {encabezado}
-                    {filasProductos}
-                </Tabla>
+                <Tabla encabezado={encabezado} filas={filasProductos}/>
             </div>
         </div>
     );

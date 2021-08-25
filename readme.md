@@ -20,7 +20,7 @@ En este proyecto se aloja lo necesario para correr la aplicación basada en micr
 
 Para instalar la aplicación se necesitan tener los microservicios instalados y compilados y asi poder levantar el container de docker.
 
-Para eso ejecutar el script "install-application.bat", el cual primero levanta las imagenes de las cuales los microservicios dependen, luego compilan los ms y luego levanta el container final, que contiene las imagenes de las dependencias y las de los ms.
+Para eso ejecutar el script "install-application.bat", el cual primero levanta las imágenes de las cuales los microservicios dependen, luego compilan los ms y luego levanta el container final, que contiene las imágenes de las dependencias y las de los ms.
 
 ---
 Se necesitan tener los siguientes puertos disponibles:

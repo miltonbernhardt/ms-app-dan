@@ -2,7 +2,7 @@ table {
     background-color: white;
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: auto;
 }
 
 th,
@@ -10,7 +10,6 @@ td {
     padding: 5px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    width: 25%;
 }
 
 tr:nth-child(even) {
