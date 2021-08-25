@@ -3,6 +3,7 @@ package com.brikton.labapps.mspedidos.service.implementation;
 import com.brikton.labapps.mspedidos.domain.Producto;
 import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 import com.brikton.labapps.mspedidos.service.ProductoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +15,19 @@ public class ProductoServiceImpl implements ProductoService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    private final String urlServer = "http://localhost";
-    private final String apiProducto = "api/producto";
-    private final String puerto = "9001";
+    @Value("${producto.host}")
+    private String host;
 
     @Override
-    public Integer stockDisponible(Producto producto) throws RecursoNoEncontradoException {
-        // TODO ver con kton
-        String server = urlServer + ":" + puerto + "/" + apiProducto;
+    public Integer getStockDisponible(Producto producto) throws RecursoNoEncontradoException {
+        String url = "http://" + host + ":9001/api/producto/stock/" + producto.getId();//TODO change for feign
         // ResponseEntity<Integer> respuesta = restTemplate.exchange(server+"/stock?idProducto="+producto.getId(), HttpMethod.GET, null , Integer .class);
-        ResponseEntity<Integer> respuesta = restTemplate.exchange(server + "/stock/" + producto.getId(), HttpMethod.GET, null, Integer.class);
-        if (respuesta.getStatusCode() == HttpStatus.OK) return respuesta.getBody();
-        else throw new RecursoNoEncontradoException("No se obtuvo respuesta con stock", 0);
+        ResponseEntity<Integer> respuesta = restTemplate.exchange(url, HttpMethod.GET, null, Integer.class);
+
+        if (respuesta.getStatusCode() == HttpStatus.OK)
+            return respuesta.getBody();
+        else
+            throw new RecursoNoEncontradoException("No se obtuvo respuesta con stock", 0);
     }
 
 }

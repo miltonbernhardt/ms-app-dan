@@ -18,11 +18,8 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
     private final PedidoService pedidoService;
 
     @Autowired
-    public DetallePedidoServiceImpl(
-            DetallePedidoRepository detallePedidoRepository,
-            ProductoRepository productoRepository,
-            PedidoService pedidoService
-    ) {
+    public DetallePedidoServiceImpl(DetallePedidoRepository detallePedidoRepository,
+            ProductoRepository productoRepository, PedidoService pedidoService) {
         this.detallePedidoRepository = detallePedidoRepository;
         this.productoRepository = productoRepository;
         this.pedidoService = pedidoService;
@@ -30,19 +27,19 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
     }
 
     @Override
-    public DetallePedido agregarDetalle(DetallePedido detalle, Integer idPedido) throws RecursoNoEncontradoException {
+    public DetallePedido addDetalle(DetallePedido detalle, Integer idPedido) throws RecursoNoEncontradoException {
         Pedido pedido = pedidoService.getPedido(idPedido);
 
         productoRepository.save(detalle.getProducto());
         detallePedidoRepository.save(detalle);
 
         pedido.agregarDetalle(detalle);
-        pedidoService.actualizarPedido(pedido);
+        pedidoService.updatePedido(pedido);
         return detalle;
     }
 
     @Override
-    public DetallePedido actualizarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException {
+    public DetallePedido updateDetalle(DetallePedido detalle) throws RecursoNoEncontradoException {
         if (detallePedidoRepository.existsById(detalle.getId())) {
 
             productoRepository.save(detalle.getProducto());
@@ -54,11 +51,20 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
     }
 
     @Override
-    public void eliminarDetalle(DetallePedido detalle) throws RecursoNoEncontradoException {
+    public void deleteDetalle(DetallePedido detalle) throws RecursoNoEncontradoException {
         if (detallePedidoRepository.existsById(detalle.getId())) {
             detallePedidoRepository.delete(detalle);
         } else {
             throw new RecursoNoEncontradoException("Detalle de pedido no encontrado: ", detalle.getId());
+        }
+    }
+
+    @Override
+    public void eliminarDetalle(Integer detalleId) throws RecursoNoEncontradoException {
+        if (detallePedidoRepository.existsById(detalleId)) {
+            detallePedidoRepository.deleteById(detalleId);
+        } else {
+            throw new RecursoNoEncontradoException("Detalle de pedido no encontrado: ", detalleId);
         }
     }
 

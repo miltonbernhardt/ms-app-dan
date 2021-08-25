@@ -2,102 +2,132 @@ package com.brikton.labapps.msusuario.rest;
 
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
-import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.brikton.labapps.msusuario.service.ObraService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/obra")
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class ObraRest {
 
-    @Autowired
-    ObraServicio obraServicio;
+    protected final Logger logger = LoggerFactory.getLogger(ObraRest.class);
+
+    private final ObraService obraServicio;
+
+    public ObraRest(ObraService obraServicio) {
+        this.obraServicio = obraServicio;
+    }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> obraPorId(@PathVariable Integer id) {
-        Optional<Obra> obra;
+    public ResponseEntity<?> getObraById(@PathVariable Integer id) {
         try {
-            obra = this.obraServicio.buscarObraPorId(id);
+            return ResponseEntity.of(this.obraServicio.getObraById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener la obra debido a un error interno.");
         }
-        return ResponseEntity.of(obra);
     }
 
     @GetMapping
-    public ResponseEntity<List<Obra>> todos() {
-        return ResponseEntity.ok(this.obraServicio.listarObras(null));
+    public ResponseEntity<List<Obra>> getAllObras() {
+        return ResponseEntity.ok(this.obraServicio.getAllObrasByTipo(null));
     }
 
     @GetMapping(path = "/tipoObra/{tipoObraId}")
-    public ResponseEntity<?> todosFiltrado(@PathVariable String tipoObraId) {
-        TipoObra tipoObra;
+    public ResponseEntity<?> getAllObrasByTipo(@PathVariable String tipoObraId) {
         try {
-            tipoObra = TipoObra.valueOf(tipoObraId);
+            TipoObra tipoObra = TipoObra.valueOf(tipoObraId);
+            return ResponseEntity.ok(this.obraServicio.getAllObrasByTipo(tipoObra));
         } catch (IllegalArgumentException e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("El tipo de obra que se requiere no es válido. \nLos siguientes valores son válidos: \"REFORMA, CASA, EDIFICIO y VIAL\".");
         }
-        return ResponseEntity.ok(this.obraServicio.listarObras(tipoObra));
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Obra nueva) {
-        Obra creada;
+    public ResponseEntity<?> saveObra(@RequestBody Obra nueva) {
         try {
-            creada = this.obraServicio.guardarObra(nueva);
+            Obra obra = this.obraServicio.saveObra(nueva);
+            if(obra == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el cliente indicado.");
+            return ResponseEntity.ok(obra);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar la obra debido a un error interno.");
         }
-        return ResponseEntity.ok(creada);
     }
 
-    @PutMapping
-    public ResponseEntity<?> actualizar(@RequestBody Obra nueva) {
-        Obra actualizada;
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateObra(@RequestBody Obra nueva, @PathVariable Integer id) {
         try {
-            actualizada = this.obraServicio.guardarObra(nueva);
+            Obra actualizada = this.obraServicio.updateObra(nueva, id);
+            return ResponseEntity.ok(actualizada);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo actualizar la obra debido a un error interno.");
         }
-        return ResponseEntity.ok(actualizada);
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    private ResponseEntity<ModelMap> handleError(HttpServletRequest req, Exception ex) {
+        logger.error(ex.getMessage());
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("reason", "El tipo de obra que se requiere no es válido. Los siguientes valores son válidos: REFORMA, CASA, EDIFICIO y VIAL.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mav.getModelMap());
     }
 
     @GetMapping(path = "/obrasPorCliente/{clienteId}")
-    public ResponseEntity<?> obrasPorCliente(@PathVariable Integer clienteId) {
-        List<Obra> obras;
+    public ResponseEntity<?> getObrasByClienteId(@PathVariable Integer clienteId) {
         try {
-            obras = this.obraServicio.listarObrasPorCliente(clienteId);
+            List<Obra> obras = this.obraServicio.getObrasByClienteId(clienteId);
+            return ResponseEntity.ok(obras);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo obtener las obras debido a un error interno.");
         }
-        return ResponseEntity.ok(obras);
     }
 
     @GetMapping(path = "/obrasPorCliente/cuit/{clienteCuit}")
-    public ResponseEntity<?> obrasPorClienteCuit(@PathVariable String clienteCuit) {
-        List<Obra> obras;
+    public ResponseEntity<?> getObrasByClienteCuit(@PathVariable String clienteCuit) {
         try {
-            obras = this.obraServicio.listarObrasPorCliente(clienteCuit);
+            List<Obra> obras = this.obraServicio.getObrasByClienteCuit(clienteCuit);
+            return ResponseEntity.ok(obras);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo obtener las obras debido a un error interno.");
         }
-        return ResponseEntity.ok(obras);
     }
 
     @GetMapping(path = "/saldo/{obraId}")
-    public ResponseEntity<?> saldoClienteDeObra(@PathVariable Integer obraId) {
-        Double saldo;
+    public ResponseEntity<?> getSaldoPorObrasByClient(@PathVariable Integer obraId) {
         try {
-            saldo = this.obraServicio.buscarSaldoClienteDeObra(obraId);
+            Double saldo = this.obraServicio.getSaldoPorObrasByClient(obraId);
+            return ResponseEntity.ok(saldo);
         } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo obtener el saldo por obras debido a un error interno.");
+        }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteObra(@PathVariable Integer id) {
+        try {
+            obraServicio.deleteObra(id);
+            return ResponseEntity.ok().body("La obra con el id: " + id + " ha sido borrada");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        return ResponseEntity.ok(saldo);
     }
 }

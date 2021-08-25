@@ -11,5 +11,4 @@ public class MsUsuarioApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MsUsuarioApplication.class, args);
 	}
-
 }

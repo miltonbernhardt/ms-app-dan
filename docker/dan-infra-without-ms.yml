@@ -1,0 +1,34 @@
+version: '2'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=dan2021
+      - POSTGRES_USER=dan2021
+      - POSTGRES_PASSWORD=dan2021
+    ports:
+      - "5432:5432"
+    networks:
+      - infra
+      - app
+
+  artemis:
+    container_name: artemis
+    build:
+      context: ./artemis/
+    restart: always
+    ports:
+      - "61616:61616"
+    networks:
+      - app
+      - infra
+
+networks:
+  infra:
+    driver: bridge
+  app:
+    driver: bridge

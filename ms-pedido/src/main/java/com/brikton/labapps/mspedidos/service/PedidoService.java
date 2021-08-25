@@ -1,6 +1,7 @@
 package com.brikton.labapps.mspedidos.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.brikton.labapps.mspedidos.domain.EstadoPedido;
 import com.brikton.labapps.mspedidos.domain.Obra;
@@ -10,13 +11,19 @@ import com.brikton.labapps.mspedidos.exception.RiesgoException;
 
 public interface PedidoService {
 
-    public Pedido crearPedido(Pedido p) throws RiesgoException;
-    public Pedido actualizarEstadoPedido(Integer id, EstadoPedido estadoPedido) 
-        throws RecursoNoEncontradoException, RiesgoException ;
-    public Pedido getPedido(Integer idPedido) throws RecursoNoEncontradoException;
-    public void actualizarPedido(Pedido p);
-    public ArrayList<Pedido> pedidosPorObra(Obra obra);
-    public ArrayList<Pedido> pedidosPorEstado(EstadoPedido estadoPedidos);
-    public ArrayList<Pedido> pedidosPorCliente(Integer idCliente) throws RecursoNoEncontradoException;
-    
+    Pedido savePedido(Pedido p) throws RiesgoException;
+
+    Pedido updateEstadoPedido(Integer id, EstadoPedido estadoPedido) throws RecursoNoEncontradoException, RiesgoException;
+
+    Pedido getPedido(Integer idPedido) throws RecursoNoEncontradoException;
+
+    void updatePedido(Pedido p);
+
+    ArrayList<Pedido> getPedidosByObra(Obra obra);
+
+    ArrayList<Pedido> getPedidosByEstado(EstadoPedido estadoPedidos);
+
+    ArrayList<Pedido> getPedidosByCliente(Integer idCliente) throws RecursoNoEncontradoException;
+
+    List<Pedido> getPedidos();
 }

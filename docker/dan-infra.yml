@@ -1,7 +1,7 @@
 version: '2'
 services:
-  postgresdb:
-    container_name: postgresdb
+  postgres:
+    container_name: postgres
     image: postgres:latest
     restart: always
     volumes:
@@ -17,64 +17,41 @@ services:
       - infra
       - app
 
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
+  artemis:
+    container_name: artemis
+    build:
+      context: ./artemis/
     ports:
-      - "8080:8080"
+      - "61616:61616"
     networks:
+      - app
       - infra
 
-  mongo:
-    container_name: mongo
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: dan2021
-      MONGO_INITDB_ROOT_PASSWORD: dan2021
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.6.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./scripts/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
     networks:
-      - infra
       - app
 
-  mongo-express:
-    container_name: mongo-express
-    image: mongo-express
-    restart: always
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.0
+    depends_on:
+      - prometheus
     ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: dan2021
-      ME_CONFIG_MONGODB_ADMINPASSWORD: dan2021
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
     networks:
+      - app
       - infra
-
-#  artemis: #ToDo: probar
-#    container_name: artemis
-#    image: artemis
-#    restart: always
-#    ports:
-#      - "61616:61616"
-#    networks:
-#      - app
-#      - infra
-
-#  service-gateway:
-#    container_name: service-gateway
-#    image: dan/service-gateway:1.0.0
-#    ports:
-#      - "80:80" #TODO ver que puerta usar1
-#    environment:
-#      - "ZUUL_ROUTES_CUENTACORRIENTE_URL=http://ms-cuentacorriente:9013/api/cuentacorriente/"
-#      - "ZUUL_ROUTES_DETALLEPEDIDO_URL=http://ms-pedido:9012/api/detallepedido/"
-#      - "ZUUL_ROUTES_PEDIDO_URL=http://ms-pedido:9012/api/pedido/"
-#      - "ZUUL_ROUTES_PRODUCTO_URL=http://ms-producto:9011/api/producto/"
-#      - "ZUUL_ROUTES_EMPLEADO_URL=http://ms-usuario:9014/api/empleado/"
-#      - "ZUUL_ROUTES_CLIENTE_URL=http://ms-usuario:9014/api/cliente/"
-#      - "ZUUL_ROUTES_OBRA_URL=http://ms-usuario:9014/api/obra/"
-#    networks:
-#      - app
-#      - infra
 
   service-discovery:
     container_name: service-discovery
@@ -84,35 +61,18 @@ services:
     networks:
       - app
 
-  ms-cuentacorriente:
-    container_name: ms-cuentacorriente
-    image: dan/ms-cuentacorriente:1.0.0
+  service-gateway:
+    container_name: service-gateway
+    image: dan/service-gateway:1.0.0
     ports:
-      - "9003:9003"
+      - "8181:8181"
     environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9003"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_cuentacorriente"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "SERVER_PORT=8181"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "USUARIO_HOST=ms-usuario"
     networks:
       - app
-
-  ms-pedido:
-    container_name: ms-pedido
-    image: dan/ms-pedido:1.0.0
-    ports:
-      - "9002:9002"
-    environment:
-      - "SPRING_PROFILES_ACTIVE=docker"
-      - "SERVER_PORT=9002"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_pedido"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
-      - "SPRING_ARTEMIS_HOST=artemis"
-      - "SPRING_ARTEMIS_PORT=61616"
-    networks:
-      - app
+      - infra
 
   ms-producto:
     container_name: ms-producto
@@ -122,8 +82,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9001"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_producto"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_producto"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
       - "SPRING_ARTEMIS_HOST=artemis"
       - "SPRING_ARTEMIS_PORT=61616"
@@ -138,22 +97,57 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
       - "SERVER_PORT=9000"
-      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/dan2021?currentSchema=ms_usuario"
-      - "SPRING_DATA_MONGODB_URI=mongodb://dan2021:dan2021@mongodb:27017/dan2021"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_usuario"
       - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
     networks:
       - app
 
-#   ToDo:
-#   s
-#      http://user:password@localhost:8761/eureka) todo para seguridad
-#  https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html
+  ms-cuentacorriente:
+    container_name: ms-cuentacorriente
+    image: dan/ms-cuentacorriente:1.0.0
+    ports:
+      - "9003:9003"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9003"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_cuentacorriente"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "PEDIDO_HOST=ms-pedido"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
 
-#     Parte 02 – Agregar telemetría
-#       agregar Prometheus
-#       agregar Graphana
-#     Parte 05 – Para el frontend
-#       agregar Node
+  ms-liquidacion:
+    container_name: ms-liquidacion
+    image: dan/ms-liquidacion:1.0.0
+    ports:
+      - "9004:9004"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9004"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_liquidacion"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
+
+  ms-pedido:
+    container_name: ms-pedido
+    image: dan/ms-pedido:1.0.0
+    ports:
+      - "9002:9002"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "SERVER_PORT=9002"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dan2021?currentSchema=ms_pedido"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka"
+      - "SPRING_ARTEMIS_HOST=artemis"
+      - "SPRING_ARTEMIS_PORT=61616"
+      - "PRODUCTO_HOST=ms-producto"
+      - "USUARIO_HOST=ms-usuario"
+    networks:
+      - app
+      - infra
 
 networks:
   infra:

@@ -6,6 +6,6 @@ import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 
 public interface ProductoService {
 
-   public Integer stockDisponible(Producto producto) throws RecursoNoEncontradoException;
-    
+    Integer getStockDisponible(Producto producto) throws RecursoNoEncontradoException;
+
 }

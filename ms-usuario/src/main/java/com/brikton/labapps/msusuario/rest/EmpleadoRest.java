@@ -1,90 +1,81 @@
 package com.brikton.labapps.msusuario.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
-
 import com.brikton.labapps.msusuario.domain.Empleado;
-
+import com.brikton.labapps.msusuario.service.EmpleadoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/empleado")
+@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class EmpleadoRest {
-	    
-	private static final List<Empleado> listaEmpleados = new ArrayList<Empleado>();
-	private static Integer ID_GEN = 1;
 
-	@PostMapping
-	public ResponseEntity<Empleado> crear(@RequestBody Empleado nuevo){
-	    System.out.println("Crear nuevo empleado: " + nuevo);
-	    nuevo.setId(ID_GEN++);
-	    listaEmpleados.add(nuevo);
-	    return ResponseEntity.ok(nuevo);
-	}
+    protected final Logger logger = LoggerFactory.getLogger(EmpleadoRest.class);
 
-	@PutMapping(path = "/{id}")
-	public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo, @PathVariable Integer id){
-        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-        		.filter(i -> listaEmpleados.get(i).getId().equals(id))
-        		.findFirst();
+    private final EmpleadoService empleadoServicio;
 
-	    if(indexOpt.isPresent()){
-	        listaEmpleados.set(indexOpt.getAsInt(), nuevo);
-            return ResponseEntity.ok(nuevo);
-        } else {
-	        return ResponseEntity.notFound().build();
-	        }
-	}
-
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Empleado> borrar(@PathVariable Integer id){
-    	OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-    			.filter(i -> listaEmpleados.get(i).getId().equals(id))
-	            .findFirst();
-
-	    if(indexOpt.isPresent()){
-	        listaEmpleados.remove(indexOpt.getAsInt());
-            return ResponseEntity.ok().build();
-        } else {
-	        return ResponseEntity.notFound().build();
-	        }
-	}
-
-	@GetMapping(path="/{id}")
-    public ResponseEntity<Empleado> empleadoPorId(@PathVariable Integer id) {
-        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-        		.filter(i -> listaEmpleados.get(i).getId().equals(id))
-	            .findFirst();
-	    if (indexOpt.isPresent()){
-	        return ResponseEntity.ok(listaEmpleados.get(indexOpt.getAsInt()));
-	    } else {
-	        return ResponseEntity.notFound().build();
-	        }
+    public EmpleadoRest(EmpleadoService empleadoServicio) {
+        this.empleadoServicio = empleadoServicio;
     }
 
-	@GetMapping
-   public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false) String usuario) {
-		if ( usuario != null){
-	        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
-            .filter(i -> listaEmpleados.get(i).getUser().getUser().equals(usuario))
-            .findFirst();
-	        if (indexOpt.isPresent()){
-	               return ResponseEntity.ok(listaEmpleados.get(indexOpt.getAsInt()));
-         } else {
-        	 return ResponseEntity.notFound().build();
-	         }
-	    }
-	    return ResponseEntity.badRequest().build();
+    @PostMapping
+    public ResponseEntity<?> createVendedor(@RequestBody Empleado empleado) {
+        try {
+            return ResponseEntity.ok(empleadoServicio.saveEmpleado(empleado));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo crear al empleado.");
+        }
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> updateEmpleado(@RequestBody Empleado empleado, @PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(empleadoServicio.updateEmpleado(empleado, id));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo actualizar al empleado.");
+        }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteEmpleado(@PathVariable Integer id) {
+        try {
+            empleadoServicio.deleteEmpleado(id);
+            return ResponseEntity.ok().body("El empleado con el id: " + id + " ha sido borrado.");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo borrar al empleado.");
+        }
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getEmpleadoById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(empleadoServicio.getEmpleado(id));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo obtener al empleado.");
+        }
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<?> getEmpleadoByNombre(@PathVariable String nombre) {
+        try {
+            return ResponseEntity.of(empleadoServicio.getEmpleadoByNombre(nombre));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Debido a un error interno no se pudo obtener al empleado.");
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Empleado>> getAllEmpleados() {
+        return ResponseEntity.ok(empleadoServicio.getAllEmpleados());
     }
 }

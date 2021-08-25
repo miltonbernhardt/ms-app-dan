@@ -1,0 +1,5 @@
+Liquidar sueldos a todos
+Liquidar sueldo por empleado
+Calcular comisiones
+Ver Liquidaciones anteriores
+Actualizar sueldo

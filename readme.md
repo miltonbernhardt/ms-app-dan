@@ -5,12 +5,9 @@ Integrantes del proyecto:
 - Brizi, Elias
 - Luz, Tamara
 
+---
 
-------
-
-
-
-En este proyecto se alojan 8 proyectos de una aplicación basada en microservicios:
+En este proyecto se aloja lo necesario para correr la aplicación basada en microservicios:
 - service-gateway: microservicio que sirve de puerta externa de la aplicación y rutea el tráfico hacia los microservicios internos 
 - service-discovery: microservicio encargado del descubrir los microservicios internos
 - ms-usuario: microservicio de usuarios
@@ -19,33 +16,34 @@ En este proyecto se alojan 8 proyectos de una aplicación basada en microservici
 - ms-cuentacorriente: microservicio de cuentas corrientes
 - docker-container: contiene los archivos necesarios para levantar la aplicación
 
-Pasos para la instalación:
--
-1. Comentar (usando '#') en el archivo [docker/dan-infra.yml](docker/dan-infra.yml) todo de los siguientes servicios:
-   - **service-gateway**
-   - **service-discovery** 
-   - **ms-cuentacorriente**
-   - **ms-pedido**
-   - **ms-producto**
-   - **ms-usuario**
-2. Levantar las imágenes de docker de postgres y mongodb
-   - `docker-compose -f docker/dan-infra.yml up -d`
-5. Se necesitan compilar las imágenes de los microservicios,para eso correr los siguientes comandos:
-   - `cd ./service-discovery`
-   - `./mvnw install`
-   - `cd ../service-gateway`
-   - `./mvnw install`
-   - `cd ../ms-cuentacorriente`
-   - `./mvnw install`
-   - `cd ../ms-pedido`
-   - `./mvnw install`
-   - `cd ../ms-producto`
-   - `./mvnw install`
-   - `cd ../ms-usuario`
-   - `./mvnw install`
-7. Descomentar lo comentado en el paso 1 en [docker/dan-infra.yml](docker/dan-infra.yml)
-8. Levantar el resto de imagenes
-   - `docker-compose -f docker/dan-infra.yml up -d`
+---
+
+Para instalar la aplicación se necesitan tener los microservicios instalados y compilados y asi poder levantar el container de docker.
+
+Para eso ejecutar el script "install-application.bat", el cual primero levanta las imágenes de las cuales los microservicios dependen, luego compilan los ms y luego levanta el container final, que contiene las imágenes de las dependencias y las de los ms.
+
+---
+Se necesitan tener los siguientes puertos disponibles:
+- 3000: servicio de gráficos relacionados con los microservicios activos proveído por grafana.
+- 5432: para el acceso a postgres.
+- 8761: microservicio encargado de descubrir los servicios disponibles.
+- 8181: para correr el microservicio que sirve de gateway para el resto de servicios.
+- 9000: microservicio de gestión de usuarios, clientes, empleados y obras.
+- 9001: microservicio para la gestión de productos en venta.
+- 9002: microservicio para la gestión de pedidos de productos por los clientes.
+- 9003: microservicio de gestión de las cuentas corrientes de los clientes.
+- 9004: microservicio que sirve para gestión las liquidaciones de los empleados.
+- 9005: para correr el frontend de la aplicación.
+- 9090: para correr el servicio de prometheus.
+- 61616: artemis
+---
+Password: "dan2021" es tanto el usuario y contraseña requerida por la base de datos y por la aplicación.
+Para grafana usar "admin" como usuario y "dan2021" como password.
+---
+Para probar con insomnia y usar la gateway fijarse que en auth tenga "Authorization: Bearer " más el token generado por al loguearse (se puede generar uno con el método gateway - /api/login -> loginUser en insomnia) 
+
+---
+Para usar un dashboard precreado de grafana, importar el archivo grafana/dashboards/mydashboards.json en grafana.
 
 
 

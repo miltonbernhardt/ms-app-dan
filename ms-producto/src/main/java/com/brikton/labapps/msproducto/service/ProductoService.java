@@ -1,22 +1,27 @@
 package com.brikton.labapps.msproducto.service;
 
-import com.brikton.labapps.msproducto.domain.Material;
-
 import java.util.List;
+
+import com.brikton.labapps.msproducto.domain.Material;
+import com.brikton.labapps.msproducto.domain.Unidad;
 
 public interface ProductoService {
 
-    Material save(Material material);
+    Material saveProducto(Material material);
 
-    Material update(Material materialActualizado);
+    Material updateProducto(Material materialActualizado);
 
-    List<Material> getByStockRange(Integer stockMinimo, Integer stockMaximo) throws Exception;
+    List<Material> getProductoByRangoStock(Integer stockMinimo, Integer stockMaximo);
 
-    Material getByName(String nombre) throws Exception;
+    Material getProductoByNombre(String nombre);
 
-    List<Material> getByPrice(Double precio) throws Exception;
+    List<Material> getProductoByPrecio(Double precio);
 
-    Integer getStock(Integer idMaterial) throws Exception;
+    List<Material> getAllProductos();
 
-    Material getMaterial(Integer id) throws Exception;
+    List<Unidad> getUnidadesProducto();
+
+    Integer getStockProducto(Integer idMaterial);
+
+    Material getMaterial(Integer id);
 }
