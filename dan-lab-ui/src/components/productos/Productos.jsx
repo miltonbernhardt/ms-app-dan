@@ -1,9 +1,11 @@
-import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '../Tabla';
+import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import ProductosForm from './ProductosForm';
 import '../styles/Form.css';
 import '../styles/Clientes.css';
 import {useEffect, useState} from 'react';
-import {getClientes, getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
+import {getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
+import {useHistory} from "react-router-dom";
+import {RUTAS} from "../../App";
 
 const unidadInicial = {
     descripcion: ''
@@ -19,13 +21,17 @@ const productoInicial = {
 }
 
 const Productos = () => {
+    const history = useHistory();
 
     const [producto, setProducto] = useState(productoInicial);
     const [listaProductos, setListaProductos] = useState([]);
     const [listaUnidades, setListaUnidades] = useState([]);
 
     useEffect(() => {
-        fetchProductos();
+        if (window.accessToken) {
+            fetchProductos();
+        } else
+            history.push(RUTAS.login)
     }, []);
 
     const fetchProductos = () => {

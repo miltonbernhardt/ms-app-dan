@@ -1,48 +1,54 @@
-import "./styles/Form.css";
+import "../styles/Form.css";
+import {Label} from "../FormComponents";
+import {useState} from "react";
 
-const Login = ({ usuario, ingresar, actualizarCampos }) => {
+const Login = ({username, password, ingresar, actualizarCampos, logged}) => {
+    const [user, setUsername] = useState(username);
+    const [pass, setPassword] = useState(password);
 
-    const handleChange = (evt) => {
-        evt.preventDefault();
-        // console.log(evt.target.value);
-        const nombreAtributo = evt.target.name;
-        const valorAtributo = evt.target.value;
-        actualizarCampos(nombreAtributo, valorAtributo);
+    const changePassword = (evt) => {
+        setPassword(evt.target.value)
+        actualizarCampos({username: user, password: pass});
+    }
+
+    const changeUsername = (evt) => {
+        setUsername(evt.target.value)
+        actualizarCampos({username: user, password: pass});
+    }
+
+    if (logged){
+        return <h1>Bienvenido!</h1>
     }
 
     return (
         <div className="container">
             <h1 className="form-step"> Login </h1>
-            <form >
+            <form>
                 <div className="row">
-                    <div className="col-25 form-label">
-                        <label>Nombre de usuario</label>
-                    </div>
+                    <Label value="Nombre de usuario"/>
                     <div className="col-75">
                         <input
                             name="nombre"
                             type="text"
                             placeholder="usuario"
-                            value={usuario.nombre}
-                            onChange={handleChange} />
+                            value={user}
+                            onChange={changeUsername}/>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-25 form-label">
-                        <label>Contraseña</label>
-                    </div>
+                    <Label value="Contraseña"/>
                     <div className="col-75">
                         <input
                             name="password"
                             type="password"
                             placeholder="Contraseña"
-                            value={usuario.password}
-                            onChange={handleChange} />
+                            value={pass}
+                            onChange={changePassword}/>
                     </div>
                 </div>
             </form>
             <div className="row">
-                <div className="col-25" />
+                <Label/>
                 <div className="col-75">
                     <button className="btn-wide" onClick={ingresar}>Ingresar</button>
                 </div>

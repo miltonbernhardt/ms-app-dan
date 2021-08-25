@@ -1,9 +1,11 @@
 import ClientesForm from './ClientesForm';
-import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '../Tabla';
+import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import {useEffect, useState} from 'react';
 import '../styles/Clientes.css';
 import '../styles/Tabla.css';
 import {getClientes, postCliente, putCliente} from '../../RestServices';
+import {useHistory} from "react-router-dom";
+import {RUTAS} from "../../App";
 
 const clienteInicial = {
     razonSocial: '-',
@@ -14,16 +16,27 @@ const clienteInicial = {
 };
 
 const Clientes = () => {
-
     const [cliente, setCliente] = useState(clienteInicial);
     const [listaClientes, setListaClientes] = useState([]);
 
+    const history = useHistory();
+
     useEffect(() => {
-        getClientes().then(data => setListaClientes(data));
+        if (window.accessToken) {
+            getClientes().then(data => {
+                if (data)
+                    setListaClientes(data)
+            });
+        } else {
+            history.push(RUTAS.login)
+        }
     }, []);
 
     const fetchClientes = () => {
-        getClientes().then(data => setListaClientes(data));
+        getClientes().then(data => {
+            if (data)
+                setListaClientes(data)
+        });
     }
 
 
@@ -70,7 +83,6 @@ const Clientes = () => {
                                   saveOrUpdate={saveOrUpdate}
                                   clean={limpiarCampos}/>
                 </div>
-                <div className="panelFormBusqueda">Busqueda</div>
             </div>
             <div className="panel">
                 <Tabla encabezado={encabezado} filas={filasCliente()}/>

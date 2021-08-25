@@ -15,6 +15,9 @@ import {
     getObras
 } from '../../RestServices';
 
+import { useHistory } from "react-router-dom";
+import {RUTAS} from "../../App";
+
 const pedidoInicial = {
     id: null,
     fechaPedido: '',
@@ -31,6 +34,7 @@ const detallePedidoInicial = {
 }
 
 const Pedidos = () => {
+    const history = useHistory();
 
     const [pedido, setPedido] = useState(pedidoInicial);
     const [listaPedidos, setListaPedidos] = useState([]);
@@ -41,21 +45,35 @@ const Pedidos = () => {
     const [listaObras, setListaObras] = useState([]);
 
     useEffect(() => {
-        fetchPedidos();
-        fetchProductos();
-        fetchObras();
+        if (window.accessToken){
+            fetchPedidos();
+            fetchProductos();
+            fetchObras();
+        }
+        else
+            history.push(RUTAS.login)
+
     }, [listaPedidos, listaDetalle]);
 
     const fetchPedidos = () => {
-        getPedidos().then(data => setListaPedidos(data))
+        getPedidos().then(data => {
+            if (data)
+                setListaPedidos(data)
+        })
     }
 
     const fetchProductos = () => {
-        getProductos().then(data => setListaProductos(data));
+        getProductos().then(data => {
+            if (data)
+                setListaProductos(data)
+        });
     }
 
     const fetchObras = () => {
-        getObras().then(data => setListaObras(data));
+        getObras().then(data => {
+            if (data)
+                setListaObras(data)
+        });
     }
 
     const actualizarPedido = (nombreAtributo, valorAtributo) => {
@@ -101,15 +119,21 @@ const Pedidos = () => {
             putDetalle(detallePedido).then(() => fetchPedidos());
     };
 
-    const filasPedidos = listaPedidos.map((e, i) => {
-        return <FilaTabla key={i}>
-            <CeldaTabla dato={e.id}/>
-            <CeldaTabla dato={e.fechaPedido}/>
-            <CeldaTabla dato={e.obra.id}/>
-            <CeldaTabla dato={e.estado}/>
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => seleccionarPedido(e)}/>
-        </FilaTabla>
-    });
+    const filasPedidos = () => {
+        if (listaPedidos){
+            listaPedidos.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={e.fechaPedido}/>
+                    <CeldaTabla dato={e.obra.id}/>
+                    <CeldaTabla dato={e.estado}/>
+                    <CeldaBotonTabla titulo="Seleccionar" accion={() => seleccionarPedido(e)}/>
+                </FilaTabla>
+            });
+        }
+        else
+            return <></>
+    }
 
     const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado", ""]
         .map((e) => {

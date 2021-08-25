@@ -1,9 +1,7 @@
 export const CampoForm = ({value, onChange, label, name, pattern, readOnly}) => {
     return (
         <div className="row">
-            <div className="col-25 form-label">
-                <label>{label}</label>
-            </div>
+            <Label value={label}/>
             <div className="col-75">
                 <input name={name}
                        pattern={pattern}
@@ -22,9 +20,7 @@ export const ComboForm = ({opciones, value, onChange, label, name}) => {
         : <></>
 
     return <div className="row">
-        <div className="col-25 form-label">
-            <label>{label}</label>
-        </div>
+        <Label value={label}/>
         <div className="col-75">
             <select
                 name={name}
@@ -35,5 +31,10 @@ export const ComboForm = ({opciones, value, onChange, label, name}) => {
         </div>
     </div>
 }
+
+export const Label = ({value}) => <div className="col-25 form-label">
+    <label>{value}</label>
+</div>
+
 
 export default CampoForm;

@@ -5,6 +5,8 @@ import "../styles/Form.css";
 import "../styles/Tabla.css";
 import {useEffect, useState} from "react";
 import {getClientes, getObras, postObra, putObra} from '../../RestServices';
+import {useHistory} from "react-router-dom";
+import {RUTAS} from "../../App";
 
 const clienteInicial = {
     id: null,
@@ -24,6 +26,7 @@ const obraInicial = {
 }
 
 const Obras = () => {
+    const history = useHistory();
 
     const [obra, setObra] = useState(obraInicial);
     const [cliente, setCliente] = useState(clienteInicial);
@@ -31,8 +34,12 @@ const Obras = () => {
     const [listaObras, setListaObras] = useState([]);
 
     useEffect(() => {
-        fetchClientes();
-        fetchObras();
+        if (window.accessToken){
+            fetchClientes();
+            fetchObras();
+        }
+        else
+            history.push(RUTAS.login)
     }, []);
 
     const fetchClientes = () => {
@@ -67,19 +74,27 @@ const Obras = () => {
         setCliente(clienteInicial);
     }
 
-    const filasObras = listaObras.map((e, i) => {
-        return <FilaTabla key={i}>
-            <CeldaTabla dato={e.id}/>
-            <CeldaTabla dato={e.descripcion}/>
-            <CeldaTabla dato={e.direccion}/>
-            <CeldaTabla dato={e.superficie}/>
-            <CeldaTabla dato={e.tipoObra}/>
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => {
-                setObra(e);
-                setCliente(e.cliente);
-            }}/>
-        </FilaTabla>
-    });
+    const filasObras = () => {
+        if (listaObras){
+            return listaObras.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={e.descripcion}/>
+                    <CeldaTabla dato={e.direccion}/>
+                    <CeldaTabla dato={e.superficie}/>
+                    <CeldaTabla dato={e.tipoObra}/>
+                    <CeldaBotonTabla titulo="Seleccionar" accion={() => {
+                        setObra(e);
+                        setCliente(e.cliente);
+                    }}/>
+                </FilaTabla>
+            });
+        }
+        else{
+            return <></>
+        }
+
+    }
 
     const encabezado = ["ID Obra", "Descripcion", "Direccion", "Superficie", "Tipo de Obra", ""]
         .map((e) => {

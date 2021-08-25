@@ -1,12 +1,5 @@
 import "../styles/Form.css";
-
-const Label = ({value}) => {
-    return (
-        <div className="col-25 form-label">
-            <label>{value}</label>
-        </div>
-    )
-}
+import {Label} from "../FormComponents";
 
 const ClientesForm = ({cliente, actualizarCliente, saveOrUpdate, clean}) => {
 

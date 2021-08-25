@@ -1,23 +1,36 @@
-import {useState} from 'react';
-import {Tabla, EncabezadoTabla, FilaTabla, CeldaTabla, CeldaBotonTabla} from '../Tabla'
+import {useEffect, useState} from 'react';
+import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla'
+import {useHistory} from "react-router-dom";
+import {RUTAS} from "../../App";
 
 const Pagos = () => {
+    const history = useHistory();
 
     const [listaPedidos, setListaPedidos] = useState([]);
+
+    useEffect(() => {
+        if (!window.accessToken) {
+            history.push(RUTAS.login)
+        }
+    }, []);
 
     const abonarPedido = () => {
         console.log("Abonar pedido listo")
     }
 
-    const filasPedidos = listaPedidos.map((e, i) => {
-        return <FilaTabla key={i}>
-            <CeldaTabla dato={e.id}/>
-            <CeldaTabla dato={e.fechaPedido}/>
-            <CeldaTabla dato={e.obra}/>
-            <CeldaTabla dato={e.estado}/>
-            <CeldaBotonTabla titulo="Abonar" accion={() => abonarPedido(e)}/>
-        </FilaTabla>
-    });
+    const filasPedidos = () => {
+        if (listaPedidos) {
+            return listaPedidos.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={e.fechaPedido}/>
+                    <CeldaTabla dato={e.obra}/>
+                    <CeldaTabla dato={e.estado}/>
+                    <CeldaBotonTabla titulo="Abonar" accion={() => abonarPedido(e)}/>
+                </FilaTabla>
+            });
+        } else return <></>
+    }
 
     const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado", ""]
         .map((e) => {

@@ -54,8 +54,10 @@ button:active {
 
 .container {
   border-radius: 5px;
-  background-color: #f2f2f2;
+  border: 1px solid #000;
   padding: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .col-25 {

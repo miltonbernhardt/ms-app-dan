@@ -1,3 +1,5 @@
+import {Label} from "../FormComponents";
+
 const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
 
     const handleChange = (evt) => {
@@ -12,9 +14,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
         <form className="form-box container">
             <h3>Obra</h3>
             <div className="row">
-                <div className="col-25 form-label">
-                    <label>Descripcion</label>
-                </div>
+                <Label value="Descripción"/>
                 <div className="col-75">
                     <input name="descripcion"
                         value={obra.descripcion}
@@ -22,9 +22,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-25 form-label">
-                    <label >Latitud</label>
-                </div>
+                <Label value="Latitud"/>
                 <div className="col-75">
                     <input
                         type="text"
@@ -35,9 +33,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-25 form-label">
-                    <label>Longitud</label>
-                </div>
+                <Label value="Longitud"/>
                 <div className="col-75">
                     <input
                         type="text"
@@ -49,9 +45,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
             </div>
 
             <div className="row">
-                <div className="col-25 form-label">
-                    <label>Direccion</label>
-                </div>
+                <Label value="Dirección"/>
                 <div className="col-75">
                     <input
                         name="direccion"
@@ -61,9 +55,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
             </div>
 
             <div className="row">
-                <div className="col-25 form-label">
-                    <label>Superficie</label>
-                </div>
+                <Label value="Superficie"/>
                 <div className="col-75">
                     <input
                         type="text"
@@ -75,9 +67,7 @@ const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
             </div>
 
             <div className="row">
-                <div className="col-25 form-label">
-                    <label>Tipo de Obra</label>
-                </div>
+                <Label value="Tipo de Obra"/>
                 <div className="col-75">
                     <select name="tipoObra" value={obra.tipoObra} onChange={handleChange} >
                         <option value="REFORMA">Reforma</option>

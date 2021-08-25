@@ -4,7 +4,7 @@ const RAIZ_URL = 'http://localhost';
 const PORT = 8181; //TODO arreglar esto pordio
 const API_PRODUCTO = 'producto'
 const API_PEDIDO = 'pedido'
-const API_OBRA = 'obra'
+const API_OBRA = 'user'
 const API_DETALLE_PEDIDO = 'detallepedido'
 const API_LIQUIDACION = 'liquidacion'
 const API_CLIENTE = 'cliente'
@@ -13,10 +13,27 @@ const API_EMPLEADO = 'empleado'
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-    'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept",//Origin, Content-Type, X-Auth-Token
-    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW4yMDIxIiwiaWF0IjoxNjI5Njc5MzE4fQ.S0vnGCmthN6yHcVK2t2ldbeJbYhQsqufpmc4CFxLUONwYUY1sgRuIrc0lBrKm9cyDQ0T6Mi4bZ8zJQZRxoCWxg'
+    'Access-Control-Allow-Headers': "Origin, X-Requested-With, Content-Type, Accept"
 }
 
+// --- USER METHODS ---
+export const login = async ({username, password}) => {
+    const URL = `http://localhost:8181/login`;
+    try {
+        const response = await axios.post(URL, {username, password}, {headers})
+
+        const {data: dataResponse, status} = response
+        if (typeof dataResponse === 'string' || status !== 200) {
+            throw new Error(dataResponse)
+        } else {
+            return dataResponse
+        }
+    } catch (error) {
+        const message = `${error.response ? error.message : error}`;
+        console.log("Error en el login: ", {method: 'login', URL, message})
+    }
+}
+export const register = async (user) => POST(`${API_OBRA}`, user);
 
 // --- OBRA METHODS ---
 export const getObras = async () => GET(`${API_OBRA}`);
@@ -56,16 +73,18 @@ export const getEmpleados = async () => GET(`${API_EMPLEADO}`);
 export const postEmpleado = async (empleado) => POST(`${API_EMPLEADO}`, empleado);
 export const putEmpleado = async (empleado) => PUT(`${API_EMPLEADO}`, empleado);
 
+const getNewHeader = () => {
+    let newHeader = headers;
+    newHeader.Authorization = `Bearer ${window.accessToken}`;
+    return newHeader;
+}
+
 // --- GENERAL METHODS ---
 export const POST = async (postfixUrl, data,) => {
     const URL = `${RAIZ_URL}:${PORT}/api/${postfixUrl}`;
     console.log({post_request: URL, data})
     try {
-        // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        // axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-        // axios.defaults.headers.post['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept";
-        const response = await axios.post(URL, data, {headers})
-
+        const response = await axios.post(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
         if (typeof dataResponse === 'string' || status !== 200) {
             throw new Error(dataResponse)
@@ -74,12 +93,8 @@ export const POST = async (postfixUrl, data,) => {
             return dataResponse
         }
     } catch (error) {
-        console.error({
-            method: 'POST',
-            URL,
-            message: `${error.response ? error.message : error}`,
-            error: error.response
-        })
+        const message = `${error.response ? error.message : error}`;
+        console.log("Error en método: ", {method: 'POST', URL, message, error: error.response})
     }
 }
 
@@ -89,7 +104,7 @@ export const PUT = async (postfixUrl, data) => {
     console.log({put_request: URL, data})
 
     try {
-        const response = await axios.put(URL, data, {headers})
+        const response = await axios.put(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
         if (typeof dataResponse === 'string' || status !== 200) {
             throw new Error(dataResponse)
@@ -98,7 +113,8 @@ export const PUT = async (postfixUrl, data) => {
             return dataResponse
         }
     } catch (error) {
-        console.error({method: 'PUT', URL, message: `${error.response ? error.message : error}`, error: error.response})
+        const message = `${error.response ? error.message : error}`;
+        console.log("Error en método: ", {method: 'PUT', URL, message, error: error.response})
     }
 }
 
@@ -107,18 +123,19 @@ export const GET = async (postfixUrl) => {
     console.log({get_request: URL})
 
     try {
-        const response = await axios.get(URL, {headers})
+        const response = await axios.get(URL, {headers: getNewHeader()})
 
         const {data: dataResponse, status} = response
 
         if (typeof dataResponse === 'string' || status !== 200) {
             throw new Error(dataResponse)
         } else {
-            console.log({get_response: URL, dataResponse})
+            console.log("Error en método: ", {get_response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {
-        console.error({method: 'GET', URL, message: `${error.response ? error.message : error}`, error: error.response})
+        const message = `${error.response ? error.message : error}`;
+        console.error({method: 'GET', URL, message, error: error.response})
     }
 }
 
@@ -127,22 +144,19 @@ export const DELETE = async (postfixUrl) => {
     console.log({delete_request: URL})
 
     try {
-        const response = await axios.delete(URL, {headers})
+        let headersCopy = [...headers, {Authorization: `Bearer ${window.accessToken}`}]
+        const response = await axios.delete(URL, {headers: headersCopy})
 
         const {data: dataResponse, status} = response
 
         if (typeof dataResponse === 'string' || status !== 200) {
             throw new Error(dataResponse)
         } else {
-            console.log({delete_response: URL, dataResponse})
+            console.log("Error en método: ", {delete_response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {
-        console.error({
-            method: 'DELETE',
-            URL,
-            message: `${error.response ? error.message : error}`,
-            error: error.response
-        })
+        const message = `${error.response ? error.message : error}`;
+        console.error({method: 'DELETE', URL, message, error: error.response})
     }
 }

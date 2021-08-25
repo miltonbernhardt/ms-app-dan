@@ -12,6 +12,8 @@ import {
     postLiquidacionTodos,
     postSueldo
 } from "../../RestServices";
+import {useHistory} from "react-router-dom";
+import {RUTAS} from "../../App";
 
 const empleadoInicial = {
     nombre: ''
@@ -23,29 +25,44 @@ const sueldoInicial = {
 }
 
 const Liquidacion = () => {
+    const history = useHistory();
 
     const [listaLiquidacion, setListaLiquidacion] = useState([]);
     const [listaEmpleados, setListaEmpleados] = useState([]);
     const [empleado, setEmpleado] = useState(empleadoInicial);
     const [sueldo, setSueldo] = useState(sueldoInicial);
 
+
+
     const fetchEmpleados = () => {
-        getEmpleados().then(data => setListaEmpleados(data));
+        getEmpleados().then(data => {
+            if (data)
+                setListaEmpleados(data)
+        });
     }
 
     const fetchLiquidacion = () => {
-        getLiquidaciones().then(data => setListaLiquidacion(data));
+        getLiquidaciones().then(data => {
+            if (data)
+                setListaLiquidacion(data)
+        });
     }
 
     const fetchSueldo = (empleado) => {
-        getSueldo(empleado).then(data => setSueldo(data));
+        getSueldo(empleado).then(data => {
+            if (data)
+                setSueldo(data)
+        });
     }
 
     useState(() => {
-        fetchEmpleados();
-        fetchLiquidacion();
-    }, []);
+        if (window.accessToken) {
+            fetchEmpleados();
+            fetchLiquidacion();
+        } else
+            history.push(RUTAS.login)
 
+    }, []);
 
     const liquidarEmpleado = () => {
         postLiquidacionEmpleado(empleado).then(() => fetchLiquidacion());
@@ -71,16 +88,22 @@ const Liquidacion = () => {
         postSueldo(sueldo).then(() => fetchSueldo());
     }
 
-    const filasLiquidacion = listaLiquidacion.map((e, i) => {
-        return <FilaTabla key={i}>
-            <CeldaTabla dato={e.id}/>
-            <CeldaTabla dato={
-                listaEmpleados[listaEmpleados.findIndex(o => o.id === e.empleado.id)].nombre
-            }/>
-            <CeldaTabla dato={e.fecha}/>
-            <CeldaTabla dato={e.monto}/>
-        </FilaTabla>
-    });
+
+    const filasLiquidacion = () => {
+        if (listaLiquidacion)
+            return listaLiquidacion.map((e, i) => {
+                return <FilaTabla key={i}>
+                    <CeldaTabla dato={e.id}/>
+                    <CeldaTabla dato={
+                        listaEmpleados[listaEmpleados.findIndex(o => o.id === e.empleado.id)].nombre
+                    }/>
+                    <CeldaTabla dato={e.fecha}/>
+                    <CeldaTabla dato={e.monto}/>
+                </FilaTabla>
+            });
+        else
+            return <></>
+    }
 
     const encabezado = ["ID Liquidacion", "Empleado", "Fecha", "Monto"].map((e) =>
         <EncabezadoTabla>{e}</EncabezadoTabla>)
