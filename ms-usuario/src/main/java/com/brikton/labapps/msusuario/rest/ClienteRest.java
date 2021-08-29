@@ -1,6 +1,8 @@
 package com.brikton.labapps.msusuario.rest;
 
 import com.brikton.labapps.msusuario.domain.Cliente;
+import com.brikton.labapps.msusuario.exceptions.ClienteNoEncontradoException;
+import com.brikton.labapps.msusuario.exceptions.UsuarioInvalidoException;
 import com.brikton.labapps.msusuario.service.ClienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +28,10 @@ public class ClienteRest {
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getClienteById(@PathVariable Integer id) {
         try {
-            Cliente cliente = this.clienteServicio.getClienteById(id);
-            if(cliente == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con el id: " + id);
-            return ResponseEntity.ok(cliente);
-        } catch (Exception e) {
+            return ResponseEntity.ok(this.clienteServicio.getClienteById(id));
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -44,25 +43,20 @@ public class ClienteRest {
     @GetMapping(path = "/cuit/{cuit}")
     public ResponseEntity<?> getClienteByCuit(@PathVariable String cuit) {
         try {
-            Cliente cliente = this.clienteServicio.getClienteByCuit(cuit);
-            if (cliente == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con el número de CUIT: " + cuit);
-            return ResponseEntity.ok(cliente);
-        } catch (Exception e) {
+            return ResponseEntity.ok(this.clienteServicio.getClienteByCuit(cuit));
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @GetMapping(path = "/razonSocial/{razonSocial}")
     public ResponseEntity<?> getClienteByRazonSocial(@PathVariable(required = false) String razonSocial) {
         try {
-            if(clienteServicio == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existen clientes con la razón social: " + razonSocial);
             return ResponseEntity.ok(this.clienteServicio.getClienteByRazonSocial(razonSocial));
-        } catch (Exception e) {
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede encontrar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -70,19 +64,25 @@ public class ClienteRest {
     public ResponseEntity<?> createCliente(@RequestBody Cliente cliente) {
         try {
             return ResponseEntity.ok(this.clienteServicio.saveCliente(cliente));
-        } catch (Exception e) {
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede crear el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping
     public ResponseEntity<?> updateCliente(@RequestBody Cliente cliente) {
         try {
-            return ResponseEntity.ok(this.clienteServicio.saveCliente(cliente));
-        } catch (Exception e) {
+            return ResponseEntity.ok(this.clienteServicio.updateCliente(cliente));
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede actualizar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -91,9 +91,9 @@ public class ClienteRest {
         try {
             this.clienteServicio.bajaCliente(id);
             return ResponseEntity.ok().body("El cliente con el id: " + id + " ha sido borrado.");
-        } catch (Exception e) {
+        } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error por lo que no se puede borrar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede borrar el cliente.");
         }
     }
 }

@@ -3,10 +3,11 @@ package com.brikton.labapps.msusuario.service.impl;
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.TipoUsuario;
 import com.brikton.labapps.msusuario.domain.Usuario;
+import com.brikton.labapps.msusuario.exceptions.ClienteNoEncontradoException;
+import com.brikton.labapps.msusuario.exceptions.UsuarioInvalidoException;
 import com.brikton.labapps.msusuario.repositories.ClienteRepository;
 import com.brikton.labapps.msusuario.service.ClienteService;
 import com.brikton.labapps.msusuario.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,11 +18,13 @@ import java.util.Optional;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-    @Autowired
-    ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
+    private final UsuarioService usuarioService;
 
-    @Autowired
-    UsuarioService usuarioService;
+    public ClienteServiceImpl(ClienteRepository clienteRepository, UsuarioService usuarioService) {
+        this.clienteRepository = clienteRepository;
+        this.usuarioService = usuarioService;
+    }
 
     @Override
     public List<Cliente> listarClientes() {
@@ -29,34 +32,32 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente getClienteById(Integer id) {
+    public Cliente getClienteById(Integer id) throws ClienteNoEncontradoException {
         Optional<Cliente> cliente = this.clienteRepository.findById(id);
         if (cliente.isEmpty() || cliente.get().getFechaBaja() != null)
-            return null;
+            throw new ClienteNoEncontradoException("No existen clientes activos con el id: " + id);
         return cliente.get();
     }
 
     @Override
-    public Cliente getClienteByCuit(String cuit) {
+    public Cliente getClienteByCuit(String cuit) throws ClienteNoEncontradoException {
         List<Cliente> clientes = this.clienteRepository.findByCuit(cuit);
-        if (clientes.size() > 0) {
+        if (clientes.size() > 0 && clientes.get(0).getFechaBaja() != null)
             return clientes.get(0);
-        }
-        return null;
+        throw new ClienteNoEncontradoException("No existen clientes activos con el cuit: " + cuit);
     }
 
     @Override
-    public Cliente getClienteByRazonSocial(String razonSocial) {
+    public Cliente getClienteByRazonSocial(String razonSocial) throws ClienteNoEncontradoException {
         Optional<Cliente> c = this.clienteRepository.findByRazonSocial(razonSocial);
         if (c.isEmpty() || c.get().getFechaBaja() != null)
-            return null;
+            throw new ClienteNoEncontradoException("No existen clientes activos con la razón social: " + razonSocial);
         return c.get();
     }
 
-
     @Override
     @Transactional
-    public Cliente saveCliente(Cliente cliente) throws Exception {
+    public Cliente saveCliente(Cliente cliente) throws ClienteNoEncontradoException, UsuarioInvalidoException {
         if (cliente.getId() == null || this.getClienteById(cliente.getId()) == null) {
             Cliente clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
 
@@ -75,10 +76,19 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void bajaCliente(Integer id) throws Exception {
+    public Cliente updateCliente(Cliente cliente) throws ClienteNoEncontradoException, UsuarioInvalidoException {
+        if ((cliente.getId() == null || cliente.getId() < 0) && (cliente.getCuit() == null || cliente.getCuit().isEmpty())) {
+            throw new ClienteNoEncontradoException("No existe dicho cliente para actualizarlo");
+        }
+        return saveCliente(cliente);
+    }
+
+    @Override
+    @Transactional
+    public void bajaCliente(Integer id) throws ClienteNoEncontradoException {
         Cliente cliente = this.getClienteById(id);
         if (cliente == null) {
-            throw new Exception("No existen clientes con el id: " + id);
+            throw new ClienteNoEncontradoException("No existen clientes con el id: " + id);
         }
         cliente.setFechaBaja(new Date());
         this.clienteRepository.save(cliente);

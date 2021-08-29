@@ -65,6 +65,13 @@
             <artifactId>spring-cloud-openfeign-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Micrometer Prometheus registry  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
