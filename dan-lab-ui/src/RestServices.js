@@ -50,7 +50,8 @@ export const putObra = async (obra) => PUT(PORT_USUARIO, `${API_OBRA}/${obra.id}
 // --- PEDIDO METHODS ---
 export const getPedidos = async () => GET(PORT_PEDIDO, `${API_PEDIDO}`);
 export const postPedido = async (pedido) => POST(PORT_PEDIDO, `${API_PEDIDO}`, pedido);
-export const putPedido = async (pedido) => PUT(PORT_PEDIDO, `${API_PEDIDO}/${pedido.id}`, pedido);
+export const putPedido = async (pedido) =>  PUT(PORT_PEDIDO, `${API_PEDIDO}/?id=${pedido.id}&nuevoEstado=${pedido.estado}`);
+
 
 // --- DETALLE PEDIDO METHODS ---
 export const postDetalle = async (detallePedido, pedido) => POST(PORT_PEDIDO, `${API_DETALLE_PEDIDO}/?idPedido=${pedido.id}`, detallePedido);
@@ -95,12 +96,12 @@ export const POST = async (port, postfixUrl, data) => {
     try {
         const response = await axios.post(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
-        if (typeof dataResponse === 'string' || status !== 200) {
+        if (status !== 200) {
             if (status === 401) {
                 localStorage.removeItem("token")
                 localStorage.removeItem("username")
             }
-
+            throw new Error(dataResponse)
         } else {
             console.log({response: method, dataResponse})
             return {data: dataResponse}
@@ -113,6 +114,7 @@ export const POST = async (port, postfixUrl, data) => {
 }
 
 export const PUT = async (port, postfixUrl, data) => {
+    console.log({postfixUrl})
     const URL = `${RAIZ_URL}:${port}/api/${postfixUrl}`;
 
     const method = `PUT ${URL}`
@@ -121,7 +123,7 @@ export const PUT = async (port, postfixUrl, data) => {
     try {
         const response = await axios.put(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
-        if (typeof dataResponse === 'string' || status !== 200) {
+        if (status !== 200) {
             if (status === 401) {
                 localStorage.removeItem("token")
                 localStorage.removeItem("username")
@@ -150,12 +152,12 @@ export const GET = async (port, postfixUrl) => {
 
         const {data: dataResponse, status} = response
 
-        if (typeof dataResponse === 'string' || status !== 200) {
+        if (status !== 200) {
             if (status === 401) {
                 localStorage.removeItem("token")
                 localStorage.removeItem("username")
             }
-
+            throw new Error(dataResponse)
         } else {
             console.log({response: method, dataResponse})
             return {data: dataResponse}
@@ -173,12 +175,11 @@ export const DELETE = async (port, postfixUrl) => {
     console.log({request: method})
 
     try {
-        let headersCopy = [...headers, {Authorization: `Bearer ${window.accessToken}`}]
-        const response = await axios.delete(URL, {headers: headersCopy})
+        const response = await axios.delete(URL, {headers: getNewHeader()})
 
         const {data: dataResponse, status} = response
 
-        if (typeof dataResponse === 'string' || status !== 200) {
+        if (status !== 200) {
             if (status === 401) {
                 localStorage.removeItem("token")
                 localStorage.removeItem("username")

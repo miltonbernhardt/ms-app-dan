@@ -13,6 +13,7 @@ import {
 } from "../../RestServices";
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
+import {toast} from "react-toastify";
 
 const empleadoInicial = {
     nombre: ''
@@ -32,8 +33,10 @@ const Liquidacion = () => {
 
     const fetchEmpleados = () => {
         getEmpleados().then(({data}) => {
-            if (data)
+            if (data) {
                 setListaEmpleados(data)
+                setEmpleado(data[0])
+            }
         });
     }
 
@@ -45,10 +48,14 @@ const Liquidacion = () => {
     }
 
     const fetchSueldo = (empleado) => {
-        getSueldo(empleado).then(({data}) => {
-            if (data)
-                setSueldo(data)
-        });
+        if (empleado && empleado.id) {
+            getSueldo(empleado).then(({data}) => {
+                if (data) {
+                    setSueldo(data)
+                    toast.success("Se ha actualizado el sueldo correctamente al monto de " + data.monto + " y comisión " + data.comision)
+                }
+            });
+        }
     }
 
     useState(() => {
@@ -61,7 +68,9 @@ const Liquidacion = () => {
     }, [history]);
 
     const liquidarEmpleado = () => {
-        postLiquidacionEmpleado(empleado).then(() => fetchLiquidacion());
+        if (empleado && empleado.id) {
+            postLiquidacionEmpleado(empleado).then(() => fetchLiquidacion());
+        }
     }
 
     const liquidarTodos = () => {
@@ -92,7 +101,8 @@ const Liquidacion = () => {
                 return <FilaTabla key={i}>
                     <CeldaTabla dato={e.id}/>
                     <CeldaTabla dato={
-                        listaEmpleados[listaEmpleados.findIndex(o => o.id === e.empleado.id)].nombre
+                        (listaEmpleados) ? listaEmpleados[listaEmpleados.findIndex(o => o.id == e.empleado.id)] ? listaEmpleados[listaEmpleados.findIndex(o => o.id == e.empleado.id)].nombre : "-" : "-"
+
                     }/>
                     <CeldaTabla dato={e.fecha}/>
                     <CeldaTabla dato={e.monto}/>

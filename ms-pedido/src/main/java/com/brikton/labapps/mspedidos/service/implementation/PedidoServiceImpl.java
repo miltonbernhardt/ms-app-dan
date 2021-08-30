@@ -15,7 +15,7 @@ import org.springframework.jms.JmsException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +53,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Pedido savePedido(Pedido p) throws RiesgoException, RecursoNoEncontradoException {
 
-        if (p.getFechaPedido() == null) p.setFechaPedido(Instant.now());
+        if (p.getFechaPedido() == null) p.setFechaPedido(LocalDate.now());
 
         boolean hayStock = true;
         for (DetallePedido detallePedido : p.getDetalle()) {

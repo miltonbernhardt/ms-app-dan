@@ -1,4 +1,5 @@
-import CampoForm, { ComboForm } from "../FormComponents";
+import CampoForm, {ComboForm, Label} from "../FormComponents";
+import React from "react";
 
 const PedidosForm = ({ pedido, actualizarCampos, clean, saveOrUpdate, verDetalle, obras }) => {
 
@@ -16,16 +17,21 @@ const PedidosForm = ({ pedido, actualizarCampos, clean, saveOrUpdate, verDetalle
             <div className="form-row">
                 <h2>Pedido</h2>
             </div>
-            <CampoForm
-                label='Fecha:'
-                name='fechaPedido'
-                value={pedido.fechaPedido}
-                onChange={handleChange} />
+            <div className="form-row">
+                <Label value='Fecha:'/>
+                <div className="form-input">
+                    <input name='fechaPedido'
+                           type='date'
+                           pattern="\d{4}/\d{1,2}/\d{1,2}"
+                           value={pedido.fechaPedido}
+                           onChange={handleChange}/>
+                </div>
+            </div>
             <ComboForm
                 label='Obra:'
                 name='obra'
                 onChange={handleChange}
-                opciones={obras.map(o => { return o.id })} />
+                opciones={(obras && obras.length > 0) ? obras.map(o => { return o.id }) : []} />
             <ComboForm
                 label='Estado:'
                 name='estado'
@@ -36,9 +42,6 @@ const PedidosForm = ({ pedido, actualizarCampos, clean, saveOrUpdate, verDetalle
             <div className="form-buttons">
                 <div className="form-button">
                     <button type="button" onClick={clean}>Limpiar</button>
-                </div>
-                <div className="form-button">
-                    <button type="button" onClick={verDetalle}>Ver Detalle</button>
                 </div>
                 <div className="form-button">
                     <button type="button" onClick={saveOrUpdate}>Guardar</button>

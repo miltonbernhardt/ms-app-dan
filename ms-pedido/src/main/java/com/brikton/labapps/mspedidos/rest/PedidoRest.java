@@ -41,7 +41,7 @@ public class PedidoRest {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El pedido tiene un mal formato");
         }
     }
 
@@ -67,7 +67,11 @@ public class PedidoRest {
     public ResponseEntity<?> actualizarEstadoPedido(@RequestParam Integer id,
                                                     @RequestParam String nuevoEstado) {
         try {
-            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, EstadoPedido.valueOf(nuevoEstado.toUpperCase())));
+            EstadoPedido estadoPedido = EstadoPedido.valueOf(nuevoEstado.toUpperCase());
+            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, estadoPedido));
+        } catch (IllegalArgumentException ex) {
+            logger.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El estado de pedido no es correcto");
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -77,7 +81,7 @@ public class PedidoRest {
         }
     }
 
-    @GetMapping(path = "/")
+    @GetMapping
     public ResponseEntity<?> getAllPedidos() {
         try {
             List<Pedido> pedidos = pedidoService.getPedidos();

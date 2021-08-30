@@ -14,11 +14,11 @@ const Pagos = () => {
     }
 
     const fetchPedidos = () => {
-        getPedidos().then(({data}) => {
-            if (data) {
-                setListaPedidos(data)
-            }
-        });
+        // getPedidos().then(({data}) => {
+        //     if (data) {
+        //         setListaPedidos(data)
+        //     }
+        // });
     }
 
     useEffect(() => {

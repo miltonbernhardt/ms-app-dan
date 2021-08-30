@@ -1,6 +1,7 @@
 package com.brikton.labapps.mspedidos.domain;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,7 +22,7 @@ public class Pedido {
     @Column(name = "id_pedido")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-	private Instant fechaPedido;
+	private LocalDate fechaPedido;
     @OneToOne
     @JoinColumn(name = "id_obra")
     private Obra obra;
@@ -41,10 +42,10 @@ public class Pedido {
     public void setId(Integer id) {
         this.id = id;
     }
-    public Instant getFechaPedido() {
+    public LocalDate getFechaPedido() {
         return fechaPedido;
     }
-    public void setFechaPedido(Instant fechaPedido) {
+    public void setFechaPedido(LocalDate fechaPedido) {
         this.fechaPedido = fechaPedido;
     }
     public Obra getObra() {

@@ -1,7 +1,7 @@
 import '../FormComponents'
 import CampoForm, {ComboForm} from '../FormComponents';
 
-const DetallePedidoForm = ({detallePedido, actualizarCampos, listaProductos, saveOrUpdate}) => {
+const DetallePedidoForm = ({detallePedido, actualizarCampos, listaProductos, update, hayPedido}) => {
 
     const handleChange = (evt) => {
         const nombreAtributo = evt.target.name;
@@ -25,22 +25,26 @@ const DetallePedidoForm = ({detallePedido, actualizarCampos, listaProductos, sav
                 label='Precio:'
                 name='precio'
                 readOnly={true}
-                value={(detallePedido.cantidad ?? 0) * (detallePedido.producto.precio ?? 1)}/>
+                value={(detallePedido.cantidad ?? 0) * (detallePedido.producto?.precio ?? 1)}/>
 
             <ComboForm
                 label='Producto:'
                 name='producto'
                 onChange={handleChange}
-                value={detallePedido.producto.nombre}
-                opciones={listaProductos.map(p => {
+                value={detallePedido.producto?.nombre}
+                opciones={(listaProductos && listaProductos.length) ? listaProductos.map(p => {
                     return p.nombre
-                })}/>
+                }):[]}/>
 
-            <div className="form-buttons">
-                <div className="form-button">
-                    <button className="btn-wide" type="button" onClick={saveOrUpdate}>Guardar</button>
+            {
+                hayPedido ?  <div className="form-buttons">
+                    <div className="form-button">
+                        <button className="btn-wide" type="button" onClick={update}>Guardar</button>
+                    </div>
                 </div>
-            </div>
+                    : <></>
+            }
+
         </form>
     );
 }

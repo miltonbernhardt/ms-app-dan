@@ -14,11 +14,11 @@ VALUES (100),
 
 
 INSERT INTO ms_liquidacion.liquidacion_sueldo (id_liquidacion, id_empleado, fecha, monto)
-VALUES (100, 100, '2020-02-01', 500.50),
+VALUES (100, 100, '2020-01-01', 500.50),
        (101, 101, '2020-02-01', 570.90),
-       (102, 102, '2020-02-01', 456.50),
-       (103, 103, '2020-02-01', 890.50),
-       (104, 104, '2020-02-01', 998.50);
+       (102, 102, '2020-01-01', 456.50),
+       (103, 102, '2020-02-01', 890.50),
+       (104, 100, '2020-02-01', 998.50);
 
 
 INSERT INTO ms_liquidacion.sueldo (id_sueldo, id_empleado, monto, comision)
