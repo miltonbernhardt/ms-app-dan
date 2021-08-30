@@ -1,7 +1,5 @@
 package com.brikton.labapps.mspedidos.rest;
 
-import java.util.List;
-
 import com.brikton.labapps.mspedidos.domain.DetallePedido;
 import com.brikton.labapps.mspedidos.domain.EstadoPedido;
 import com.brikton.labapps.mspedidos.domain.Obra;
@@ -9,12 +7,13 @@ import com.brikton.labapps.mspedidos.domain.Pedido;
 import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 import com.brikton.labapps.mspedidos.exception.RiesgoException;
 import com.brikton.labapps.mspedidos.service.PedidoService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pedido")
@@ -33,6 +32,10 @@ public class PedidoRest {
         if (validarPedido(nuevoPedido)) {
             try {
                 return ResponseEntity.ok(this.pedidoService.savePedido(nuevoPedido));
+
+            } catch (RecursoNoEncontradoException e) {
+                logger.error(e.getMessage());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (RiesgoException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

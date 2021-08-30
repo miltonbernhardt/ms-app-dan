@@ -55,21 +55,21 @@ const Pedidos = () => {
     }, [listaPedidos, listaDetalle, history]);
 
     const fetchPedidos = () => {
-        getPedidos().then(data => {
+        getPedidos().then(({data}) => {
             if (data)
                 setListaPedidos(data)
         })
     }
 
     const fetchProductos = () => {
-        getProductos().then(data => {
+        getProductos().then(({data}) => {
             if (data)
                 setListaProductos(data)
         });
     }
 
     const fetchObras = () => {
-        getObras().then(data => {
+        getObras().then(({data}) => {
             if (data)
                 setListaObras(data)
         });
@@ -126,7 +126,7 @@ const Pedidos = () => {
                     <CeldaTabla dato={e.fechaPedido}/>
                     <CeldaTabla dato={e.obra.id}/>
                     <CeldaTabla dato={e.estado}/>
-                    <CeldaBotonTabla titulo="Seleccionar" accion={() => seleccionarPedido(e)}/>
+                    <CeldaBotonTabla titulo="Seleccionar" action={() => seleccionarPedido(e)}/>
                 </FilaTabla>
             });
         }
@@ -155,8 +155,8 @@ const Pedidos = () => {
             <CeldaTabla dato={e.cantidad}/>
             <CeldaTabla dato={e.precio}/>
             <CeldaTabla dato={e.producto.nombre}/>
-            <CeldaBotonTabla titulo="Eliminar" accion={() => eliminarDetalle(e)}/>
-            <CeldaBotonTabla titulo="Seleccionar" accion={() => setDetalle(e)}/>
+            <CeldaBotonTabla titulo="Eliminar" action={() => eliminarDetalle(e)}/>
+            <CeldaBotonTabla titulo="Seleccionar" action={() => setDetalle(e)}/>
         </FilaTabla>
     });
 

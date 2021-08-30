@@ -2,12 +2,11 @@ import "../styles/Form.css";
 import {Label} from "../FormComponents";
 import {useState} from "react";
 import {login} from "../../RestServices";
-import {useAlert} from "react-alert";
+import {toast} from 'react-toastify';
 
 const Login = ({logged, setLogged}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const alert = useAlert()
 
     const ingresar = () => {
         if (!logged) {
@@ -16,9 +15,9 @@ const Login = ({logged, setLogged}) => {
                     setLogged(true)
                     localStorage.setItem('token', data.accessToken);
                     localStorage.setItem('username', username);
-                    alert.success('Se ha logueado correctamente!')
+                    toast.success('Se ha logueado correctamente!')
                 } else {
-                    alert.error('Revise usuario y/o contraseña')
+                    toast.error('Revise usuario y/o contraseña')
                     setLogged(false)
                     localStorage.removeItem('token');
                     localStorage.removeItem('username');

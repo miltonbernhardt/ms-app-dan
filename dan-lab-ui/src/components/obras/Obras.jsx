@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import {getClientes, getObras, postObra, putObra} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
-import {useAlert} from "react-alert";
+import {toast} from 'react-toastify';
 
 const clienteInicial = {
     id: null,
@@ -18,17 +18,16 @@ const clienteInicial = {
 const obraInicial = {
     id: null,
     descripcion: "",
-    latitud: 0,
-    longitud: 0,
+    latitud: "",
+    longitud: "",
     direccion: "",
-    superficie: 0,
-    tipoObra: "",
+    superficie: "",
+    tipoObra: "REFORMA",
     cliente: clienteInicial
 }
 
 const Obras = () => {
     const history = useHistory();
-    const alert = useAlert();
     const [obra, setObra] = useState(obraInicial);
     const [cliente, setCliente] = useState(clienteInicial);
     const [listaClientes, setListaClientes] = useState([]);
@@ -43,14 +42,16 @@ const Obras = () => {
     }, [history]);
 
     const fetchClientes = () => {
-        getClientes().then(data => {
-            if (data)
+        getClientes().then(({data}) => {
+            if (data) {
                 setListaClientes(data)
+                setCliente(data[0])
+            }
         });
     }
 
     const fetchObras = () => {
-        getObras().then(data => {
+        getObras().then(({data}) => {
             if (data)
                 setListaObras(data)
         });
@@ -64,26 +65,41 @@ const Obras = () => {
     const actualizarCliente = (nombreAtributo, valorAtributo) => {
         const index = listaClientes.findIndex(c => c.[nombreAtributo] === valorAtributo);
         setCliente(listaClientes[index])
-        const nuevaObra = {...obra, cliente: listaClientes[index]};
+        const nuevaObra = {...obra, cliente: cliente};
         setObra(nuevaObra);
     }
 
     const validateObra = () => {
-        return !!(obra.descripcion && obra.latitud && obra.longitud && obra.superficie && obra.tipoObra);
+        return !!(obra.descripcion && obra.latitud && obra.longitud && obra.superficie);
     }
 
-    const saveOrUpdate = () => {
+    const saveOrUpdate = (e) => {
+        e.preventDefault()
         if (validateObra()) {
             obra.cliente = cliente
+            !(obra.id) ? postObra(obra).then(({data, error = "No se ha podido guardar la obra correctamente"}) => {
+                if (data) {
+                    toast.success("La obra se ha guardado correctamente")
+                    fetchObras();
+                    setObra(obraInicial);
+                    setCliente(clienteInicial);
+                } else
+                    toast.error(error)
+            }) : putObra(obra).then(({data, error = "No se ha podido actualizar la obra correctamente"}) => {
+                if (data) {
+                    setCliente(data)
+                    toast.success("La obra se ha actualizado correctamente")
+                    fetchObras();
+                    setObra(obraInicial);
+                    setCliente(clienteInicial);
+                } else
+                    toast.error(error)
+            });
 
-            const algoObra = () => {
-                fetchObras()
-            }
-            !(obra.id) ? postObra(obra).then(algoObra) : putObra(obra).then(algoObra);
-            setObra(obraInicial);
-            setCliente(clienteInicial);
         } else {
-            alert.error("Faltan indicar ciertos datos de la obra");
+            console.log({cliente})
+            console.log({obra})
+            toast.error("Faltan indicar ciertos datos de la obra");
         }
 
     };
@@ -95,6 +111,7 @@ const Obras = () => {
 
     const filasObras = () => {
         if (listaObras) {
+            console.log(listaObras)
             return listaObras.map((e, i) => {
                 return <FilaTabla key={i}>
                     <CeldaTabla dato={e.id}/>
@@ -102,7 +119,7 @@ const Obras = () => {
                     <CeldaTabla dato={e.direccion}/>
                     <CeldaTabla dato={e.superficie}/>
                     <CeldaTabla dato={e.tipoObra}/>
-                    <CeldaBotonTabla titulo="Seleccionar" accion={() => {
+                    <CeldaBotonTabla titulo="Seleccionar" action={() => {
                         setObra(e);
                         setCliente(e.cliente);
                     }}/>

@@ -31,21 +31,21 @@ const Liquidacion = () => {
     const [sueldo, setSueldo] = useState(sueldoInicial);
 
     const fetchEmpleados = () => {
-        getEmpleados().then(data => {
+        getEmpleados().then(({data}) => {
             if (data)
                 setListaEmpleados(data)
         });
     }
 
     const fetchLiquidacion = () => {
-        getLiquidaciones().then(data => {
+        getLiquidaciones().then(({data}) => {
             if (data)
                 setListaLiquidacion(data)
         });
     }
 
     const fetchSueldo = (empleado) => {
-        getSueldo(empleado).then(data => {
+        getSueldo(empleado).then(({data}) => {
             if (data)
                 setSueldo(data)
         });
@@ -80,7 +80,6 @@ const Liquidacion = () => {
     }
 
     const actualizarSueldoEmpleado = () => {
-        console.log(sueldo);
         postSueldo(sueldo).then(() => {
             fetchSueldo()
         });

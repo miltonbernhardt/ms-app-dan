@@ -79,10 +79,10 @@ const ObrasForm = ({obra, actualizarCampos, saveOrUpdate, clean}) => {
 
             <div className="form-buttons">
                 <div className="form-button">
-                    <button type="button" onClick={clean}>Limpiar</button>
+                    <button type="button" onClick={(e) => saveOrUpdate(e)}>Guardar</button>
                 </div>
                 <div className="form-button">
-                    <button type="button" onClick={saveOrUpdate}>Guardar</button>
+                    <button type="button" onClick={clean}>Limpiar</button>
                 </div>
             </div>
         </form>

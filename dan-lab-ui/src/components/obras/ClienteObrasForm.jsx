@@ -13,7 +13,7 @@ const ClienteObrasForm = ({cliente, actualizarCampos, listaClientes}) => {
             <h3>Cliente</h3>
 
             <ComboForm
-                label='Razon Social'
+                label='Razon social:'
                 placeholder='Razon Social'
                 name='razonSocial'
                 value={cliente.razonSocial}
@@ -23,7 +23,7 @@ const ClienteObrasForm = ({cliente, actualizarCampos, listaClientes}) => {
                 })}/>
 
             <ComboForm
-                label='CUIT'
+                label='CUIT:'
                 placeholder='CUIT'
                 name='cuit'
                 value={cliente.cuit}

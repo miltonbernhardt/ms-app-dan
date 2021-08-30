@@ -20,7 +20,7 @@ export const Tabla = ({encabezado, filas}) => {
 
 export const EncabezadoTabla = ({children}) => {
     return (
-        <th className>
+        <th>
             {children}
         </th>
     )
@@ -42,7 +42,7 @@ export const CeldaTabla = ({dato}) => {
 export const CeldaBotonTabla = ({titulo, action}) => {
     return (
         <td>
-            <button className="table-button" onClick={action}>{titulo}</button>
+            <button className="table-button" onClick={() => action()}>{titulo}</button>
         </td>
     )
 }

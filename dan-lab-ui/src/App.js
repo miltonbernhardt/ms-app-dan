@@ -8,7 +8,8 @@ import Pedidos from './components/pedidos/Pedidos';
 import Pagos from './components/pagos/Pagos';
 import Liquidacion from './components/liquidacion/Liquidacion'
 import NavBar from './components/NavBar';
-import {useAlert} from "react-alert";
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const RUTAS = {
     login: "/",
@@ -23,37 +24,47 @@ export const RUTAS = {
 
 function App() {
     const [logged, setLogged] = useState(false);
-    const alert = useAlert()
 
     useEffect(() => {
         setLogged(localStorage.getItem("token") !== null && localStorage.getItem("token") !== undefined)
     }, []);
 
     const logout = () => {
-        alert.info("Sesión cerrada")
+        toast.success('Sesión cerrada')
         setLogged(false)
         localStorage.removeItem('token')
     }
 
     return (
-        <div className="App">
-            <Router>
-                {logged ? <NavBar logout={logout}/> : <></>}
-
-                <Switch>
-
-                    <Route exact path={RUTAS.login}>
-                        <Login logged={logged} setLogged={setLogged}/>
-                    </Route>
-                    <Route path={RUTAS.clientes} component={Clientes}/>
-                    <Route path={RUTAS.obras} component={Obras}/>
-                    <Route path={RUTAS.productos} component={Productos}/>
-                    <Route path={RUTAS.pedidos} component={Pedidos}/>
-                    <Route path={RUTAS.pagos} component={Pagos}/>
-                    <Route path={RUTAS.liquidacion} component={Liquidacion}/>
-                </Switch>
-            </Router>
-        </div>
+        <>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={2500}
+                hideProgressBar
+                newestOnTop
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover={false}
+            />
+            <div className="App">
+                <Router>
+                    {logged ? <NavBar logout={logout}/> : <></>}
+                    <Switch>
+                        <Route exact path={RUTAS.login}>
+                            <Login logged={logged} setLogged={setLogged}/>
+                        </Route>
+                        <Route path={RUTAS.clientes} component={Clientes}/>
+                        <Route path={RUTAS.obras} component={Obras}/>
+                        <Route path={RUTAS.productos} component={Productos}/>
+                        <Route path={RUTAS.pedidos} component={Pedidos}/>
+                        <Route path={RUTAS.pagos} component={Pagos}/>
+                        <Route path={RUTAS.liquidacion} component={Liquidacion}/>
+                    </Switch>
+                </Router>
+            </div>
+        </>
     );
 }
 

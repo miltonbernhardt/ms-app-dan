@@ -100,3 +100,7 @@ nav {
   color: white;
   padding: 0;
 }
+
+.Toastify__close-button {
+  display: none;
+}

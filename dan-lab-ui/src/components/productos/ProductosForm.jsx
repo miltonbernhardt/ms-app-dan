@@ -46,15 +46,15 @@ const ProductosForm = ({ producto, unidades, actualizarCampos, clean, saveOrUpda
                 label="Unidad:"
                 name="unidad"
                 value={producto.unidad.descripcion}
-                opciones={unidades ? unidades.map(u => { return u.descripcion }) : []}
+                opciones={(unidades && unidades.length > 0) ? unidades.map(u => { return u.descripcion }) : []}
                 onChange={handleChange} />
 
             <div className="form-buttons">
                 <div className="form-button">
-                    <button type="button" onClick={clean}>Limpiar</button>
+                    <button type="button" onClick={saveOrUpdate}>Guardar</button>
                 </div>
                 <div className="form-button">
-                    <button type="button" onClick={saveOrUpdate}>Guardar</button>
+                    <button type="button" onClick={clean}>Limpiar</button>
                 </div>
             </div>
         </form >

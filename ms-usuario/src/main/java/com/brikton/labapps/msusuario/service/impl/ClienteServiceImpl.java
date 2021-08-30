@@ -57,19 +57,20 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public Cliente saveCliente(Cliente cliente) throws ClienteNoEncontradoException, UsuarioInvalidoException {
-        if (cliente.getId() == null || this.getClienteById(cliente.getId()) == null) {
-            Cliente clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
-
-            if (clienteAntiguo != null) {
-                cliente.setId(clienteAntiguo.getId());
-            } else {
-                Usuario usuario = new Usuario();
-                usuario.setUsername(cliente.getRazonSocial());
-                usuario.setTipoUsuario(TipoUsuario.CLIENTE);
-                this.usuarioService.saveUsuario(usuario);
-                cliente.setUsuario(usuario);
+    public Cliente saveCliente(Cliente cliente) throws UsuarioInvalidoException {
+        try {
+            if (cliente.getId() == null || this.getClienteById(cliente.getId()) == null) {
+                Cliente clienteAntiguo = this.getClienteByCuit(cliente.getCuit());
+                if (clienteAntiguo != null) {
+                    cliente.setId(clienteAntiguo.getId());
+                }
             }
+        } catch (ClienteNoEncontradoException ignored) {
+            Usuario usuario = new Usuario();
+            usuario.setUsername(cliente.getRazonSocial());
+            usuario.setTipoUsuario(TipoUsuario.CLIENTE);
+            this.usuarioService.saveUsuario(usuario);
+            cliente.setUsuario(usuario);
         }
         return this.clienteRepository.save(cliente);
     }

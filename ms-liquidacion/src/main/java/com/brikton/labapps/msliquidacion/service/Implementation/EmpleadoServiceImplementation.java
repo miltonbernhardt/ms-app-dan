@@ -22,7 +22,7 @@ public class EmpleadoServiceImplementation implements EmpleadoService {
 
     @Override
     public List<Empleado> getEmpleados() throws Exception {
-        String url = "http://" + host + ":9000/api/empleado";//TODO change for feign
+        String url = "http://" + host + ":9000/api/empleado";
         ResponseEntity<List<Empleado>> respuesta = restTemplate.exchange(
                 url,
                 HttpMethod.GET,

@@ -65,8 +65,8 @@ const ClientesForm = ({cliente, actualizarCliente, saveOrUpdate, clean}) => {
                     </div>
                 </div>
                 <div className="form-buttons">
-                    <Button label="Guardar / actualizar" action={() => saveOrUpdate()}/>
-                    <Button label="Cancelar" action={clean}/>
+                    <Button label="Guardar / Actualizar" action={saveOrUpdate}/>
+                    <Button label="Limpiar" action={clean}/>
                 </div>
             </form>
         </div>

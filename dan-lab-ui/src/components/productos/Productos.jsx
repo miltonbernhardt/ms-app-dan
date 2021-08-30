@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import {getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
+import {toast} from "react-toastify";
 
 const unidadInicial = {
     descripcion: ''
@@ -13,9 +14,9 @@ const unidadInicial = {
 const productoInicial = {
     nombre: '',
     descripcion: '',
-    precio: 0,
-    stockActual: 0,
-    stockMinimo: 0,
+    precio: '',
+    stockActual: '',
+    stockMinimo: '',
     unidad: unidadInicial
 }
 
@@ -33,11 +34,11 @@ const Productos = () => {
     }, [history]);
 
     const fetchProductos = () => {
-        getProductos().then(data => {
+        getProductos().then(({data}) => {
             if (data)
                 setListaProductos(data)
         });
-        getUnidades().then(data => {
+        getUnidades().then(({data}) => {
             if (data)
                 setListaUnidades(data)
         });
@@ -49,10 +50,32 @@ const Productos = () => {
         setProducto(nuevoProducto);
     }
 
-    const saveOrUpdate = () => {
-        !(producto.id) ? postProducto(producto).then(() => fetchProductos()) :
-            putProducto(producto).then(() => fetchProductos());
-        setProducto(productoInicial);
+    const validarProducto = !!(producto.nombre && producto.precio && producto.descripcion && producto.stockActual && producto.stockMinimo && producto.unidad);
+
+    const saveOrUpdate = (e) => {
+        e.preventDefault()
+
+        if (validarProducto) {
+            (!(producto.id)) ? postProducto(producto).then(({data, error = "No se ha podido guardar el producto"}) => {
+                    if (data) {
+                        toast.success("El producto se ha guardado correctamente")
+                        fetchProductos();
+                        setProducto(productoInicial);
+                    } else {
+                        toast.error(error)
+                    }
+                }) :
+                putProducto(producto).then(({data, error = "No se ha podido actualizar el producto"}) => {
+                    if (data) {
+                        toast.success("El producto se ha actualizado correctamente")
+                        fetchProductos();
+                        setProducto(productoInicial);
+                    } else {
+                        toast.error(error)
+                    }
+                });
+        } else
+            toast.error("Faltan campos del producto")
     };
 
     const cleanProducto = () => {
@@ -60,7 +83,7 @@ const Productos = () => {
     }
 
     const filasProductos = () => {
-        if (listaProductos)
+        if (listaProductos && listaProductos.length > 0)
             return listaProductos.map((e, i) => {
                 return <FilaTabla key={i}>
                     <CeldaTabla dato={e.id}/>
@@ -69,7 +92,7 @@ const Productos = () => {
                     <CeldaTabla dato={e.precio}/>
                     <CeldaTabla dato={e.stockActual}/>
                     <CeldaTabla dato={e.stockMinimo}/>
-                    <CeldaBotonTabla titulo="Seleccionar" accion={() => setProducto(e)}/>
+                    <CeldaBotonTabla titulo="Seleccionar" action={() => setProducto(e)}/>
                 </FilaTabla>
             });
         else
@@ -94,7 +117,7 @@ const Productos = () => {
             </div>
 
             <div className="panel">
-                <Tabla encabezado={encabezado} filas={filasProductos}/>
+                <Tabla encabezado={encabezado} filas={filasProductos()}/>
             </div>
         </>
     );

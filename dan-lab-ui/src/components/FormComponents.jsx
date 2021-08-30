@@ -18,7 +18,7 @@ export const CampoForm = ({value, onChange, label, name, pattern, readOnly}) => 
 export const ComboForm = ({opciones, value, onChange, label, name}) => {
 
     const options = opciones ?
-        opciones.map((o, index) => <option key={index} value={o}>{o}</option>)
+        opciones.map((option, index) => <option key={index} value={option}>{option}</option>)
         : <></>
 
     return <div className="form-row">
@@ -34,13 +34,11 @@ export const ComboForm = ({opciones, value, onChange, label, name}) => {
     </div>
 }
 
-export const Label = ({value}) => <div className="form-label">
-    <label>{value}</label>
-</div>
+export const Label = ({value}) => <label className="form-label">{value}</label>
 
 export const Button = ({action, label}) =>
     <div className="form-button">
-        <button onClick={action}>{label}</button>
+        <button onClick={(e) => action(e)}>{label}</button>
     </div>
 
 
