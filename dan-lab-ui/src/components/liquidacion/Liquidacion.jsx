@@ -2,7 +2,6 @@ import {useState} from "react";
 import LiquidacionForm from "./LiquidacionForm";
 import '../Tabla';
 import '../styles/Form.css';
-import '../styles/Clientes.css';
 import {CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import {
     getEmpleados,
@@ -104,31 +103,27 @@ const Liquidacion = () => {
             return <></>
     }
 
-    const encabezado = ["ID Liquidacion", "Empleado", "Fecha", "Monto"].map((e) =>
-        <EncabezadoTabla>{e}</EncabezadoTabla>)
+    const encabezado = ["ID Liquidación", "Empleado", "Fecha", "Monto"].map((e, i) =>
+        <EncabezadoTabla key={i}>{e}</EncabezadoTabla>)
 
     return (
-        <div className='box'>
-            <div><h3>Liquidacion</h3></div>
+        <>
+            <h1>Gestión de liquidaciones</h1>
 
-            <div className="panelForm">
-                <div className="panelFormAlta">
-                    <LiquidacionForm
-                        empleado={empleado}
-                        listaEmpleados={listaEmpleados}
-                        actualizarCampos={actualizarEmpleado}
-                        actualizarCamposSueldo={actualizarCamposSueldo}
-                        actualizarSueldoEmpleado={actualizarSueldoEmpleado}
-                        liquidarEmpleado={liquidarEmpleado}
-                        liquidarTodos={liquidarTodos}
-                        sueldoEmpleado={sueldo}
-                    />
-                </div>
+            <div className="panel-form-simple">
+                <LiquidacionForm
+                    empleado={empleado}
+                    listaEmpleados={listaEmpleados}
+                    actualizarCampos={actualizarEmpleado}
+                    actualizarCamposSueldo={actualizarCamposSueldo}
+                    actualizarSueldoEmpleado={actualizarSueldoEmpleado}
+                    liquidarEmpleado={liquidarEmpleado}
+                    liquidarTodos={liquidarTodos}
+                    sueldoEmpleado={sueldo}
+                />
             </div>
-            <div className="panelForm">
-                <Tabla encabezado={encabezado} filas={filasLiquidacion}/>
-            </div>
-        </div>
+            <Tabla encabezado={encabezado} filas={filasLiquidacion()}/>
+        </>
     );
 }
 

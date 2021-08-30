@@ -1,8 +1,10 @@
+import React from "react";
+
 export const CampoForm = ({value, onChange, label, name, pattern, readOnly}) => {
     return (
-        <div className="row">
+        <div className="form-row">
             <Label value={label}/>
-            <div className="col-75">
+            <div className="form-input">
                 <input name={name}
                        pattern={pattern}
                        value={value}
@@ -19,9 +21,9 @@ export const ComboForm = ({opciones, value, onChange, label, name}) => {
         opciones.map((o, index) => <option key={index} value={o}>{o}</option>)
         : <></>
 
-    return <div className="row">
+    return <div className="form-row">
         <Label value={label}/>
-        <div className="col-75">
+        <div className="form-input">
             <select
                 name={name}
                 value={value}
@@ -32,9 +34,14 @@ export const ComboForm = ({opciones, value, onChange, label, name}) => {
     </div>
 }
 
-export const Label = ({value}) => <div className="col-25 form-label">
+export const Label = ({value}) => <div className="form-label">
     <label>{value}</label>
 </div>
+
+export const Button = ({action, label}) =>
+    <div className="form-button">
+        <button onClick={action}>{label}</button>
+    </div>
 
 
 export default CampoForm;

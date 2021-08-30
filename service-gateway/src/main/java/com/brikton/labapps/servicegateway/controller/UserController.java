@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class UserController {
 
     protected final Logger logger = LoggerFactory.getLogger(UserController.class);

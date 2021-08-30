@@ -1,14 +1,13 @@
 import ClientesForm from './ClientesForm';
 import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import {useEffect, useState} from 'react';
-import '../styles/Clientes.css';
 import '../styles/Tabla.css';
 import {getClientes, postCliente, putCliente} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
 
 const clienteInicial = {
-    razonSocial: '-',
+    razonSocial: '',
     habilitadoOnline: true,
     maxCuentaCorriente: 0.0,
     mail: '',
@@ -66,27 +65,21 @@ const Clientes = () => {
             return <></>
     }
 
-    const encabezado = ["ID Usuario", "Razón Social", "e-mail", ""].map((e, i) => <EncabezadoTabla key={i}>{e}</EncabezadoTabla>)
+    const encabezado = ["ID Usuario", "Razón social", "Email", ""].map((e, i) => <EncabezadoTabla key={i}>{e}</EncabezadoTabla>)
 
     const limpiarCampos = () => {
         setCliente(clienteInicial);
     }
 
     return (
-        <div className="box">
-            <div><h1>Gestion de clientes</h1></div>
-            <div className="panelForm">
-                <div className="panelFormAlta">
-                    <ClientesForm cliente={cliente}
-                                  actualizarCliente={actualizarCliente}
-                                  saveOrUpdate={saveOrUpdate}
-                                  clean={limpiarCampos}/>
-                </div>
-            </div>
-            <div className="panel">
-                <Tabla encabezado={encabezado} filas={filasCliente()}/>
-            </div>
-        </div>
+        <>
+            <div><h1>Gestión de clientes</h1></div>
+            <ClientesForm cliente={cliente}
+                          actualizarCliente={actualizarCliente}
+                          saveOrUpdate={saveOrUpdate}
+                          clean={limpiarCampos}/>
+            <Tabla encabezado={encabezado} filas={filasCliente()}/>
+        </>
     )
 }
 

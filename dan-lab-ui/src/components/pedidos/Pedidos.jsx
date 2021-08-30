@@ -2,7 +2,6 @@ import {Tabla, FilaTabla, CeldaTabla, CeldaBotonTabla, EncabezadoTabla} from '..
 import PedidosForm from './PedidosForm';
 import DetallePedidoForm from './DetallePedidoForm'
 import '../styles/Form.css';
-import '../styles/Clientes.css';
 import {useEffect, useState} from "react";
 import {
     getPedidos,
@@ -167,32 +166,28 @@ const Pedidos = () => {
         })
 
     return (
-        <div className="box">
-            <div><h1>Pedidos</h1></div>
-            <div className="panelForm">
-                <div className="panelFormAlta">
-                    <PedidosForm
-                        pedido={pedido}
-                        actualizarCampos={actualizarPedido}
-                        clean={cleanPedido}
-                        saveOrUpdate={saveOrUpdatePedido}
-                        obras={listaObras}/>
-                </div>
-                <div className="panelFormAlta">
-                    <DetallePedidoForm
-                        detallePedido={detallePedido}
-                        listaProductos={listaProductos}
-                        actualizarCampos={actualizarDetalle}
-                        saveOrUpdate={saveOrUpdateDetalle}/>
-                </div>
+        <>
+            <h1>Gestión pedidos</h1>
+            <div className="panel-form-doble">
+                <PedidosForm
+                    pedido={pedido}
+                    actualizarCampos={actualizarPedido}
+                    clean={cleanPedido}
+                    saveOrUpdate={saveOrUpdatePedido}
+                    obras={listaObras}/>
+                <DetallePedidoForm
+                    detallePedido={detallePedido}
+                    listaProductos={listaProductos}
+                    actualizarCampos={actualizarDetalle}
+                    saveOrUpdate={saveOrUpdateDetalle}/>
             </div>
             <div className="panel">
                 <div><h3>Detalle</h3></div>
                 <Tabla encabezado={encabezadoDetalle} filas={filasDetalle}/>
                 <div><h3>Pedidos</h3></div>
-                <Tabla encabezado={encabezado} filas={filasPedidos}/>
+                <Tabla encabezado={encabezado} filas={filasPedidos()}/>
             </div>
-        </div>
+        </>
     );
 }
 export default Pedidos;

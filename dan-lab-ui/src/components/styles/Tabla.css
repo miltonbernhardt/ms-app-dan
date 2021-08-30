@@ -1,9 +1,20 @@
+.table-box {
+    margin: 1%;
+}
+
+.table-button {
+    width: 50%;
+}
+
 table {
     background-color: white;
     width: 100%;
     border-collapse: collapse;
     table-layout: auto;
 }
+
+
+
 
 th,
 td {

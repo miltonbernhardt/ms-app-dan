@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cliente")
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class ClienteRest {
 
     protected final Logger logger = LoggerFactory.getLogger(ClienteRest.class);
@@ -93,7 +93,7 @@ public class ClienteRest {
             return ResponseEntity.ok().body("El cliente con el id: " + id + " ha sido borrado.");
         } catch (ClienteNoEncontradoException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ocurrió un error por lo que no se puede borrar el cliente.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

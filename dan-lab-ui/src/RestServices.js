@@ -1,6 +1,14 @@
 import axios from 'axios';
 
 const RAIZ_URL = `http://localhost`;
+
+const PORT_GATEWAY = '8181'
+const PORT_USUARIO = '9000'
+const PORT_PRODUCTO = '9001'
+const PORT_PEDIDO = '9002'
+const PORT_CUENTA_CORRIENTE = '9003'
+const PORT_LIQUIDACION = '9004'
+
 const API_PRODUCTO = 'producto'
 const API_PEDIDO = 'pedido'
 const API_OBRA = 'obra'
@@ -25,7 +33,6 @@ export const login = async ({username, password}) => {
             if (status === 404){
                 localStorage.removeItem("token")
             }
-            throw new Error(dataResponse)
         } else {
             return dataResponse
         }
@@ -37,42 +44,42 @@ export const login = async ({username, password}) => {
 export const register = async (user) => POST(`${API_OBRA}`, user);
 
 // --- OBRA METHODS ---
-export const getObras = async () => GET(`${API_OBRA}`);
-export const postObra = async (obra) => POST(`${API_OBRA}`, obra);
-export const putObra = async (obra) => PUT(`${API_OBRA}/${obra.id}`, obra);
+export const getObras = async () => GET(PORT_USUARIO, `${API_OBRA}`);
+export const postObra = async (obra) => POST(PORT_USUARIO,`${API_OBRA}`, obra);
+export const putObra = async (obra) => PUT(PORT_USUARIO,`${API_OBRA}/${obra.id}`, obra);
 
 // --- PEDIDO METHODS ---
-export const getPedidos = async () => GET(`${API_PEDIDO}`);
-export const postPedido = async (pedido) => POST(`${API_PEDIDO}`, pedido);
-export const putPedido = async (pedido) => PUT(`${API_PEDIDO}/${pedido.id}`, pedido);
+export const getPedidos = async () => GET(PORT_PEDIDO,`${API_PEDIDO}`);
+export const postPedido = async (pedido) => POST(PORT_PEDIDO,`${API_PEDIDO}`, pedido);
+export const putPedido = async (pedido) => PUT(PORT_PEDIDO,`${API_PEDIDO}/${pedido.id}`, pedido);
 
 // --- DETALLE PEDIDO METHODS ---
-export const postDetalle = async (detallePedido, pedido) => POST(`${API_DETALLE_PEDIDO}/?idPedido=${pedido.id}`, detallePedido);
-export const putDetalle = async (detallePedido) => PUT(`${API_DETALLE_PEDIDO}`, detallePedido);
-export const deleteDetalle = async (detallePedido) => DELETE(`${API_DETALLE_PEDIDO}/id?idDetalle=${detallePedido.id}`);
+export const postDetalle = async (detallePedido, pedido) => POST(PORT_PEDIDO,`${API_DETALLE_PEDIDO}/?idPedido=${pedido.id}`, detallePedido);
+export const putDetalle = async (detallePedido) => PUT(PORT_PEDIDO,`${API_DETALLE_PEDIDO}`, detallePedido);
+export const deleteDetalle = async (detallePedido) => DELETE(PORT_PEDIDO,`${API_DETALLE_PEDIDO}/id?idDetalle=${detallePedido.id}`);
 
 // --- PRODUCTO METHODS ---
-export const getProductos = async () => GET(`${API_PRODUCTO}`);
-export const getUnidades = () => GET(`${API_PRODUCTO}/unidades`);
-export const postProducto = async (producto) => POST(`${API_PRODUCTO}`, producto);
-export const putProducto = async (producto) => PUT(`${API_PRODUCTO}`, producto);
+export const getProductos = async () => GET(PORT_PRODUCTO,`${API_PRODUCTO}`);
+export const getUnidades = () => GET(PORT_PRODUCTO,`${API_PRODUCTO}/unidades`);
+export const postProducto = async (producto) => POST(PORT_PRODUCTO,`${API_PRODUCTO}`, producto);
+export const putProducto = async (producto) => PUT(PORT_PRODUCTO,`${API_PRODUCTO}`, producto);
 
 // --- LIQUIDACION METHODS ---
-export const getLiquidaciones = async () => GET(`${API_LIQUIDACION}`);
-export const postLiquidacionTodos = async () => POST(`${API_LIQUIDACION}/todos`);
-export const postLiquidacionEmpleado = async (empleado) => POST(`${API_LIQUIDACION}/empleado?idEmpleado=${empleado.id}`);
-export const postSueldo = async (sueldo) => POST(`${API_LIQUIDACION}/sueldo`, sueldo);
-export const getSueldo = async (empleado) => GET(`${API_LIQUIDACION}/empleado/sueldo?idEmpleado=${empleado.id}`);
+export const getLiquidaciones = async () => GET(PORT_LIQUIDACION,`${API_LIQUIDACION}`);
+export const postLiquidacionTodos = async () => POST(PORT_LIQUIDACION,`${API_LIQUIDACION}/todos`);
+export const postLiquidacionEmpleado = async (empleado) => POST(PORT_LIQUIDACION,`${API_LIQUIDACION}/empleado?idEmpleado=${empleado.id}`);
+export const postSueldo = async (sueldo) => POST(PORT_LIQUIDACION,`${API_LIQUIDACION}/sueldo`, sueldo);
+export const getSueldo = async (empleado) => GET(PORT_LIQUIDACION,`${API_LIQUIDACION}/empleado/sueldo?idEmpleado=${empleado.id}`);
 
 // --- CLIENTE METHODS ---
-export const getClientes = async () => GET(`${API_CLIENTE}`);
-export const postCliente = async (cliente) => POST(`${API_CLIENTE}`, cliente);
-export const putCliente = async (cliente) => PUT(`${API_CLIENTE}`, cliente);
+export const getClientes = async () => GET(PORT_USUARIO,`${API_CLIENTE}`);
+export const postCliente = async (cliente) => POST(PORT_USUARIO,`${API_CLIENTE}`, cliente);
+export const putCliente = async (cliente) => PUT(PORT_USUARIO,`${API_CLIENTE}`, cliente);
 
 // --- EMPLEADO METHODS ---
-export const getEmpleados = async () => GET(`${API_EMPLEADO}`);
-export const postEmpleado = async (empleado) => POST(`${API_EMPLEADO}`, empleado);
-export const putEmpleado = async (empleado) => PUT(`${API_EMPLEADO}`, empleado);
+export const getEmpleados = async () => GET(PORT_USUARIO,`${API_EMPLEADO}`);
+export const postEmpleado = async (empleado) => POST(PORT_USUARIO,`${API_EMPLEADO}`, empleado);
+export const putEmpleado = async (empleado) => PUT(PORT_USUARIO,`${API_EMPLEADO}`, empleado);
 
 const getNewHeader = () => {
     const token = localStorage.getItem('token');
@@ -80,9 +87,9 @@ const getNewHeader = () => {
 }
 
 // --- GENERAL METHODS ---
-export const POST = async (postfixUrl, data,) => {
-    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
-    console.log({post_request: URL, data})
+export const POST = async (port, postfixUrl, data) => {
+    const URL = `${RAIZ_URL}:${port}/api/${postfixUrl}`;
+    console.log({request: URL, data})
     try {
         const response = await axios.post(URL, data, {headers: getNewHeader()})
         const {data: dataResponse, status} = response
@@ -91,9 +98,9 @@ export const POST = async (postfixUrl, data,) => {
                 localStorage.removeItem("token")
                 localStorage.removeItem("username")
             }
-            throw new Error(dataResponse)
+
         } else {
-            console.log({post_response: URL, dataResponse})
+            console.log({response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {
@@ -102,10 +109,10 @@ export const POST = async (postfixUrl, data,) => {
     }
 }
 
-export const PUT = async (postfixUrl, data) => {
-    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
+export const PUT = async (port, postfixUrl, data) => {
+    const URL = `${RAIZ_URL}:${port}/api/${postfixUrl}`;
 
-    console.log({put_request: URL, data})
+    console.log({request: URL, data})
 
     try {
         const response = await axios.put(URL, data, {headers: getNewHeader()})
@@ -117,7 +124,7 @@ export const PUT = async (postfixUrl, data) => {
             }
             throw new Error(dataResponse)
         } else {
-            console.log({put_response: URL, dataResponse})
+            console.log({response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {
@@ -126,9 +133,9 @@ export const PUT = async (postfixUrl, data) => {
     }
 }
 
-export const GET = async (postfixUrl) => {
-    const URL = `${RAIZ_URL}:8181/api/${postfixUrl}`;
-    console.log({get_request: URL})
+export const GET = async (port, postfixUrl) => {
+    const URL = `${RAIZ_URL}:${port}/api/${postfixUrl}`;
+    console.log({request: URL})
 
     try {
         const response = await axios.get(URL, {headers: getNewHeader()})
@@ -142,7 +149,7 @@ export const GET = async (postfixUrl) => {
             }
             throw new Error(dataResponse)
         } else {
-            console.log("Error en método: ", {get_response: URL, dataResponse})
+            console.log("Error en método: ", {response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {
@@ -151,9 +158,9 @@ export const GET = async (postfixUrl) => {
     }
 }
 
-export const DELETE = async (postfixUrl) => {
-    const URL = `${RAIZ_URL}/api/${postfixUrl}`;
-    console.log({delete_request: URL})
+export const DELETE = async (port, postfixUrl) => {
+    const URL = `${RAIZ_URL}:${port}/api/${postfixUrl}`;
+    console.log({request: URL})
 
     try {
         let headersCopy = [...headers, {Authorization: `Bearer ${window.accessToken}`}]
@@ -168,7 +175,7 @@ export const DELETE = async (postfixUrl) => {
             }
             throw new Error(dataResponse)
         } else {
-            console.log("Error en método: ", {delete_response: URL, dataResponse})
+            console.log("Error en método: ", {response: URL, dataResponse})
             return dataResponse
         }
     } catch (error) {

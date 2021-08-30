@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {getClientes, getObras, postObra, putObra} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
+import {useAlert} from "react-alert";
 
 const clienteInicial = {
     id: null,
@@ -27,6 +28,7 @@ const obraInicial = {
 
 const Obras = () => {
     const history = useHistory();
+    const alert = useAlert();
     const [obra, setObra] = useState(obraInicial);
     const [cliente, setCliente] = useState(clienteInicial);
     const [listaClientes, setListaClientes] = useState([]);
@@ -66,13 +68,24 @@ const Obras = () => {
         setObra(nuevaObra);
     }
 
+    const validateObra = () => {
+        return !!(obra.descripcion && obra.latitud && obra.longitud && obra.superficie && obra.tipoObra);
+    }
+
     const saveOrUpdate = () => {
-        const algoObra = () => {
-            fetchObras()
+        if (validateObra()) {
+            obra.cliente = cliente
+
+            const algoObra = () => {
+                fetchObras()
+            }
+            !(obra.id) ? postObra(obra).then(algoObra) : putObra(obra).then(algoObra);
+            setObra(obraInicial);
+            setCliente(clienteInicial);
+        } else {
+            alert.error("Faltan indicar ciertos datos de la obra");
         }
-        !(obra.id) ? postObra(obra).then(algoObra) : putObra(obra).then(algoObra);
-        setObra(obraInicial);
-        setCliente(clienteInicial);
+
     };
 
     const cleanObra = () => {
@@ -98,37 +111,31 @@ const Obras = () => {
         } else {
             return <></>
         }
-
     }
 
     const encabezado = ["ID Obra", "Descripcion", "Direccion", "Superficie", "Tipo de Obra", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     return (
-        <div className="box">
-            <div><h1>Gestion de Obras</h1></div>
-            <div className="panelForm">
-                <div className="panelFormAlta">
-                    <ObrasForm
-                        obra={obra}
-                        actualizarCampos={actualizarObra}
-                        clean={cleanObra}
-                        saveOrUpdate={saveOrUpdate}/>
-                </div>
-
-                <div className="panelFormBusqueda">
-                    <ClienteObrasForm
-                        cliente={cliente}
-                        actualizarCampos={actualizarCliente}
-                        listaClientes={listaClientes}/>
-                </div>
+        <>
+            <h1>Gestion de Obras</h1>
+            <div className="panel-form-doble">
+                <ObrasForm
+                    obra={obra}
+                    actualizarCampos={actualizarObra}
+                    clean={cleanObra}
+                    saveOrUpdate={saveOrUpdate}/>
+                <ClienteObrasForm
+                    cliente={cliente}
+                    actualizarCampos={actualizarCliente}
+                    listaClientes={listaClientes}/>
             </div>
             <div className="panel">
-                <Tabla encabezado={encabezado} filas={filasObras}/>
+                <Tabla encabezado={encabezado} filas={filasObras()}/>
             </div>
-        </div>
+        </>
     );
 }
 

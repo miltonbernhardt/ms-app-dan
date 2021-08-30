@@ -1,12 +1,10 @@
 import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla';
 import ProductosForm from './ProductosForm';
 import '../styles/Form.css';
-import '../styles/Clientes.css';
 import {useEffect, useState} from 'react';
 import {getProductos, getUnidades, postProducto, putProducto} from '../../RestServices';
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
-import {useAlert} from "react-alert";
 
 const unidadInicial = {
     descripcion: ''
@@ -23,7 +21,6 @@ const productoInicial = {
 
 const Productos = () => {
     const history = useHistory();
-    const alert = useAlert();
     const [producto, setProducto] = useState(productoInicial);
     const [listaProductos, setListaProductos] = useState([]);
     const [listaUnidades, setListaUnidades] = useState([]);
@@ -85,9 +82,9 @@ const Productos = () => {
         })
 
     return (
-        <div className="box">
-            <div><h1>Productos</h1></div>
-            <div className="panel">
+        <>
+            <h1>Gestión productos</h1>
+            <div className="panel-form-simple">
                 <ProductosForm
                     producto={producto}
                     unidades={listaUnidades}
@@ -95,10 +92,11 @@ const Productos = () => {
                     clean={cleanProducto}
                     saveOrUpdate={saveOrUpdate}/>
             </div>
+
             <div className="panel">
                 <Tabla encabezado={encabezado} filas={filasProductos}/>
             </div>
-        </div>
+        </>
     );
 }
 

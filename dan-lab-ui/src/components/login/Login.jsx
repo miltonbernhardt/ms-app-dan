@@ -2,7 +2,6 @@ import "../styles/Form.css";
 import {Label} from "../FormComponents";
 import {useState} from "react";
 import {login} from "../../RestServices";
-import {RUTAS} from "../../App";
 import {useAlert} from "react-alert";
 
 const Login = ({logged, setLogged}) => {
@@ -44,7 +43,7 @@ const Login = ({logged, setLogged}) => {
             <div className="container">
                 <h1 className="form-step"> Login </h1>
                 <form id='formLogin'>
-                    <div className="row">
+                    <div className="col-75">
                         <Label value="Nombre de usuario"/>
                         <div className="col-75">
                             <input
@@ -56,7 +55,7 @@ const Login = ({logged, setLogged}) => {
                                 onKeyPress={e => handleEnter(e)}/>
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="col-75">
                         <Label value="Contraseña"/>
                         <div className="col-75">
                             <input
@@ -73,7 +72,7 @@ const Login = ({logged, setLogged}) => {
                         </div>
                     </div>
                 </form>
-                <div className="row button-login">
+                <div className="col-75 button-login">
                     <div>
                         <button className="btn-wide" onClick={ingresar}>Ingresar</button>
                     </div>

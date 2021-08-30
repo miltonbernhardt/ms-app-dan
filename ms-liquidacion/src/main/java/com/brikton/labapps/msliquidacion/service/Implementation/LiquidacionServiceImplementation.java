@@ -40,13 +40,13 @@ public class LiquidacionServiceImplementation implements LiquidacionService {
     public List<LiquidacionSueldo> liquidarSueldoTodos() {
         List<LiquidacionSueldo> liquidacion = new ArrayList<>();
         List<Sueldo> sueldos = sueldoRepository.findAll();
-        for (Sueldo s : sueldos) {
+        for (Sueldo sueldo : sueldos) {
             LiquidacionSueldo ls = new LiquidacionSueldo();
             ls.setFecha(Instant.now());
-            ls.setEmpleado(s.getEmpleado());
-            Double monto = s.getMonto();
-            Double comision = ventaService.getMontoVentasMes(s.getEmpleado()) * s.getComision();
-            ventaService.saldarVentas(s.getEmpleado());
+            ls.setEmpleado(sueldo.getEmpleado());
+            Double monto = sueldo.getMonto();
+            Double comision = ventaService.getMontoVentasMes(sueldo.getEmpleado()) * sueldo.getComision();
+            ventaService.saldarVentas(sueldo.getEmpleado());
             ls.setMonto(monto + comision);
             liquidacion.add(ls);
         }

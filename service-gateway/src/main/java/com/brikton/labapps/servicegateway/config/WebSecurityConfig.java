@@ -5,6 +5,7 @@ import com.brikton.labapps.servicegateway.jwt.AuthEntryPointJwt;
 import com.brikton.labapps.servicegateway.jwt.AuthTokenFilter;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,8 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/images/**",
                         "/",
-                        "/home/",
-                        "/home",
                         "/api/usuario/**",
                         "/actuator/**",
                         "/register",

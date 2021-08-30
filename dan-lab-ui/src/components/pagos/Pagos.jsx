@@ -33,18 +33,18 @@ const Pagos = () => {
     }
 
     const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     return (
-        <div className="box">
-            <div><h1>Pagos</h1></div>
+        <>
+            <h1>Gestión de pagos</h1>
             <div className="panel">
-                <div><h3>Pedidos</h3></div>
-                <Tabla encabezado={encabezado} filas={filasPedidos}/>
+                <h2>Pedidos</h2>
+                <Tabla encabezado={encabezado} filas={filasPedidos()}/>
             </div>
-        </div>);
+        </>);
 }
 
 export default Pagos;
