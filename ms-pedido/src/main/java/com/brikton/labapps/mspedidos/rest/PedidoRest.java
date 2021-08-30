@@ -66,9 +66,13 @@ public class PedidoRest {
     @PutMapping
     public ResponseEntity<?> actualizarEstadoPedido(@RequestParam Integer id,
                                                     @RequestParam String nuevoEstado) {
+        logger.info("--- actualizarEstadoPedido - id: {}, nuevoEstado: {}", id, nuevoEstado);
         try {
             EstadoPedido estadoPedido = EstadoPedido.valueOf(nuevoEstado.toUpperCase());
-            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, estadoPedido));
+            Pedido pedido =  pedidoService.updateEstadoPedido(id, estadoPedido);
+            if(pedido == null)
+                return  ResponseEntity.status(HttpStatus.CONFLICT).body("El pedido ya no puede ser actualizado");
+            return ResponseEntity.ok(pedido);
         } catch (IllegalArgumentException ex) {
             logger.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El estado de pedido no es correcto");
