@@ -2,25 +2,28 @@ package com.brikton.labapps.msusuario.service;
 
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
+import com.brikton.labapps.msusuario.exceptions.ClienteNoEncontradoException;
+import com.brikton.labapps.msusuario.exceptions.ObraNoEncontradaException;
+import com.brikton.labapps.msusuario.exceptions.ObrasNoAsociadasException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ObraService {
 
-    Obra saveObra(Obra obra);
+    Obra saveObra(Obra obra) throws ClienteNoEncontradoException;
 
-    Obra updateObra(Obra nueva, Integer id) throws Exception;
+    Obra updateObra(Obra nueva, Integer id) throws ObraNoEncontradaException;
 
-    void deleteObra(Integer id) throws Exception;
+    void deleteObra(Integer id) throws ObraNoEncontradaException;
 
     List<Obra> getAllObrasByTipo(TipoObra tipoObraId);
 
-    Optional<Obra> getObraById(Integer id) throws Exception;
+    Obra getObraById(Integer id) throws ObraNoEncontradaException;
 
-    List<Obra> getObrasByClienteId(Integer clienteId) throws Exception;
+    List<Obra> getObrasByClienteId(Integer clienteId) throws ClienteNoEncontradoException, ObrasNoAsociadasException;
 
-    List<Obra> getObrasByClienteCuit(String clienteCuit) throws Exception;
+    List<Obra> getObrasByClienteCuit(String clienteCuit) throws ClienteNoEncontradoException, ObrasNoAsociadasException;
 
-    Double getSaldoPorObrasByClient(Integer obraId) throws Exception;
+    Double getSaldoPorObrasByClient(Integer obraId) throws ObraNoEncontradaException;
 }

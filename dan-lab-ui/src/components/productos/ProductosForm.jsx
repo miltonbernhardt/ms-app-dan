@@ -11,50 +11,50 @@ const ProductosForm = ({ producto, unidades, actualizarCampos, clean, saveOrUpda
     }
 
     return (
-        <form className="form-box container">
+        <form className="form-box">
             <h3>Producto</h3>
 
-            <CampoForm label='Nombre del Producto'
+            <CampoForm label='Nombre:'
                 name='nombre'
                 value={producto.nombre}
                 onChange={handleChange} />
 
-            <CampoForm label='Descripcion'
+            <CampoForm label='Descripción:'
                 name='descripcion'
                 value={producto.descripcion}
                 onChange={handleChange} />
 
-            <CampoForm label='Precio'
+            <CampoForm label='Precio:'
                 name='precio'
                 pattern="[0-9.]*"
                 value={producto.precio}
                 onChange={handleChange} />
 
-            <CampoForm label='Stock Actual'
+            <CampoForm label='Stock actual:'
                 name='stockActual'
                 pattern="[0-9.]*"
                 value={producto.stockActual}
                 onChange={handleChange} />
 
-            <CampoForm label='Stock Minimo'
+            <CampoForm label='Stock mínimo:'
                 name='stockMinimo'
                 pattern="[0-9.]*"
                 value={producto.stockMinimo}
                 onChange={handleChange} />
 
             <ComboForm
-                label="Unidad"
+                label="Unidad:"
                 name="unidad"
                 value={producto.unidad.descripcion}
-                opciones={unidades ? unidades.map(u => { return u.descripcion }) : []}
+                opciones={(unidades && unidades.length > 0) ? unidades.map(u => { return u.descripcion }) : []}
                 onChange={handleChange} />
 
-            <div className="row">
-                <div className="col-50 ">
-                    <button type="button" onClick={clean}>Limpiar</button>
-                </div>
-                <div className="col-50">
+            <div className="form-buttons">
+                <div className="form-button">
                     <button type="button" onClick={saveOrUpdate}>Guardar</button>
+                </div>
+                <div className="form-button">
+                    <button type="button" onClick={clean}>Limpiar</button>
                 </div>
             </div>
         </form >

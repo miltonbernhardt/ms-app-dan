@@ -1,12 +1,12 @@
 package com.brikton.labapps.msusuario.service;
 
 import com.brikton.labapps.msusuario.domain.Usuario;
-
-import java.util.Optional;
+import com.brikton.labapps.msusuario.exceptions.UsuarioInvalidoException;
+import com.brikton.labapps.msusuario.exceptions.UsuarioNoEncontradoException;
 
 public interface UsuarioService {
 
-    Usuario saveUsuario(Usuario usuario) throws Exception;
+    Usuario saveUsuario(Usuario usuario) throws UsuarioInvalidoException;
 
-    Optional<Usuario> getUsuario(String mail) throws Exception;
+    Usuario getUsuario(String mail) throws UsuarioNoEncontradoException;
 }

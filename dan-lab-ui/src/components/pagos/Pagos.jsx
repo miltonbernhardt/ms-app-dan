@@ -2,21 +2,33 @@ import {useEffect, useState} from 'react';
 import {CeldaBotonTabla, CeldaTabla, EncabezadoTabla, FilaTabla, Tabla} from '../Tabla'
 import {useHistory} from "react-router-dom";
 import {RUTAS} from "../../App";
+import {getPedidos} from "../../RestServices";
 
 const Pagos = () => {
     const history = useHistory();
 
     const [listaPedidos, setListaPedidos] = useState([]);
 
-    useEffect(() => {
-        if (!localStorage.getItem("token")) {
-            history.push(RUTAS.login)
-        }
-    }, [history]);
-
     const abonarPedido = () => {
         console.log("Abonar pedido listo")
     }
+
+    const fetchPedidos = () => {
+        // getPedidos().then(({data}) => {
+        //     if (data) {
+        //         setListaPedidos(data)
+        //     }
+        // });
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            getPedidos().then(() => fetchPedidos());
+        } else
+            history.push(RUTAS.login)
+    }, [history]);
+
+
 
     const filasPedidos = () => {
         if (listaPedidos) {
@@ -26,25 +38,25 @@ const Pagos = () => {
                     <CeldaTabla dato={e.fechaPedido}/>
                     <CeldaTabla dato={e.obra}/>
                     <CeldaTabla dato={e.estado}/>
-                    <CeldaBotonTabla titulo="Abonar" accion={() => abonarPedido(e)}/>
+                    <CeldaBotonTabla titulo="Abonar" action={() => abonarPedido(e)}/>
                 </FilaTabla>
             });
         } else return <></>
     }
 
     const encabezado = ["ID Pedido", "Fecha de Pedido", "ID Obra", "Estado", ""]
-        .map((e) => {
-            return <EncabezadoTabla>{e}</EncabezadoTabla>
+        .map((e, i) => {
+            return <EncabezadoTabla key={i}>{e}</EncabezadoTabla>
         })
 
     return (
-        <div className="box">
-            <div><h1>Pagos</h1></div>
+        <>
+            <h1>Gestión de pagos</h1>
             <div className="panel">
-                <div><h3>Pedidos</h3></div>
-                <Tabla encabezado={encabezado} filas={filasPedidos}/>
+                <h2>Pedidos</h2>
+                <Tabla encabezado={encabezado} filas={filasPedidos()}/>
             </div>
-        </div>);
+        </>);
 }
 
 export default Pagos;

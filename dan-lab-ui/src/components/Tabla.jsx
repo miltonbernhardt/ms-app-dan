@@ -1,10 +1,9 @@
 import React from 'react';
 
-export const Tabla = ({titulo = '', encabezado, filas}) => {
+export const Tabla = ({encabezado, filas}) => {
 
     return (
-        <div>
-            <h2>{titulo}</h2>
+        <div className="table-box">
             <table>
                 <thead>
                     <tr>
@@ -35,15 +34,15 @@ export const FilaTabla = ({children}) => {
 }
 export const CeldaTabla = ({dato}) => {
     return (
-        <td className="celdaTabla">
+        <td>
             {dato}
         </td>
     )
 }
-export const CeldaBotonTabla = ({titulo, accion}) => {
+export const CeldaBotonTabla = ({titulo, action}) => {
     return (
-        <td className="celdaTabla">
-            <button onClick={accion}>{titulo}</button>
+        <td>
+            <button className="table-button" onClick={() => action()}>{titulo}</button>
         </td>
     )
 }

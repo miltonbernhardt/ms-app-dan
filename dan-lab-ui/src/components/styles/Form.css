@@ -1,52 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
-h1 {
-  text-align: center;
-}
-
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
-}
-
-.btn-wide {
-  width: 100%;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  float: center;
-  margin-top: 4px;
-  margin-bottom: 4px;
-  width: 90%;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-button:active {
-  background-color: #36833a;
-
-}
 
 .button-login{
   width: 10%;
@@ -62,50 +13,67 @@ button:active {
   margin-right: 25%;
 }
 
+.panel-form-doble {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  /*align-content: space-around;*/
+  padding: 1% 5%;
+  width: 100%;
+}
+
+.panel-form-simple {
+  padding: 1% 20%;
+}
+
+.form-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1%;
+}
+
 .form-label {
+  min-width: 150px;
   text-align: right;
 }
 
-.container {
-  border-radius: 5px;
-  border: 1px solid #000;
-  padding: 20px;
+.form-input {
   width: 100%;
-  height: 100%;
+  min-width: 250px;
+  justify-content: flex-start;
 }
 
-.col-25 {
-  float: left;
-  width: 35%;
-  margin-top: 6px;
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: 1%;
+  margin-bottom: 2%;
 }
 
-.col-50 {
-  float: left;
-  width: 50%;
-  margin-top: 6px;
+.form-button {
+  width: 25%;
+  min-width: 150px;
 }
 
-.col-75 {
-  float: left;
-  width: 65%;
-  margin-top: 6px;
+
+.form-buttons .label {
+  display: inline-block;
 }
 
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-
-  .col-25,
-  .col-75,
-  input[type=submit] {
-    width: 100%;
-    margin-top: 0;
-  }
+.form-buttons .label input  {
+  float: end;
 }

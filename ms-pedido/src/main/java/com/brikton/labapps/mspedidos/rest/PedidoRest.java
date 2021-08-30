@@ -1,7 +1,5 @@
 package com.brikton.labapps.mspedidos.rest;
 
-import java.util.List;
-
 import com.brikton.labapps.mspedidos.domain.DetallePedido;
 import com.brikton.labapps.mspedidos.domain.EstadoPedido;
 import com.brikton.labapps.mspedidos.domain.Obra;
@@ -9,16 +7,17 @@ import com.brikton.labapps.mspedidos.domain.Pedido;
 import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 import com.brikton.labapps.mspedidos.exception.RiesgoException;
 import com.brikton.labapps.mspedidos.service.PedidoService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pedido")
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class PedidoRest {
     protected final Logger logger = LoggerFactory.getLogger(DetallePedidoRest.class);
 
@@ -33,12 +32,16 @@ public class PedidoRest {
         if (validarPedido(nuevoPedido)) {
             try {
                 return ResponseEntity.ok(this.pedidoService.savePedido(nuevoPedido));
+
+            } catch (RecursoNoEncontradoException e) {
+                logger.error(e.getMessage());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (RiesgoException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El pedido tiene un mal formato");
         }
     }
 
@@ -64,7 +67,11 @@ public class PedidoRest {
     public ResponseEntity<?> actualizarEstadoPedido(@RequestParam Integer id,
                                                     @RequestParam String nuevoEstado) {
         try {
-            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, EstadoPedido.valueOf(nuevoEstado.toUpperCase())));
+            EstadoPedido estadoPedido = EstadoPedido.valueOf(nuevoEstado.toUpperCase());
+            return ResponseEntity.ok(pedidoService.updateEstadoPedido(id, estadoPedido));
+        } catch (IllegalArgumentException ex) {
+            logger.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El estado de pedido no es correcto");
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -74,7 +81,7 @@ public class PedidoRest {
         }
     }
 
-    @GetMapping(path = "/")
+    @GetMapping
     public ResponseEntity<?> getAllPedidos() {
         try {
             List<Pedido> pedidos = pedidoService.getPedidos();

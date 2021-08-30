@@ -1,20 +1,23 @@
 package com.brikton.labapps.msusuario.service;
 
 import com.brikton.labapps.msusuario.domain.Cliente;
+import com.brikton.labapps.msusuario.exceptions.ClienteNoEncontradoException;
+import com.brikton.labapps.msusuario.exceptions.UsuarioInvalidoException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClienteService {
     List<Cliente> listarClientes();
 
-    Cliente getClienteById(Integer id);
+    Cliente getClienteById(Integer id) throws ClienteNoEncontradoException;
 
-    Cliente getClienteByCuit(String cuit);
+    Cliente getClienteByCuit(String cuit) throws ClienteNoEncontradoException;
 
-    Cliente getClienteByRazonSocial(String razonSocial);
+    Cliente getClienteByRazonSocial(String razonSocial) throws ClienteNoEncontradoException;
 
-    Cliente saveCliente(Cliente cliente) throws Exception;
+    Cliente saveCliente(Cliente cliente) throws ClienteNoEncontradoException, UsuarioInvalidoException;
 
-    void bajaCliente(Integer id) throws Exception;
+    Cliente updateCliente(Cliente cliente) throws ClienteNoEncontradoException, UsuarioInvalidoException;
+
+    void bajaCliente(Integer id) throws ClienteNoEncontradoException;
 }

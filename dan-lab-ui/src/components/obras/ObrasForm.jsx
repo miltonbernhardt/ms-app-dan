@@ -1,93 +1,91 @@
 import {Label} from "../FormComponents";
 
-const ObrasForm = ({ obra, actualizarCampos, saveOrUpdate, clean }) => {
+const ObrasForm = ({obra, actualizarCampos, saveOrUpdate, clean}) => {
 
     const handleChange = (evt) => {
         evt.preventDefault();
-        // console.log(evt.target.value);
         const nombreAtributo = evt.target.name;
         const valorAtributo = evt.target.value;
         if (evt.target.validity.valid) actualizarCampos(nombreAtributo, valorAtributo);
     }
 
     return (
-        <form className="form-box container">
+        <form className="form-box">
             <h3>Obra</h3>
-            <div className="row">
-                <Label value="Descripción"/>
-                <div className="col-75">
+            <div className="form-row">
+                <Label value="Descripción:"/>
+                <div className="form-input">
                     <input name="descripcion"
-                        value={obra.descripcion}
-                        onChange={handleChange} />
+                           value={obra.descripcion}
+                           onChange={handleChange}/>
                 </div>
             </div>
-            <div className="row">
-                <Label value="Latitud"/>
-                <div className="col-75">
+            <div className="form-row">
+                <Label value="Latitud:"/>
+                <div className="form-input">
                     <input
                         type="text"
                         pattern="[0-9]*"
                         name="latitud"
                         value={obra.latitud}
-                        onChange={handleChange} />
+                        onChange={handleChange}/>
                 </div>
             </div>
-            <div className="row">
-                <Label value="Longitud"/>
-                <div className="col-75">
+            <div className="form-row">
+                <Label value="Longitud:"/>
+                <div className="form-input">
                     <input
                         type="text"
                         pattern="[0-9]*"
                         name="longitud"
                         value={obra.longitud}
-                        onChange={handleChange} />
+                        onChange={handleChange}/>
                 </div>
             </div>
 
-            <div className="row">
-                <Label value="Dirección"/>
-                <div className="col-75">
+            <div className="form-row">
+                <Label value="Dirección:"/>
+                <div className="form-input">
                     <input
                         name="direccion"
                         value={obra.direccion}
-                        onChange={handleChange} />
+                        onChange={handleChange}/>
                 </div>
             </div>
 
-            <div className="row">
-                <Label value="Superficie"/>
-                <div className="col-75">
+            <div className="form-row">
+                <Label value="Superficie:"/>
+                <div className="form-input">
                     <input
                         type="text"
                         pattern="[0-9]*"
                         name="superficie"
                         value={obra.superficie}
-                        onChange={handleChange} />
+                        onChange={handleChange}/>
                 </div>
             </div>
 
-            <div className="row">
-                <Label value="Tipo de Obra"/>
-                <div className="col-75">
-                    <select name="tipoObra" value={obra.tipoObra} onChange={handleChange} >
+            <div className="form-row">
+                <Label value="Tipo de obra:"/>
+                <div className="form-input">
+                    <select name="tipoObra" value={obra.tipoObra} onChange={handleChange}>
                         <option value="REFORMA">Reforma</option>
                         <option value="CASA">Casa</option>
                         <option value="EDIFICIO">Edificio</option>
                         <option value="VIAL">Vial</option>
-
                     </select>
                 </div>
             </div>
 
-            <div className="row">
-                <div className="col-50 ">
+            <div className="form-buttons">
+                <div className="form-button">
+                    <button type="button" onClick={(e) => saveOrUpdate(e)}>Guardar</button>
+                </div>
+                <div className="form-button">
                     <button type="button" onClick={clean}>Limpiar</button>
                 </div>
-                <div className="col-50">
-                    <button type="button" onClick={saveOrUpdate}>Guardar</button>
-                </div>
             </div>
-        </form >
+        </form>
     );
 }
 

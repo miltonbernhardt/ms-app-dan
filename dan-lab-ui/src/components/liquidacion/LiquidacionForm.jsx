@@ -14,7 +14,7 @@ const LiquidacionForm = ({ empleado, actualizarCampos, listaEmpleados, liquidarT
     }
 
     return (
-        <form className='formbox-container'>
+        <form className='form-box'>
             <ComboForm
                 label="Empleado"
                 name="nombre"
@@ -29,21 +29,20 @@ const LiquidacionForm = ({ empleado, actualizarCampos, listaEmpleados, liquidarT
                 value={sueldoEmpleado.monto}
                 onChange={handleChangeSueldo} />
             <CampoForm
-                label="Porcentaje de comision"
+                label="Porcentaje de comisión:"
                 name="comision"
                 pattern="[0-9.]*"
                 value={sueldoEmpleado.comision}
                 onChange={handleChangeSueldo}
             />
-            <div className="row">
-                <div className="col-25" />
-                <div className="col-25">
+            <div className="form-buttons">
+                <div className="form-button">
                     <button type="button" onClick={actualizarSueldoEmpleado}>Actualizar Sueldo</button>
                 </div>
-                <div className="col-25">
+                <div className="form-button">
                     <button type="button" onClick={liquidarEmpleado}>Liquidar Empleado</button>
                 </div>
-                <div className="col-25">
+                <div className="form-button">
                     <button type="button" onClick={liquidarTodos}>Liquidar a todos</button>
                 </div>
             </div>

@@ -11,7 +11,7 @@ import com.brikton.labapps.mspedidos.exception.RiesgoException;
 
 public interface PedidoService {
 
-    Pedido savePedido(Pedido p) throws RiesgoException;
+    Pedido savePedido(Pedido p) throws RiesgoException, RecursoNoEncontradoException;
 
     Pedido updateEstadoPedido(Integer id, EstadoPedido estadoPedido) throws RecursoNoEncontradoException, RiesgoException;
 

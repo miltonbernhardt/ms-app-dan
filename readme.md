@@ -27,13 +27,12 @@ Se necesitan tener los siguientes puertos disponibles:
 - 3000: servicio de gráficos relacionados con los microservicios activos proveído por grafana.
 - 5432: para el acceso a postgres.
 - 8761: microservicio encargado de descubrir los servicios disponibles.
-- 8181: para correr el microservicio que sirve de gateway para el resto de servicios.
+- 8181: para correr el microservicio que sirve de gateway para el resto de servicios y corre el frontend.
 - 9000: microservicio de gestión de usuarios, clientes, empleados y obras.
 - 9001: microservicio para la gestión de productos en venta.
 - 9002: microservicio para la gestión de pedidos de productos por los clientes.
 - 9003: microservicio de gestión de las cuentas corrientes de los clientes.
-- 9004: microservicio que sirve para gestión las liquidaciones de los empleados.
-- 9005: para correr el frontend de la aplicación.
+- 9004: microservicio que sirve para gestión las liquidaciones de los empleados
 - 9090: para correr el servicio de prometheus.
 - 61616: artemis
 ---

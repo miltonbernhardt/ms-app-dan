@@ -1,5 +1,5 @@
 import "../styles/Form.css";
-import {Label} from "../FormComponents";
+import {Button, Label} from "../FormComponents";
 
 const ClientesForm = ({cliente, actualizarCliente, saveOrUpdate, clean}) => {
 
@@ -11,69 +11,67 @@ const ClientesForm = ({cliente, actualizarCliente, saveOrUpdate, clean}) => {
     }
 
     return (
-        <form className="form-box container">
-            <div className="row">
-                <Label value="Razon Social"/>
-                <div className="col-75">
-                    <input
-                        name="razonSocial"
-                        value={cliente.razonSocial}
-                        onChange={handleChange}/>
+        <div className="panel-form-simple">
+            <form className="form-box">
+                <div className="form-row">
+                    <Label value="Razón Social:"/>
+                    <div className="form-input">
+                        <input
+                            name="razonSocial"
+                            value={cliente.razonSocial}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <Label value="Cuit"/>
-                <div className="col-75">
-                    <input
-                        type="text"
-                        pattern="[0-9]*"
-                        name="cuit"
-                        value={cliente.cuit}
-                        onChange={handleChange}/>
+                <div className="form-row">
+                    <Label value="Cuit:"/>
+                    <div className="form-input">
+                        <input
+                            type="text"
+                            pattern="[0-9]*"
+                            name="cuit"
+                            value={cliente.cuit}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <Label value="Email"/>
-                <div className="col-75">
-                    <input
-                        name="mail"
-                        value={cliente.mail}
-                        onChange={handleChange}/>
+                <div className="form-row">
+                    <Label value="Email:"/>
+                    <div className="form-input">
+                        <input
+                            name="mail"
+                            value={cliente.mail}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-            </div>
 
-            <div className="row">
-                <Label value="Maximo Descubierto"/>
-                <div className="col-75">
-                    <input
-                        type="text"
-                        pattern="[0-9.]*"
-                        name="maxCuentaCorriente"
-                        value={cliente.maxCuentaCorriente}
-                        onChange={handleChange}/>
+                <div className="form-row">
+                    <Label value="Máximo descubierto:"/>
+                    <div className="form-input">
+                        <input
+                            type="text"
+                            pattern="[0-9.]*"
+                            name="maxCuentaCorriente"
+                            value={cliente.maxCuentaCorriente}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <Label value="Habilitado Online"/>
-                <div className="col-75">
-                    <input
-                        name="habilitadoOnline"
-                        type="checkbox"
-                        checked={cliente.habilitadoOnline}
-                        onChange={handleChange}/>
+                <div className="form-row">
+                    <Label value="Habilitado online:"/>
+                    <div className="form-input" >
+                        <input
+                            name="habilitadoOnline"
+                            type="checkbox"
+                            checked={cliente.habilitadoOnline}
+                            onChange={handleChange}/>
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <Button label="Cancelar action" action={clean}/>
-                <Button label="Guardar" action={() => saveOrUpdate()}/>
-            </div>
-        </form>
+                <div className="form-buttons">
+                    <Button label="Guardar / Actualizar" action={saveOrUpdate}/>
+                    <Button label="Limpiar" action={clean}/>
+                </div>
+            </form>
+        </div>
     )
 }
 
-const Button = ({action, label}) =>
-    <div className="col-50">
-        <button type="button" onClick={action}>{label}</button>
-    </div>
 
 export default ClientesForm;

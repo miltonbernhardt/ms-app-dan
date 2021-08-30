@@ -5,14 +5,13 @@ import com.brikton.labapps.mspedidos.exception.RecursoNoEncontradoException;
 import com.brikton.labapps.mspedidos.service.DetallePedidoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/detallepedido")
-@CrossOrigin(origins = {"http://localhost:9005", "http://ms-frontend:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:9005", "http://localhost:8181", "http://service-gateway:8181"}, maxAge = 3000)
 public class DetallePedidoRest {
 
     protected final Logger logger = LoggerFactory.getLogger(DetallePedidoRest.class);
@@ -31,7 +30,7 @@ public class DetallePedidoRest {
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             logger.error(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar el item.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo guardar el item.");
         }
     }
 
@@ -42,7 +41,7 @@ public class DetallePedidoRest {
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             logger.error(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se puede actualizar el detalle.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se puede actualizar el detalle.");
         }
     }
 
@@ -54,7 +53,7 @@ public class DetallePedidoRest {
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             logger.error(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo eliminar el detalle.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo eliminar el detalle.");
         }
     }
 
@@ -66,7 +65,7 @@ public class DetallePedidoRest {
         } catch (RecursoNoEncontradoException e) {
             logger.error(e.getMessage());
             logger.error(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo eliminar el detalle.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo eliminar el detalle.");
         }
     }
 }

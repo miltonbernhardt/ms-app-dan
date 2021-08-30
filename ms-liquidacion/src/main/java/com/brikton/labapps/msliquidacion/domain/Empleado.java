@@ -1,12 +1,13 @@
 package com.brikton.labapps.msliquidacion.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Empleado {
 
   @Id
+  @Column(name = "id_empleado")
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   public Empleado() {}

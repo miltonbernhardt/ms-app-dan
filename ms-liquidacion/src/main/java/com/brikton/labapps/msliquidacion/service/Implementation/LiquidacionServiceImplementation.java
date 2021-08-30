@@ -9,6 +9,7 @@ import com.brikton.labapps.msliquidacion.service.LiquidacionService;
 import com.brikton.labapps.msliquidacion.service.VentaService;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,13 +41,13 @@ public class LiquidacionServiceImplementation implements LiquidacionService {
     public List<LiquidacionSueldo> liquidarSueldoTodos() {
         List<LiquidacionSueldo> liquidacion = new ArrayList<>();
         List<Sueldo> sueldos = sueldoRepository.findAll();
-        for (Sueldo s : sueldos) {
+        for (Sueldo sueldo : sueldos) {
             LiquidacionSueldo ls = new LiquidacionSueldo();
-            ls.setFecha(Instant.now());
-            ls.setEmpleado(s.getEmpleado());
-            Double monto = s.getMonto();
-            Double comision = ventaService.getMontoVentasMes(s.getEmpleado()) * s.getComision();
-            ventaService.saldarVentas(s.getEmpleado());
+            ls.setFecha(LocalDate.now());
+            ls.setEmpleado(sueldo.getEmpleado());
+            Double monto = sueldo.getMonto();
+            Double comision = ventaService.getMontoVentasMes(sueldo.getEmpleado()) * sueldo.getComision();
+            ventaService.saldarVentas(sueldo.getEmpleado());
             ls.setMonto(monto + comision);
             liquidacion.add(ls);
         }
@@ -102,7 +103,7 @@ public class LiquidacionServiceImplementation implements LiquidacionService {
         Double comision = ventaService.getMontoVentasMes(sueldo.get().getEmpleado()) * porcentajeVenta;
         LiquidacionSueldo ls = new LiquidacionSueldo();
         ls.setEmpleado(sueldo.get().getEmpleado());
-        ls.setFecha(Instant.now());
+        ls.setFecha(LocalDate.now());
         ls.setMonto(sueldo.get().getMonto() + comision);
         ventaService.saldarVentas(sueldo.get().getEmpleado());
         liquidacionRepository.save(ls);

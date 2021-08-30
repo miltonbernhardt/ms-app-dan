@@ -1,6 +1,6 @@
-import { ComboForm } from "../FormComponents";
+import {ComboForm} from "../FormComponents";
 
-const ClienteObrasForm = ({ cliente, actualizarCampos, listaClientes }) => {
+const ClienteObrasForm = ({cliente, actualizarCampos, listaClientes}) => {
 
     const handleChange = (evt) => {
         const nombreAtributo = evt.target.name;
@@ -9,26 +9,30 @@ const ClienteObrasForm = ({ cliente, actualizarCampos, listaClientes }) => {
     }
 
     return (
-        <form className="form-box container">
+        <form className="form-box">
             <h3>Cliente</h3>
 
             <ComboForm
-                label='Razon Social'
+                label='Razon social:'
                 placeholder='Razon Social'
                 name='razonSocial'
                 value={cliente.razonSocial}
                 onChange={handleChange}
-                opciones={listaClientes.map(c => { return c.razonSocial })} />
+                opciones={listaClientes.map(c => {
+                    return c.razonSocial
+                })}/>
 
             <ComboForm
-                label='CUIT'
+                label='CUIT:'
                 placeholder='CUIT'
                 name='cuit'
                 value={cliente.cuit}
                 onChange={handleChange}
-                opciones={listaClientes.map(c => { return c.cuit })} />
+                opciones={listaClientes.map(c => {
+                    return c.cuit
+                })}/>
 
-        </form >
+        </form>
     );
 }
 
