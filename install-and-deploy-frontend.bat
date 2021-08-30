@@ -7,3 +7,4 @@ git add .\service-gateway\src\main\resources\public\*
 ./mvnw clean install -pl service-gateway -am
 docker-compose -f ./docker/dan-infra.yml -p "dan-container" up -d --remove-orphans
 
+

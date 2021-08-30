@@ -3,10 +3,17 @@ import axios from 'axios';
 const RAIZ_URL = `http://localhost`;
 
 const PORT_GATEWAY = '8181'
+const PORT_USUARIO = PORT_GATEWAY
+const PORT_PRODUCTO = PORT_GATEWAY
+const PORT_PEDIDO = PORT_GATEWAY
+const PORT_LIQUIDACION = PORT_GATEWAY
+
+/*
 const PORT_USUARIO = '9000'
 const PORT_PRODUCTO = '9001'
 const PORT_PEDIDO = '9002'
 const PORT_LIQUIDACION = '9004'
+ */
 
 const API_PRODUCTO = 'producto'
 const API_PEDIDO = 'pedido'
