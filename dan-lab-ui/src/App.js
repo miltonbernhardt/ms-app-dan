@@ -59,7 +59,7 @@ function App() {
                         <Route path={RUTAS.obras} component={Obras}/>
                         <Route path={RUTAS.productos} component={Productos}/>
                         <Route path={RUTAS.pedidos} component={Pedidos}/>
-                        <Route path={RUTAS.pagos} component={Pagos}/>
+                        {/*<Route path={RUTAS.pagos} component={Pagos}/>*/}
                         <Route path={RUTAS.liquidacion} component={Liquidacion}/>
                     </Switch>
                 </Router>

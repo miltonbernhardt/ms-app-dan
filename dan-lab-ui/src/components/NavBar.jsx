@@ -12,9 +12,9 @@ const NavBar = ({logout}) => {
                 <Link className="nav-links" to={RUTAS.obras}>
                     <li>Obras</li>
                 </Link>
-                <Link className="nav-links" to={RUTAS.pagos}>
-                    <li>Pagos</li>
-                </Link>
+                {/*<Link className="nav-links" to={RUTAS.pagos}>*/}
+                {/*    <li>Pagos</li>*/}
+                {/*</Link>*/}
                 <Link className="nav-links" to={RUTAS.pedidos}>
                     <li>Pedidos</li>
                 </Link>
